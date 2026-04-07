@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="es" class="h-100">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,11 +8,14 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ProyAdoPet.styles.css" asp-append-version="true" />
 </head>
-<body>
+
+<body class="d-flex flex-column h-100">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" href="/">AdoPet</a>
+                <a class="navbar-brand fw-bold text-primary" href="/">
+                    <i class="bi bi-paw-fill"></i> AdoPet
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarAdoPet">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -38,18 +41,18 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <form method="post" action="/Account/Logout">
-                                    <button type="submit" class="btn btn-outline-light">Cerrar Sesión</button>
+                                <form method="post" action="/Account/Logout" class="d-inline">
+                                    <button type="submit" class="btn btn-outline-light btn-sm">Cerrar Sesión</button>
                                 </form>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item me-2">
-                                <a class="btn btn-outline-light" href="/Account/Login">Login</a>
+                                <a class="btn btn-outline-light btn-sm" href="/Account/Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="btn btn-light text-dark" href="/Account/Register">Crear Cuenta</a>
+                                <a class="btn btn-light btn-sm text-dark" href="/Account/Register">Crear Cuenta</a>
                             </li>
                         }
                     </ul>
@@ -57,17 +60,30 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
+    <main role="main" class="flex-shrink-0 flex-grow-1">
+        <div class="pb-5">
+            @RenderBody()
+        </div>
+    </main>
+
+    <footer class="footer mt-auto py-3 bg-dark text-secondary border-top border-secondary">
         <div class="container">
-            &copy; 2026 - ProyAdoPet - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <div class="mb-2 mb-md-0">
+                    <span class="text-light fw-bold">AdoPet</span>
+                    <span class="ms-2 small text-muted">&copy; @DateTime.Now.Year Sitio web de adopción</span>
+                </div>
+
+                <div class="small d-flex align-items-center">
+                    <span class="me-3">Lima, Perú</span>
+                    <span class="d-none d-md-inline text-secondary opacity-50">|</span>
+                    <span class="ms-3 text-muted">Proyecto de curso</span>
+                </div>
+            </div>
         </div>
     </footer>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
