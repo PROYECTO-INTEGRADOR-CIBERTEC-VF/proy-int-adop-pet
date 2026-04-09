@@ -1,0 +1,75 @@
+﻿@model IEnumerable<ProyAdoPet.Models.Mascota>
+
+@{
+    ViewData["Title"] = "Adopta un amigo";
+}
+
+<div class="bg-light py-2 mb-4 border-bottom shadow-sm">
+    <div class="container d-flex align-items-center justify-content-between">
+        <div>
+            <h4 class="fw-bold text-primary mb-0">¡Encuentra a tu nuevo mejor amigo!</h4>
+            <p class="text-muted small mb-0">Mascotas buscando un hogar.</p>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid px-4">
+    @if (TempData["Mensaje"] != null)
+    {
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <small><i class="bi bi-info-circle-fill me-2"></i> @TempData["Mensaje"]</small>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-5 g-3 mb-5">
+        @foreach (var item in Model)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 hover-shadow transition-all">
+                    <div class="position-relative">
+                        <img src="~/fotos/@item.FotoMascota"
+                             class="card-img-top"
+                             alt="Foto de @item.Nombre"
+                             style="height: 180px; object-fit: cover;">
+
+                        <span class="position-absolute bottom-0 start-0 m-2 badge rounded-pill bg-primary shadow-sm" style="font-size: 0.7rem;">
+                            @item.Estado
+                        </span>
+                    </div>
+
+                    <div class="card-body text-center p-2">
+                        <h5 class="fw-bold text-dark mb-1">@item.Nombre</h5>
+                        <p class="text-muted small mb-2">@item.Edad de edad</p>
+
+                        <p class="card-text text-secondary small px-1" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 0.85rem;">
+                            @item.Descripcion
+                        </p>
+                    </div>
+
+                    <div class="card-footer bg-transparent border-0 pb-3 pt-0">
+                        <div class="d-grid">
+                            <a asp-controller="Acceso" asp-action="Login" class="btn btn-primary btn-sm rounded-pill">
+                                <i class="bi bi-heart-fill me-1"></i> Conocer
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<style>
+    .hover-shadow:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1) !important;
+        transition: all 0.2s ease;
+    }
+    .text-truncate-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+</style>
