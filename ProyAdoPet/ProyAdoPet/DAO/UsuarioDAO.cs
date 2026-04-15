@@ -49,7 +49,37 @@ namespace ProyAdoPet.DAO
 
         public Usuario ValidarUsuario(string correo, string clave)
         {
-            throw new NotImplementedException();
+            Usuario usuario = null;
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(cadena))
+                {
+                    SqlCommand cmd = new SqlCommand("sp_ValidarUsuario", cn);
+                    cmd.Parameters.AddWithValue("@Correo", correo);
+                    cmd.Parameters.AddWithValue("@Clave", clave);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cn.Open();
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            usuario = new Usuario()
+                            {
+                                IdUsuario = Convert.ToInt32(dr["IdUsuario"]),
+                                Nombre = dr["Nombre"].ToString(),
+                                Correo = dr["Correo"].ToString(),
+                                IdRol = Convert.ToInt32(dr["IdRol"])
+                            };
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                usuario = null;
+            }
+            return usuario;
         }
     }
 }

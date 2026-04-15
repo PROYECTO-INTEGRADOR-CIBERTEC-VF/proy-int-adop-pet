@@ -29,5 +29,17 @@ namespace ProyAdoPet.Services
             //si todo pasa correcto
             return _usuario.Registrar(usuario);
         }
+
+        public Usuario ValidarUsuario(string correo, string clave)
+        {
+            //validacion
+            if (string.IsNullOrEmpty(correo) || string.IsNullOrEmpty(clave))
+            {
+                return null;
+            }
+
+            //si es correcto
+            return _usuario.ValidarUsuario(correo, clave);
+        }
     }
 }
