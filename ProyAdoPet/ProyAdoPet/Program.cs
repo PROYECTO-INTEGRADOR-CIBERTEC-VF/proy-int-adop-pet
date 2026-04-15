@@ -1,6 +1,7 @@
 using ProyAdoPet.DAO;
 using ProyAdoPet.Repository;
 using ProyAdoPet.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +14,21 @@ builder.Services.AddScoped<UsuarioService>();
 
 
 //sesion
-builder.Services.AddDistributedMemoryCache(); //guarda sesion en ram
+builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(30); //30 inactivo borra sesion
+    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
 });
+
+//cookie
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Usuario/Login"; //si no esta logueado
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20); 
+    });
 
 var app = builder.Build();
 
@@ -33,8 +44,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseSession();
 
+app.UseSession();
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

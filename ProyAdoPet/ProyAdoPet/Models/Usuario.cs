@@ -20,5 +20,6 @@ namespace ProyAdoPet.Models
 
         [Compare("Clave", ErrorMessage = "Las contraseñas no coinciden")]
         public string ConfirmarClave { get; set; } //solo para vista
+        public int IdRol { get; set; }
     }
 }
