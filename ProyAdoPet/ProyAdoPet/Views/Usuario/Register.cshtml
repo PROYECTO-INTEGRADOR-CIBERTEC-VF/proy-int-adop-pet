@@ -1,0 +1,76 @@
+﻿@model ProyAdoPet.Models.Usuario
+
+@{
+    ViewData["Title"] = "Crear Cuenta";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-dark text-white text-center py-4 rounded-top-4">
+                    <h2 class="fw-bold mb-0"><i class="bi bi-person-plus-fill text-primary"></i> Únete a AdoPet</h2>
+                    <p class="small mb-0 opacity-75">Completa tus datos para empezar a adoptar</p>
+                </div>
+                <div class="card-body p-4">
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <div>@ViewBag.Error</div>
+                        </div>
+                    }
+
+                    <form asp-action="Register" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Nombre" class="form-control" placeholder="Nombre completo" />
+                            <label asp-for="Nombre"><i class="bi bi-person me-2"></i>Nombre completo</label>
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Correo" class="form-control" placeholder="nombre@ejemplo.com" />
+                            <label asp-for="Correo"><i class="bi bi-envelope me-2"></i>Correo electrónico</label>
+                            <span asp-validation-for="Correo" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-floating mb-3">
+                            <input asp-for="Clave" type="password" class="form-control" placeholder="Contraseña" />
+                            <label asp-for="Clave"><i class="bi bi-lock me-2"></i>Contraseña</label>
+                            <span asp-validation-for="Clave" class="text-danger small"></span>
+                        </div>
+
+                        <div class="form-floating mb-4">
+                            <input asp-for="ConfirmarClave" type="password" class="form-control" placeholder="Repetir contraseña" />
+                            <label asp-for="ConfirmarClave"><i class="bi bi-shield-check me-2"></i>Confirmar contraseña</label>
+                            <span asp-validation-for="ConfirmarClave" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg rounded-pill shadow-sm fw-bold">
+                                Registrarse
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer bg-light text-center py-3 rounded-bottom-4">
+                    <span class="text-muted small">¿Ya tienes una cuenta? </span>
+                    <a asp-action="Login" class="text-primary fw-bold text-decoration-none small">Inicia sesión aquí</a>
+                </div>
+            </div>
+
+            <div class="text-center mt-3">
+                <a href="/" class="text-muted small text-decoration-none"><i class="bi bi-arrow-left"></i> Volver al inicio</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

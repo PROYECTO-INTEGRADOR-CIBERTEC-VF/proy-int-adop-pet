@@ -8,6 +8,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IMascota, MascotaDAO>();
 builder.Services.AddScoped<MascotaService>();
+builder.Services.AddScoped<IUsuario, UsuarioDAO>();
+builder.Services.AddScoped<UsuarioService>();
 
 
 //sesion
