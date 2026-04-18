@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using ProyAdoPet.Constants
+
+<!DOCTYPE html>
 <html lang="es" class="h-100">
 <head>
     <meta charset="utf-8" />
@@ -24,24 +26,56 @@
                         <li class="nav-item">
                             <a class="nav-link" href="/">Inicio</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Mascotas">Mascotas</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/Home/SobreNosotros">Sobre Nosotros</a>
-                        </li>
+
                         @if (User.Identity.IsAuthenticated)
                         {
+                            @if (User.IsInRole(RolesConstantes.Administrador))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-warning" href="/Admin/GestionMascotas">Gestión de Mascotas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Admin/SolicitudesDisponibles">Solicitudes Disponibles</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Admin/SolicitudesRechazadas">Rechazadas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Admin/Historial">Historial</a>
+                                </li>
+                            }
+                            else
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Mascotas">Mascotas</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Solicitudes/MisSolicitudes">Mis Solicitudes</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/Home/SobreNosotros">Sobre Nosotros</a>
+                                </li>
+                            }
+                        }
+                        else
+                        {
                             <li class="nav-item">
-                                <a class="nav-link" href="/Solicitudes/MisSolicitudes">Mis Solicitudes</a>
+                                <a class="nav-link" href="/Mascotas">Mascotas</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/Home/SobreNosotros">Sobre Nosotros</a>
                             </li>
                         }
                     </ul>
+
                     <ul class="navbar-nav">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <li class="nav-item me-3 d-flex align-items-center">
+                                <span class="text-light small">Hola, @User.Identity.Name</span>
+                            </li>
                             <li class="nav-item">
-                                <form method="post" action="/Usuario/Logout" class="d-inline">
+                                <form method="post" action="/Login/Logout" class="d-inline">
                                     <button type="submit" class="btn btn-outline-light btn-sm">Cerrar Sesión</button>
                                 </form>
                             </li>
@@ -49,7 +83,7 @@
                         else
                         {
                             <li class="nav-item me-2">
-                                <a class="btn btn-outline-light btn-sm" href="/Usuario/Login">Login</a>
+                                <a class="btn btn-outline-light btn-sm" href="/Login/LogIn">Login</a>
                             </li>
                             <li class="nav-item">
                                 <a class="btn btn-light btn-sm text-dark" href="/Usuario/Register">Crear Cuenta</a>
