@@ -26,8 +26,9 @@ builder.Services.AddSession(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Usuario/Login"; //si no esta logueado
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(20); 
+        options.LoginPath = "/Login/Login"; //si no esta logueado
+        options.AccessDeniedPath = "/Login/AccesoDenegado"; //donde se va sin permiso
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60); 
     });
 
 var app = builder.Build();

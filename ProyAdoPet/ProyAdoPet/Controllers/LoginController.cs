@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using ProyAdoPet.Services;
 using ProyAdoPet.Constants;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ProyAdoPet.Controllers
 {
@@ -59,5 +60,8 @@ namespace ProyAdoPet.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Mascotas", "Inicio");
         }
+
+        [AllowAnonymous] //todos puede ver esta pagina
+        public IActionResult AccesoDenegado() => View();
     }
 }
