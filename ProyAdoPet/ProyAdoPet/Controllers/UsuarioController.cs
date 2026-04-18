@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProyAdoPet.Models;
 using ProyAdoPet.Services;
-using System.Security.Claims;
 
 namespace ProyAdoPet.Controllers
 {
@@ -37,44 +34,6 @@ namespace ProyAdoPet.Controllers
                 ViewBag.Error = resultado;
                 return View(user);
             }
-        }
-
-        [HttpGet]
-        public IActionResult Login() => View();
-
-        [HttpPost]
-        public async Task<IActionResult> Login(string correo, string clave)
-        {
-            var usuarioEncontrado = _usuario.ValidarUsuario(correo, clave);
-
-            if (usuarioEncontrado != null)
-            {
-                //lista de claims - datos del usuario que viajan
-                var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, usuarioEncontrado.Nombre),
-                    new Claim(ClaimTypes.Role, usuarioEncontrado.IdRol.ToString()),
-                    new Claim("IdUsuario", usuarioEncontrado.IdUsuario.ToString())
-                };
-
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                //firmar la cookie
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                    new ClaimsPrincipal(claimsIdentity));
-
-                return RedirectToAction("Mascotas", "Inicio");
-            }
-
-            ViewBag.Error = "Credenciales incorrectas.";
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Logout()
-        {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Mascotas", "Inicio");
         }
     }
 }
