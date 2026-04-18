@@ -53,7 +53,6 @@ namespace ProyAdoPet.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, usuarioEncontrado.Nombre),
-                    new Claim(ClaimTypes.Email, usuarioEncontrado.Correo),
                     new Claim(ClaimTypes.Role, usuarioEncontrado.IdRol.ToString()),
                     new Claim("IdUsuario", usuarioEncontrado.IdUsuario.ToString())
                 };
