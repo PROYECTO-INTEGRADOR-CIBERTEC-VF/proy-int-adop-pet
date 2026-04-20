@@ -29,7 +29,7 @@ namespace ProyAdoPet.DAO
                                 Nombre = dr["Nombre"].ToString(),
                                 Edad = dr["Edad"].ToString(),
                                 Descripcion = dr["Descripcion"].ToString(),
-                                Estado = dr["Estado"].ToString(),
+                                Estado = Convert.ToInt32(dr["EstadoId"]),
                                 FotoMascota = dr["FotoMascota"] != DBNull.Value
                                               ? dr["FotoMascota"].ToString()
                                               : "sin-foto.jpg"
@@ -40,6 +40,59 @@ namespace ProyAdoPet.DAO
                 }
             }
             return lista;
+        }
+
+        public IEnumerable<Estado> ListarEstado()
+        {
+            List<Estado> lista = new List<Estado>();
+
+            using (var conexion = new SqlConnection(cadena))
+            {
+                conexion.Open();
+                SqlCommand cmd = new SqlCommand("sp_ListarEstados", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using (var dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(new Estado
+                        {
+                            Id = Convert.ToInt32(dr["Id"]),
+                            EstadoNombre = dr["Nombre"].ToString()!
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
+
+        public bool Registrar(Mascota objeto)
+        {
+            bool respuesta = false;
+            try
+            {
+                using (var conexion = new SqlConnection(cadena))
+                {
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_RegistrarMascota", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@Nombre", objeto.Nombre);
+                    cmd.Parameters.AddWithValue("@Edad", objeto.Edad ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Descripcion", objeto.Descripcion ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@EstadoId", objeto.Estado);
+                    cmd.Parameters.AddWithValue("@FotoMascota", objeto.FotoMascota ?? (object)DBNull.Value);
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    if (filasAfectadas > 0) respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
         }
     }
 }
