@@ -12,9 +12,12 @@ namespace ProyAdoPet.Controllers
     public class AdminMascotaController : Controller
     {
         private readonly MascotaService _mascotaService;
-        public AdminMascotaController(MascotaService mascotaService)
+        private readonly IWebHostEnvironment _hostEnvironment;
+
+        public AdminMascotaController(MascotaService mascotaService, IWebHostEnvironment hostEnvironment)
         {
             _mascotaService = mascotaService;
+            _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet("")]
@@ -36,6 +39,51 @@ namespace ProyAdoPet.Controllers
             var listaEstados =  _mascotaService.EstadosMascota();
             ViewBag.Estados = new SelectList(listaEstados, "Id", "EstadoNombre");
             return View();
+        }
+
+        [HttpPost("Registrar")]
+        public async Task<IActionResult> RegistrarMascota(Mascota objeto, IFormFile FotoArchivo)
+        {
+            ModelState.Remove("Id");
+            if (ModelState.IsValid)
+            {
+
+                if (FotoArchivo != null && FotoArchivo.Length > 0)
+                {
+                    string nombreUnico = Guid.NewGuid().ToString() + Path.GetExtension(FotoArchivo.FileName);
+
+                    string rutaCarpeta = Path.Combine(_hostEnvironment.WebRootPath, "fotos");
+
+                    if (!Directory.Exists(rutaCarpeta)) Directory.CreateDirectory(rutaCarpeta);
+
+                    string rutaCompleta = Path.Combine(rutaCarpeta, nombreUnico);
+                    using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                    {
+                        await FotoArchivo.CopyToAsync(stream);
+                    }
+
+                    objeto.FotoMascota = nombreUnico;
+                }
+                else
+                {
+                    objeto.FotoMascota = "sin-foto.jpg";
+                }
+                bool resultado = await _mascotaService.RegistrarMascota(objeto);
+
+                if (resultado)
+                {
+                    TempData["MensajeExito"] = "¡Mascota registrada correctamente!";
+                    return RedirectToAction("ListadoMascotas");
+                }
+                else
+                {
+                    ViewBag.Error = "Ocurrió un error al guardar en la base de datos.";
+                }
+            }
+
+            var listaEstados = _mascotaService.EstadosMascota();
+            ViewBag.Estados = new SelectList(listaEstados, "Id", "EstadoNombre");
+            return View(objeto);
         }
     }
 }
