@@ -11,6 +11,16 @@
                 <div class="card-header bg-warning text-dark py-3">
                     <h4 class="mb-0 text-center"><i class="bi bi-paw-fill me-2"></i>Registrar Mascota</h4>
                 </div>
+
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                        @ViewBag.Error
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                }
+
                 <div class="card-body p-4">
                     <form asp-action="RegistrarMascota" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
