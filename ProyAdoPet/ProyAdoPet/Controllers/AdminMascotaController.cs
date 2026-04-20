@@ -34,7 +34,7 @@ namespace ProyAdoPet.Controllers
         public IActionResult RegistrarMascota()
         {
             var listaEstados =  _mascotaService.EstadosMascota();
-            ViewBag.Estados = new SelectList(listaEstados, "Id", "Nombre");
+            ViewBag.Estados = new SelectList(listaEstados, "Id", "EstadoNombre");
             return View();
         }
     }
