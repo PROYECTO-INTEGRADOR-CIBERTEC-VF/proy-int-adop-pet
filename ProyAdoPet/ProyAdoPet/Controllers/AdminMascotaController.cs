@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using ProyAdoPet.Constants;
 using ProyAdoPet.Models;
 using ProyAdoPet.Services;
@@ -27,6 +28,14 @@ namespace ProyAdoPet.Controllers
             }
 
             return View(mascotas);
+        }
+
+        [HttpGet("Registrar")]
+        public IActionResult RegistrarMascota()
+        {
+            var listaEstados =  _mascotaService.EstadosMascota();
+            ViewBag.Estados = new SelectList(listaEstados, "Id", "Nombre");
+            return View();
         }
     }
 }
