@@ -66,5 +66,33 @@ namespace ProyAdoPet.DAO
             }
             return lista;
         }
+
+        public bool Registrar(Mascota objeto)
+        {
+            bool respuesta = false;
+            try
+            {
+                using (var conexion = new SqlConnection(cadena))
+                {
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_RegistrarMascota", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@Nombre", objeto.Nombre);
+                    cmd.Parameters.AddWithValue("@Edad", objeto.Edad ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Descripcion", objeto.Descripcion ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@EstadoId", objeto.Estado);
+                    cmd.Parameters.AddWithValue("@FotoMascota", objeto.FotoMascota ?? (object)DBNull.Value);
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    if (filasAfectadas > 0) respuesta = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
+        }
     }
 }

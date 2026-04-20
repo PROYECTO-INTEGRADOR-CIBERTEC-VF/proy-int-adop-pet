@@ -6,5 +6,6 @@ namespace ProyAdoPet.Repository
     {
         //listado de estados de mascotas
         IEnumerable<Estado> ListarEstado();
+        bool Registrar(Mascota objeto);
     }
 }
