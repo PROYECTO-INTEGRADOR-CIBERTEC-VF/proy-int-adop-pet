@@ -29,13 +29,38 @@ namespace ProyAdoPet.DAO
                                 Nombre = dr["Nombre"].ToString(),
                                 Edad = dr["Edad"].ToString(),
                                 Descripcion = dr["Descripcion"].ToString(),
-                                Estado = dr["Estado"].ToString(),
+                                Estado = Convert.ToInt32(dr["EstadoId"]),
                                 FotoMascota = dr["FotoMascota"] != DBNull.Value
                                               ? dr["FotoMascota"].ToString()
                                               : "sin-foto.jpg"
                             };
                             lista.Add(mascota);
                         }
+                    }
+                }
+            }
+            return lista;
+        }
+
+        public IEnumerable<Estado> ListarEstado()
+        {
+            List<Estado> lista = new List<Estado>();
+
+            using (var conexion = new SqlConnection(cadena))
+            {
+                conexion.Open();
+                SqlCommand cmd = new SqlCommand("sp_ListarEstados", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using (var dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(new Estado
+                        {
+                            Id = Convert.ToInt32(dr["Id"]),
+                            EstadoNombre = dr["Nombre"].ToString()!
+                        });
                     }
                 }
             }

@@ -33,8 +33,9 @@
                              alt="Foto de @item.Nombre"
                              style="height: 180px; object-fit: cover;">
 
-                        <span class="position-absolute bottom-0 start-0 m-2 badge rounded-pill bg-primary shadow-sm" style="font-size: 0.7rem;">
-                            @item.Estado
+                        <span class="position-absolute bottom-0 start-0 m-2 badge rounded-pill @(item.Estado == 1 ? "bg-success" : "bg-info") shadow-sm"
+                              style="font-size: 0.7rem;">
+                            @(item.Estado == 1 ? "Disponible" : "Adoptado")
                         </span>
                     </div>
 

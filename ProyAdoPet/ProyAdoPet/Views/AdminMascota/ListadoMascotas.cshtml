@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ProyAdoPet.Models.Mascota>
+﻿@using ProyAdoPet.Constants
+@model IEnumerable<ProyAdoPet.Models.Mascota>
 
 @{
     ViewData["Title"] = "Gestión de Mascotas";
@@ -57,18 +58,18 @@
                                     </td>
                                     <td class="fw-bold">@item.Nombre</td>
                                     <td>@item.Edad años</td>
-                                    <td>
-                                        @if (item.Estado == "Disponible")
+                                            <td>
+                                        @if (item.Estado == EstadosConstantes.Disponible)
                                         {
                                             <span class="badge rounded-pill bg-success">Disponible</span>
                                         }
-                                        else if (item.Estado == "Adoptado")
+                                        else if (item.Estado == EstadosConstantes.Adoptado)
                                         {
                                             <span class="badge rounded-pill bg-info text-dark">Adoptado</span>
                                         }
                                         else
                                         {
-                                            <span class="badge rounded-pill bg-warning text-dark">@item.Estado</span>
+                                            <span class="badge rounded-pill bg-warning text-dark">Estado #@item.Estado</span>
                                         }
                                     </td>
                                     <td>

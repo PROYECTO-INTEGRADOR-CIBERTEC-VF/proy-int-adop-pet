@@ -16,5 +16,10 @@ namespace ProyAdoPet.Services
         {
             return _mascota.listado();
         }
+
+        public IEnumerable<Estado> EstadosMascota()
+        {
+            return _mascota.ListarEstado();
+        }
     }
 }
