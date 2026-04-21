@@ -22,6 +22,7 @@ namespace ProyAdoPet.DAO
                         cmd.Parameters.AddWithValue("@Nombre", oUsuario.Nombre);
                         cmd.Parameters.AddWithValue("@Correo", oUsuario.Correo);
                         cmd.Parameters.AddWithValue("@Clave", oUsuario.Clave);
+                        cmd.Parameters.AddWithValue("IdRol", oUsuario.IdRol);
 
                         //parametro de salida
                         SqlParameter registradoParam = new SqlParameter("@Registrado", SqlDbType.Bit)

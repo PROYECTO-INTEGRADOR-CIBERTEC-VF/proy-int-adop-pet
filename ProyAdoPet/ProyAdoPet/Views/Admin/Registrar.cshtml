@@ -1,0 +1,74 @@
+﻿@model ProyAdoPet.Models.Usuario
+
+@{
+    ViewData["Title"] = "Registrar Administrador";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-warning">
+                <div class="card-header bg-warning text-dark text-center">
+                    <h4><i class="bi bi-person-plus-fill"></i> Nuevo Administrador</h4>
+                </div>
+                <div class="card-body p-4">
+
+                    @if (TempData["MensajeExito"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            @TempData["MensajeExito"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger">@ViewBag.Error</div>
+                    }
+
+                    <form asp-action="Registrar" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="mb-3">
+                            <label asp-for="Nombre" class="form-label font-weight-bold"></label>
+                            <input asp-for="Nombre" class="form-control" placeholder="Nombre completo" />
+                            <span asp-validation-for="Nombre" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Correo" class="form-label font-weight-bold"></label>
+                            <input asp-for="Correo" class="form-control" placeholder="correo@ejemplo.com" />
+                            <span asp-validation-for="Correo" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Clave" class="form-label font-weight-bold">Contraseña</label>
+                            <input asp-for="Clave" type="password" class="form-control" />
+                            <span asp-validation-for="Clave" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ConfirmarClave" class="form-label font-weight-bold">Confirmar Contraseña</label>
+                            <input asp-for="ConfirmarClave" type="password" class="form-control" />
+                            <span asp-validation-for="ConfirmarClave" class="text-danger small"></span>
+                        </div>
+
+                        <div class="d-grid gap-2 mt-4">
+                            <button type="submit" class="btn btn-warning">
+                                <i class="bi bi-save"></i> Guardar Acceso
+                            </button>
+                            <a asp-controller="Admin" asp-action="Dashboard" class="btn btn-outline-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
