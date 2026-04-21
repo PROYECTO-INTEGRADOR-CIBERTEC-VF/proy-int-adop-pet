@@ -1,0 +1,36 @@
+﻿@model Mascota
+
+<h2>Editar Mascota</h2>
+
+<form asp-action="Editar" method="post">
+
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label>Nombre</label>
+        <input asp-for="Nombre" />
+    </div>
+
+    <div>
+        <label>Edad</label>
+        <input asp-for="Edad" />
+    </div>
+
+    <div>
+        <label>Descripción</label>
+        <input asp-for="Descripcion" />
+    </div>
+
+    <div>
+        <label>Estado</label>
+        <input asp-for="Estado" />
+    </div>
+
+    <div>
+        <label>Foto</label>
+        <input asp-for="FotoMascota" />
+    </div>
+
+    <button type="submit">Guardar cambios</button>
+
+</form>
