@@ -29,7 +29,9 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.LoginPath = "/Login/Login"; //si no esta logueado
         options.AccessDeniedPath = "/Login/AccesoDenegado"; //donde se va sin permiso
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60); 
-    });
+    }); 
+
+builder.Services.AddScoped<ISolicitud, SolicitudDAO>();
 
 var app = builder.Build();
 

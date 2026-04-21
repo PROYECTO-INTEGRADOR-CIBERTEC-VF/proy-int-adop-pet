@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Solicitud de Adopción";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-success text-white text-center rounded-top-4">
+                    <h4>🐾 Solicitud de Adopción</h4>
+                </div>
+
+                <div class="card-body p-4">
+
+                    <form method="post">
+
+                        <input type="hidden" name="idMascota" value="@ViewBag.IdMascota" />
+
+                        <div class="mb-3">
+                            <label class="form-label">Mensaje</label>
+                            <textarea name="mensaje" class="form-control" rows="4" placeholder="Escribe por qué deseas adoptar esta mascota..."></textarea>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                Enviar Solicitud
+                            </button>
+                        </div>
+
+                    </form>
+
+                    @if (ViewBag.Error != null)
+                    {
+                        <div class="alert alert-danger mt-3 text-center">
+                            @ViewBag.Error
+                        </div>
+                    }
+
+                    @if (ViewBag.Mensaje != null)
+                    {
+                        <div class="alert alert-success mt-3 text-center">
+                            @ViewBag.Mensaje
+                        </div>
+                    }
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
