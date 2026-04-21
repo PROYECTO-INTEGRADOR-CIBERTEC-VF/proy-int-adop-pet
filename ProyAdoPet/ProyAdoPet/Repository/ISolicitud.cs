@@ -4,6 +4,8 @@ namespace ProyAdoPet.Repository
 {
     public interface ISolicitud
     {
+        bool Solicitar(int idUsuario, int idMascota, string mensaje);
+
         public interface ISolicitud
         {
             bool Solicitar(int idUsuario, int idMascota, string mensaje);

@@ -2,6 +2,7 @@
 using ProyAdoPet.Models;
 using ProyAdoPet.Repository;
 using System.Data;
+using System.Data.SqlClient;
 
 namespace ProyAdoPet.DAO
 {
