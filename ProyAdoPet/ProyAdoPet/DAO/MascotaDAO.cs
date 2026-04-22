@@ -119,7 +119,7 @@ namespace ProyAdoPet.DAO
                             Nombre = dr["Nombre"].ToString(),
                             Edad = dr["Edad"].ToString(),
                             Descripcion = dr["Descripcion"].ToString(),
-                            Estado = Convert.ToInt32(dr["Estado"]),
+                            Estado = Convert.ToInt32(dr["EstadoId"]),
                             FotoMascota = dr["FotoMascota"] != DBNull.Value
                                 ? dr["FotoMascota"].ToString()
                                 : "sin-foto.jpg"

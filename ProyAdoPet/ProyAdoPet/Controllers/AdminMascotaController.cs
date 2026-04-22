@@ -86,8 +86,8 @@ namespace ProyAdoPet.Controllers
             return View(objeto);
         }
     
-    // HU07 → EDITAR GET
-        [HttpGet("Editar/{id}")]
+        // HU07 → EDITAR GET
+        [HttpGet("Editar")]
         public IActionResult Editar(int id)
         {
             var mascota = _mascotaService.ObtenerMascota(id);
@@ -104,14 +104,23 @@ namespace ProyAdoPet.Controllers
         {
             if (ModelState.IsValid)
             {
+                var mascotaActual =  _mascotaService.ObtenerMascota(obj.Id);
+
                 if (FotoArchivo != null && FotoArchivo.Length > 0)
                 {
+                    if (!string.IsNullOrEmpty(mascotaActual.FotoMascota))
+                    {
+                        string rutaFotoVieja = Path.Combine(_hostEnvironment.WebRootPath, "fotos", mascotaActual.FotoMascota);
+
+                        if (System.IO.File.Exists(rutaFotoVieja))
+                        {
+                            System.IO.File.Delete(rutaFotoVieja); //borramos foto vieja
+                        }
+                    }
+
                     string nombreUnico = Guid.NewGuid().ToString() + Path.GetExtension(FotoArchivo.FileName);
-
                     string rutaCarpeta = Path.Combine(_hostEnvironment.WebRootPath, "fotos");
-
                     if (!Directory.Exists(rutaCarpeta)) Directory.CreateDirectory(rutaCarpeta);
-
                     string rutaCompleta = Path.Combine(rutaCarpeta, nombreUnico);
 
                     using (var stream = new FileStream(rutaCompleta, FileMode.Create))
@@ -121,18 +130,20 @@ namespace ProyAdoPet.Controllers
 
                     obj.FotoMascota = nombreUnico;
                 }
+                else
+                {
+                    obj.FotoMascota = mascotaActual.FotoMascota;
+                }
 
                 bool ok = await _mascotaService.ActualizarMascota(obj);
 
                 if (ok)
                 {
                     TempData["MensajeExito"] = "Mascota actualizada correctamente";
-                    return RedirectToAction("ListadoMascotas");
+                    return RedirectToAction("ListadoMascotas", "AdminMascota");
                 }
-                else
-                {
-                    ViewBag.Error = "Error al actualizar la mascota";
-                }
+
+                ViewBag.Error = "Error al actualizar la mascota en la base de datos";
             }
 
             var listaEstados = _mascotaService.EstadosMascota();
