@@ -85,5 +85,61 @@ namespace ProyAdoPet.Controllers
             ViewBag.Estados = new SelectList(listaEstados, "Id", "EstadoNombre");
             return View(objeto);
         }
+    
+    // HU07 → EDITAR GET
+        [HttpGet("Editar/{id}")]
+        public IActionResult Editar(int id)
+        {
+            var mascota = _mascotaService.ObtenerMascota(id);
+
+            var listaEstados = _mascotaService.EstadosMascota();
+            ViewBag.Estados = new SelectList(listaEstados, "Id", "EstadoNombre");
+
+            return View(mascota);
+        }
+
+        //  HU07 → EDITAR POST
+        [HttpPost("Editar")]
+        public async Task<IActionResult> Editar(Mascota obj, IFormFile? FotoArchivo)
+        {
+            if (ModelState.IsValid)
+            {
+                if (FotoArchivo != null && FotoArchivo.Length > 0)
+                {
+                    string nombreUnico = Guid.NewGuid().ToString() + Path.GetExtension(FotoArchivo.FileName);
+
+                    string rutaCarpeta = Path.Combine(_hostEnvironment.WebRootPath, "fotos");
+
+                    if (!Directory.Exists(rutaCarpeta)) Directory.CreateDirectory(rutaCarpeta);
+
+                    string rutaCompleta = Path.Combine(rutaCarpeta, nombreUnico);
+
+                    using (var stream = new FileStream(rutaCompleta, FileMode.Create))
+                    {
+                        await FotoArchivo.CopyToAsync(stream);
+                    }
+
+                    obj.FotoMascota = nombreUnico;
+                }
+
+                bool ok = await _mascotaService.ActualizarMascota(obj);
+
+                if (ok)
+                {
+                    TempData["MensajeExito"] = "Mascota actualizada correctamente";
+                    return RedirectToAction("ListadoMascotas");
+                }
+                else
+                {
+                    ViewBag.Error = "Error al actualizar la mascota";
+                }
+            }
+
+            var listaEstados = _mascotaService.EstadosMascota();
+            ViewBag.Estados = new SelectList(listaEstados, "Id", "EstadoNombre");
+
+            return View(obj);
+        }
     }
 }
+

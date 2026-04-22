@@ -1,0 +1,93 @@
+﻿@model ProyAdoPet.Models.Mascota
+
+<style>
+    .box {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 25px;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+        font-family: Arial;
+    }
+
+    h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #34495e;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 8px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    .btn-save {
+        width: 100%;
+        background: #28a745;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+        .btn-save:hover {
+            background: #218838;
+        }
+
+    .file {
+        margin-bottom: 15px;
+    }
+</style>
+
+<div class="box">
+
+    <h2>🐾 Editar Mascota</h2>
+
+    <form asp-action="Editar" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" asp-for="Id" />
+
+        <div>
+            <label>Nombre</label>
+            <input asp-for="Nombre" class="form-control" />
+        </div>
+
+        <div>
+            <label>Edad</label>
+            <input asp-for="Edad" class="form-control" />
+        </div>
+
+        <div>
+            <label>Descripción</label>
+            <textarea asp-for="Descripcion" class="form-control"></textarea>
+        </div>
+
+        <div>
+            <label>Estado</label>
+            <select asp-for="Estado" class="form-control" asp-items="ViewBag.Estados"></select>
+        </div>
+
+        <div class="file">
+            <label>Foto</label>
+            <input type="file" name="FotoArchivo" class="form-control" />
+        </div>
+
+        <button type="submit" class="btn-save">
+            💾 Guardar Cambios
+        </button>
+
+    </form>
+
+</div>

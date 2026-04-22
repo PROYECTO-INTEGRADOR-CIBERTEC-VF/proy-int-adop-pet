@@ -93,6 +93,76 @@ namespace ProyAdoPet.DAO
                 respuesta = false;
             }
             return respuesta;
+       }
+    
+     //  HU07 → OBTENER
+        public Mascota Obtener(int id)
+        {
+            Mascota mascota = null;
+
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("sp_ObtenerMascota", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                cn.Open();
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        mascota = new Mascota
+                        {
+                            Id = Convert.ToInt32(dr["Id"]),
+                            Nombre = dr["Nombre"].ToString(),
+                            Edad = dr["Edad"].ToString(),
+                            Descripcion = dr["Descripcion"].ToString(),
+                            Estado = Convert.ToInt32(dr["Estado"]),
+                            FotoMascota = dr["FotoMascota"] != DBNull.Value
+                                ? dr["FotoMascota"].ToString()
+                                : "sin-foto.jpg"
+                        };
+                    }
+                }
+            }
+
+            return mascota;
+        }
+
+        //  HU07 → ACTUALIZAR
+        public bool Actualizar(Mascota obj)
+        {
+            bool respuesta = false;
+
+            try
+            {
+                using (SqlConnection cn = new SqlConnection(cadena))
+                {
+                    cn.Open();
+
+                    SqlCommand cmd = new SqlCommand("sp_ActualizarMascota", cn);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    cmd.Parameters.AddWithValue("@Id", obj.Id);
+                    cmd.Parameters.AddWithValue("@Nombre", obj.Nombre);
+                    cmd.Parameters.AddWithValue("@Edad", obj.Edad ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Descripcion", obj.Descripcion ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Estado", obj.Estado);
+                    cmd.Parameters.AddWithValue("@FotoMascota", obj.FotoMascota ?? (object)DBNull.Value);
+
+                    int filas = cmd.ExecuteNonQuery();
+                    if (filas > 0) respuesta = true;
+                }
+            }
+            catch
+            {
+                respuesta = false;
+            }
+
+            return respuesta;
         }
     }
 }
+

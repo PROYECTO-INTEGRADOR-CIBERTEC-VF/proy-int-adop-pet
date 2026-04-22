@@ -31,5 +31,23 @@ namespace ProyAdoPet.Services
             }
             return await Task.Run(() => _mascota.Registrar(objeto));
         }
+    
+    //  HU07 → OBTENER
+        public Mascota ObtenerMascota(int id)
+        {
+            return _mascota.Obtener(id);
+        }
+
+        // 🔥 HU07 → ACTUALIZAR
+        public async Task<bool> ActualizarMascota(Mascota objeto)
+        {
+            if (!string.IsNullOrEmpty(objeto.Nombre))
+            {
+                objeto.Nombre = objeto.Nombre.Trim();
+            }
+
+            return await Task.Run(() => _mascota.Actualizar(objeto));
+        }
     }
 }
+
