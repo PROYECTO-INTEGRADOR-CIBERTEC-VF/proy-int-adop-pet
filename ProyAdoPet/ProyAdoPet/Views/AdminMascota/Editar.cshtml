@@ -1,93 +1,89 @@
 ﻿@model ProyAdoPet.Models.Mascota
 
-<style>
-    .box {
-        max-width: 600px;
-        margin: 40px auto;
-        padding: 25px;
-        background: #ffffff;
-        border-radius: 12px;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.1);
-        font-family: Arial;
-    }
+@{
+    ViewData["Title"] = "Editar Mascota";
+}
 
-    h2 {
-        text-align: center;
-        color: #2c3e50;
-        margin-bottom: 20px;
-    }
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-gradient bg-warning text-dark py-3 rounded-top-4">
+                    <h2 class="text-center mb-0 fs-4">
+                        <i class="bi bi-pencil-square me-2"></i>Editar Mascota
+                    </h2>
+                </div>
 
-    label {
-        font-weight: bold;
-        color: #34495e;
-    }
+                <div class="card-body p-4">
+                    <form asp-action="Editar" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="text-center mb-4">
+                            <label class="d-block mb-2 fw-bold text-muted">Imagen Actual</label>
+                            @if (!string.IsNullOrEmpty(Model.FotoMascota))
+                            {
+                                <img src="~/fotos/@Model.FotoMascota" alt="Foto de @Model.Nombre"
+                                     class="img-thumbnail rounded-3 shadow-sm" 
+                                     style="height: 150px; width: 150px; object-fit: cover;" />
+                            }
+                            else
+                            {
+                                <div class="bg-light d-inline-flex align-items-center justify-content-center rounded-3 shadow-sm" 
+                                     style="height: 150px; width: 150px;">
+                                    <i class="bi bi-camera text-secondary fs-1"></i>
+                                </div>
+                            }
+                        </div>
 
-    .form-control {
-        width: 100%;
-        padding: 8px;
-        margin-top: 5px;
-        margin-bottom: 15px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-    }
+                        <div class="row">
+                            <div class="col-md-8 mb-3">
+                                <label asp-for="Nombre" class="form-label fw-bold">Nombre</label>
+                                <input asp-for="Nombre" class="form-control focus-ring focus-ring-warning border-2" placeholder="Ej: Firulais" />
+                                <span asp-validation-for="Nombre" class="text-danger small"></span>
+                            </div>
 
-    .btn-save {
-        width: 100%;
-        background: #28a745;
-        color: white;
-        padding: 10px;
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        cursor: pointer;
-    }
+                            <div class="col-md-4 mb-3">
+                                <label asp-for="Edad" class="form-label fw-bold">Edad</label>
+                                <input asp-for="Edad" class="form-control focus-ring focus-ring-warning border-2" />
+                                <span asp-validation-for="Edad" class="text-danger small"></span>
+                            </div>
+                        </div>
 
-        .btn-save:hover {
-            background: #218838;
-        }
+                        <div class="mb-3">
+                            <label asp-for="Estado" class="form-label fw-bold">Estado de Adopción</label>
+                            <select asp-for="Estado" class="form-select border-2" asp-items="ViewBag.Estados">
+                                <option value="">-- Seleccionar Estado --</option>
+                            </select>
+                            <span asp-validation-for="Estado" class="text-danger small"></span>
+                        </div>
 
-    .file {
-        margin-bottom: 15px;
-    }
-</style>
+                        <div class="mb-3">
+                            <label asp-for="Descripcion" class="form-label fw-bold">Descripción / Historia</label>
+                            <textarea asp-for="Descripcion" class="form-control border-2" rows="3" placeholder="Cuéntanos sobre su personalidad..."></textarea>
+                            <span asp-validation-for="Descripcion" class="text-danger small"></span>
+                        </div>
 
-<div class="box">
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">Actualizar Foto <span class="text-muted fw-normal">(Opcional)</span></label>
+                            <input type="file" name="FotoArchivo" class="form-control border-2" accept="image/*" />
+                            <div class="form-text">Si no seleccionas una, se mantendrá la imagen actual.</div>
+                        </div>
 
-    <h2>🐾 Editar Mascota</h2>
-
-    <form asp-action="Editar" method="post" enctype="multipart/form-data">
-
-        <input type="hidden" asp-for="Id" />
-
-        <div>
-            <label>Nombre</label>
-            <input asp-for="Nombre" class="form-control" />
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-warning btn-lg fw-bold text-dark shadow-sm">
+                                <i class="bi bi-check-circle-fill me-2"></i>Guardar Cambios
+                            </button>
+                            <a asp-action="ListadoMascotas" class="btn btn-outline-secondary border-2">
+                                <i class="bi bi-x-lg me-1"></i>Cancelar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div>
-            <label>Edad</label>
-            <input asp-for="Edad" class="form-control" />
-        </div>
-
-        <div>
-            <label>Descripción</label>
-            <textarea asp-for="Descripcion" class="form-control"></textarea>
-        </div>
-
-        <div>
-            <label>Estado</label>
-            <select asp-for="Estado" class="form-control" asp-items="ViewBag.Estados"></select>
-        </div>
-
-        <div class="file">
-            <label>Foto</label>
-            <input type="file" name="FotoArchivo" class="form-control" />
-        </div>
-
-        <button type="submit" class="btn-save">
-            💾 Guardar Cambios
-        </button>
-
-    </form>
-
+    </div>
 </div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
