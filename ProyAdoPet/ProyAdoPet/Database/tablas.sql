@@ -43,6 +43,7 @@ GO
 --INSERT PRUEBA
 INSERT INTO Estado (Id, Nombre) VALUES (1, 'Disponible');
 INSERT INTO Estado (Id, Nombre) VALUES (2, 'Adoptado');
+INSERT INTO Estado (Id, Nombre) VALUES (3, 'Eliminado');
 GO
 
 -- =============================================
