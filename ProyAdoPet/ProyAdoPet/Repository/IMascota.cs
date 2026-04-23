@@ -9,5 +9,6 @@ namespace ProyAdoPet.Repository
         bool Registrar(Mascota objeto);
         Mascota Obtener(int id);
         bool Actualizar(Mascota obj);
+        bool Eliminar(int id);
     }
 }
