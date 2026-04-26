@@ -65,3 +65,39 @@ GO
 INSERT INTO Mascota (Nombre, Edad, Descripcion, EstadoId, FotoMascota)
 VALUES ('Max', '3 años', 'Tranquilo y cariñoso, ideal para familia', 1, '0b6856_437e49e1656142bcadfba49e7aa27058~mv2.jpg');
 GO
+
+
+-- =============================================
+-- TABLA: Estado solicitud
+-- =============================================
+CREATE TABLE EstadoSolicitud (
+    Id INT PRIMARY KEY,
+    Nombre NVARCHAR(50) NOT NULL
+);
+
+INSERT INTO EstadoSolicitud (Id, Nombre) VALUES 
+(1, 'Pendiente'), 
+(2, 'Citado para Entrevista'), 
+(3, 'Aprobado - En Adopción'), 
+(4, 'Rechazado');
+
+
+-- =============================================
+-- TABLA: Solicitud de adopcion
+-- =============================================
+CREATE TABLE SolicitudAdopcion (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    MascotaId INT NOT NULL,
+    UsuarioId INT NOT NULL,
+    NombreCompleto NVARCHAR(100) NOT NULL,
+    DNI CHAR(8) NOT NULL,
+    Telefono NVARCHAR(15) NOT NULL,
+    Direccion NVARCHAR(MAX) NOT NULL,
+    MotivoAdopcion NVARCHAR(MAX) NOT NULL,
+    EstadoSolicitudId INT DEFAULT 1,
+    FechaCreacion DATETIME DEFAULT GETDATE(),
+    
+    CONSTRAINT FK_Solicitud_Mascota FOREIGN KEY (MascotaId) REFERENCES Mascota(Id),
+    CONSTRAINT FK_Solicitud_Usuario FOREIGN KEY (UsuarioId) REFERENCES Usuario(IdUsuario),
+    CONSTRAINT FK_Solicitud_Estado FOREIGN KEY (EstadoSolicitudId) REFERENCES EstadoSolicitud(Id)
+);
