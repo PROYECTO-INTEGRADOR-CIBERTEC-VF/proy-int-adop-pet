@@ -66,7 +66,7 @@
                                         }
                                     </td>
                                     <td class="fw-bold">@item.Nombre</td>
-                                    <td>@item.Edad años</td>
+                                    <td>@item.Edad</td>
                                             <td>
                                         @if (item.Estado == EstadosConstantes.Disponible)
                                         {
@@ -91,9 +91,13 @@
                                             <a asp-action="Editar" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm" title="Editar">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
-                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm" title="Eliminar">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
+                                            <form asp-action="Eliminar" method="post" onsubmit="return confirm('¿Realmente deseas eliminar a @item.Nombre?');">
+                                                <input type="hidden" name="id" value="@item.Id" />
+
+                                                <button type="submit" class="btn btn-outline-danger btn-sm" title="Eliminar Mascota">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
                                         </div>
                                     </td>
                                 </tr>

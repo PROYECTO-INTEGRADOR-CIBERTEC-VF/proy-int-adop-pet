@@ -151,6 +151,25 @@ namespace ProyAdoPet.Controllers
 
             return View(obj);
         }
+
+        //HU-09: ELIMINAR MASCOTA METODO POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Eliminar(int id)
+        {
+            bool seElimino = _mascotaService.EliminarMascota(id);
+
+            if (seElimino)
+            {
+                TempData["MensajeExito"] = "La mascota se quitó del listado correctamente.";
+            }
+            else
+            {
+                TempData["MensajeError"] = "No se pudo eliminar. Verifica que la mascota no esté ya adoptada.";
+            }
+
+            return RedirectToAction("ListadoMascotas");
+        }
     }
 }
 

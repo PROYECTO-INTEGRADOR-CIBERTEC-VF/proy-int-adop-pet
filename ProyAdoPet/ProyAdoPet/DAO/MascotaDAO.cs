@@ -163,6 +163,33 @@ namespace ProyAdoPet.DAO
 
             return respuesta;
         }
+
+        public bool Eliminar(int id)
+        {
+            bool respuesta = false;
+            try
+            {
+                using (SqlConnection conexion = new SqlConnection(cadena))
+                {
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_EliminarMascota", conexion);
+                    cmd.Parameters.AddWithValue("@Id", id);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+
+                    if (filasAfectadas > 0)
+                    {
+                        respuesta = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                respuesta = false;
+            }
+            return respuesta;
+        }
     }
 }
 

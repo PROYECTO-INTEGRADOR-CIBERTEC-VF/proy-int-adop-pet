@@ -49,6 +49,20 @@ GO
 
 
 -- =============================================
+-- PROCEDIMIENTO: Listado de mascotas
+-- =============================================
+CREATE OR ALTER PROCEDURE sp_ListarMascotas
+AS
+BEGIN
+    SELECT Id, Nombre, Edad, Descripcion, EstadoId, FotoMascota 
+    FROM Mascota
+    WHERE EstadoId = 1 
+    ORDER BY Id DESC;
+END;
+GO
+
+
+-- =============================================
 -- PROCEDIMIENTO: Listado estados
 -- =============================================
 CREATE OR ALTER PROCEDURE sp_ListarEstados
@@ -115,4 +129,15 @@ BEGIN
     WHERE Id = @Id
 END
 
+-- =============================================
+-- PROCEDIMIENTO: Borrado logico de mascota
+-- =============================================
+CREATE OR ALTER PROCEDURE sp_EliminarMascota
+    @Id INT
+AS
+BEGIN
+    DELETE FROM Mascota 
+    WHERE Id = @Id AND EstadoId = 1;
+END
+GO
 
