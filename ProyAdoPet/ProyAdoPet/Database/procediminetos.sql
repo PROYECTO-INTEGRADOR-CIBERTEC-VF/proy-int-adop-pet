@@ -56,7 +56,7 @@ AS
 BEGIN
     SELECT Id, Nombre, Edad, Descripcion, EstadoId, FotoMascota 
     FROM Mascota
-    WHERE EstadoId <> 3 
+    WHERE EstadoId = 1 
     ORDER BY Id DESC;
 END;
 GO
@@ -136,9 +136,8 @@ CREATE OR ALTER PROCEDURE sp_EliminarMascota
     @Id INT
 AS
 BEGIN
-    UPDATE Mascota 
-    SET EstadoId = 3 --eliminado
-    WHERE Id = @Id
+    DELETE FROM Mascota 
+    WHERE Id = @Id AND EstadoId = 1;
 END
 GO
 
