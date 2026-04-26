@@ -1,0 +1,97 @@
+﻿@model ProyAdoPet.Models.SolicitudAdopcion
+
+@{
+    ViewData["Title"] = "Formulario de Adopción";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="card shadow-sm border-0 rounded-4 mb-4 bg-light">
+                <div class="card-body d-flex align-items-center p-4">
+                    <img src="~/fotos/@ViewBag.MascotaFoto" class="rounded-circle shadow-sm me-4"
+                         style="width: 100px; height: 100px; object-fit: cover; border: 3px solid white;">
+                    <div>
+                        <h3 class="mb-1 fw-bold text-primary">Postulación para adoptar a @ViewBag.MascotaNombre</h3>
+                        <p class="text-muted mb-0 small"><i class="bi bi-info-circle me-1"></i> Estás a un paso de darle un hogar.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-body p-5">
+                    <h4 class="mb-4 fw-bold"><i class="bi bi-file-earmark-text me-2"></i>Tus Datos de Evaluación</h4>
+
+                    @if (TempData["MensajeError"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <i class="bi bi-exclamation-octagon-fill me-2"></i>
+                            @TempData["MensajeError"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form asp-action="Postular" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden" asp-for="MascotaId" />
+
+                        <div class="row">
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="NombreCompleto" class="form-label fw-semibold">Nombre Completo</label>
+                                <input asp-for="NombreCompleto" class="form-control form-control-lg" placeholder="Ej: Nombre Apellido..." />
+                                <span asp-validation-for="NombreCompleto" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="DNI" class="form-label fw-semibold">DNI</label>
+                                <input asp-for="DNI" class="form-control" maxlength="8" placeholder="8 dígitos" />
+                                <span asp-validation-for="DNI" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Telefono" class="form-label fw-semibold">Teléfono / WhatsApp</label>
+                                <input asp-for="Telefono" class="form-control" placeholder="999 999 999" />
+                                <span asp-validation-for="Telefono" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-12 mb-3">
+                                <label asp-for="Direccion" class="form-label fw-semibold">Dirección de Residencia</label>
+                                <input asp-for="Direccion" class="form-control" placeholder="Av. Calle 123, Ciudad" />
+                                <span asp-validation-for="Direccion" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-12 mb-4">
+                                <label asp-for="MotivoAdopcion" class="form-label fw-semibold">¿Por qué deseas adoptar a esta mascota?</label>
+                                <textarea asp-for="MotivoAdopcion" class="form-control" rows="4"
+                                          placeholder="Cuéntanos un poco sobre tu hogar, economia, si tienes espacio, otros animales y por qué elegiste a esta mascota..."></textarea>
+                                <span asp-validation-for="MotivoAdopcion" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="alert alert-warning d-flex align-items-center py-2" role="alert">
+                            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                            <div style="font-size: 0.85rem;">
+                                Al enviar esta solicitud, declaras que los datos son reales y que estás dispuesto a una entrevista presencial.
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a asp-controller="Inicio" asp-action="DetalleMascota" asp-route-id="@Model.MascotaId" class="btn btn-light btn-lg px-4 me-md-2">Cancelar</a>
+                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow">
+                                Enviar Solicitud <i class="bi bi-send-fill ms-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

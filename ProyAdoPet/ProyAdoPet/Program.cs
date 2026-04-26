@@ -11,6 +11,8 @@ builder.Services.AddScoped<IMascota, MascotaDAO>();
 builder.Services.AddScoped<MascotaService>();
 builder.Services.AddScoped<IUsuario, UsuarioDAO>();
 builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<ISolicitudAdopcion, SolicitudAdopcionDAO>();
+builder.Services.AddScoped<SolicitudService>();
 
 
 //sesion
