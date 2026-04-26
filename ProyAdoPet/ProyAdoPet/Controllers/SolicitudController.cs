@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProyAdoPet.Models;
 using ProyAdoPet.Services;
+using System.Security.Claims;
 
 namespace ProyAdoPet.Controllers
 {
+    [Authorize]
     public class SolicitudController : Controller
     {
         private readonly SolicitudService _solicitudService;
@@ -29,6 +32,39 @@ namespace ProyAdoPet.Controllers
             return View(modelo);
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Postular(SolicitudAdopcion solicitud)
+        {
+            string idUsuarioStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                                 ?? User.FindFirst("IdUsuario")?.Value;
+            solicitud.UsuarioId = int.Parse(idUsuarioStr);
 
+            solicitud.FechaCreacion = DateTime.Now;
+
+            if (ModelState.IsValid)
+            {
+                bool exito = _solicitudService.EnviarSolicitud(solicitud);
+                if (exito)
+                {
+                    return RedirectToAction("Confirmacion", new
+                    {
+                        nombre = solicitud.NombreCompleto,
+                        fecha = solicitud.FechaCreacion.ToString("dd/MM/yyyy HH:mm")
+                    });
+                }
+            }
+
+            TempData["MensajeError"] = "Hubo un problema al enviar la solicitud.";
+            return View(solicitud);
+        }
+
+        [HttpGet]
+        public IActionResult Confirmacion(string nombre, string fecha)
+        {
+            ViewBag.Nombre = nombre;
+            ViewBag.Fecha = fecha;
+            return View();
+        }
     }
 }
