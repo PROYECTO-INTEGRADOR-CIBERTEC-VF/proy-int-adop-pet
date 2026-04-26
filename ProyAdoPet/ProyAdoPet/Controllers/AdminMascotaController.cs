@@ -154,6 +154,7 @@ namespace ProyAdoPet.Controllers
 
         //HU-09: ELIMINAR MASCOTA METODO POST
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Eliminar(int id)
         {
             bool seElimino = _mascotaService.EliminarMascota(id);

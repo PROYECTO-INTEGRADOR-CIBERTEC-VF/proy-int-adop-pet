@@ -1,4 +1,5 @@
-﻿using ProyAdoPet.Constants;
+﻿using Microsoft.Extensions.Hosting;
+using ProyAdoPet.Constants;
 using ProyAdoPet.DAO;
 using ProyAdoPet.Models;
 using ProyAdoPet.Repository;
@@ -8,10 +9,12 @@ namespace ProyAdoPet.Services
     public class MascotaService
     {
         IMascota _mascota;
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public MascotaService(IMascota mascota)
+        public MascotaService(IMascota mascota, IWebHostEnvironment hostEnvironment)
         {
             _mascota = mascota;
+            _hostEnvironment = hostEnvironment;
         }
 
         public IEnumerable<Mascota> MascotasDisponibles()
@@ -53,24 +56,29 @@ namespace ProyAdoPet.Services
         //HU-09: ELIMINAR MASCOTA
         public bool EliminarMascota(int id)
         {
-            if (id <= 0)
+            var mascota = _mascota.Obtener(id);
+
+            if (mascota == null || mascota.Estado != EstadosConstantes.Disponible)
             {
                 return false;
             }
 
-            var mascotaActual = _mascota.Obtener(id);
+            bool seEliminoDB = _mascota.Eliminar(id);
 
-            if (mascotaActual == null)
+            if (seEliminoDB)
             {
-                return false;
-            }
+                if (!string.IsNullOrEmpty(mascota.FotoMascota))
+                {
+                    string rutaFoto = Path.Combine(_hostEnvironment.WebRootPath, "fotos", mascota.FotoMascota);
 
-            if (mascotaActual.Estado != EstadosConstantes.Disponible)
-            {
-                return false;
+                    if (System.IO.File.Exists(rutaFoto))
+                    {
+                        System.IO.File.Delete(rutaFoto);
+                    }
+                }
+                return true;
             }
-
-            return _mascota.Eliminar(id);
+            return false;
         }
 
     }
