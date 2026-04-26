@@ -141,6 +141,21 @@ BEGIN
 END
 GO
 
+-- =============================================
+-- PROCEDIMIENTO: Verificar si un usuario tiene un solicitud activa
+-- =============================================
+CREATE OR ALTER PROCEDURE sp_ExisteSolicitudUsuario
+    @MascotaId INT,
+    @UsuarioId INT
+AS
+BEGIN
+    SELECT COUNT(1) 
+    FROM SolicitudAdopcion 
+    WHERE MascotaId = @MascotaId 
+      AND UsuarioId = @UsuarioId 
+      AND EstadoSolicitudId <> 4;
+END;
+
 
 -- =============================================
 -- PROCEDIMIENTO: Registro de solicitud de adopcion
