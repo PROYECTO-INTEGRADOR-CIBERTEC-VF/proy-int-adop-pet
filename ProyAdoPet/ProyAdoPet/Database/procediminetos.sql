@@ -141,3 +141,23 @@ BEGIN
 END
 GO
 
+
+-- =============================================
+-- PROCEDIMIENTO: Registro de solicitud de adopcion
+-- =============================================
+CREATE OR ALTER PROCEDURE sp_RegistrarSolicitud
+    @MascotaId INT,
+    @UsuarioId INT,
+    @NombreCompleto NVARCHAR(100),
+    @DNI CHAR(8),
+    @Telefono NVARCHAR(15),
+    @Direccion NVARCHAR(MAX),
+    @MotivoAdopcion NVARCHAR(MAX)
+AS
+BEGIN
+    INSERT INTO SolicitudAdopcion (MascotaId, UsuarioId, NombreCompleto, DNI, Telefono, Direccion, MotivoAdopcion, EstadoSolicitudId, FechaCreacion)
+    VALUES (@MascotaId, @UsuarioId, @NombreCompleto, @DNI, @Telefono, @Direccion, @MotivoAdopcion, 1, GETDATE());
+    
+    SELECT SCOPE_IDENTITY(); -- Retorna el ID insertado
+END;
+GO
