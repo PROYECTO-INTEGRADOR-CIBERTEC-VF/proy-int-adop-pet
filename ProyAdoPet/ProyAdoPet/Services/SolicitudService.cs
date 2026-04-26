@@ -19,5 +19,10 @@ namespace ProyAdoPet.Services
             return _solicitud.Registrar(solicitud);
         }
 
+        public bool VerificarExistencia(int mascotaId, int usuarioId)
+        {
+            return _solicitud.YaTieneSolicitud(mascotaId, usuarioId);
+        }
+
     }
 }

@@ -39,5 +39,22 @@ namespace ProyAdoPet.DAO
             }
             return respuesta;
         }
+
+        public bool YaTieneSolicitud(int mascotaId, int usuarioId)
+        {
+            bool existe = false;
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                conexion.Open();
+                SqlCommand cmd = new SqlCommand("sp_ExisteSolicitudUsuario", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@MascotaId", mascotaId);
+                cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+
+                int conteo = (int)cmd.ExecuteScalar();
+                if (conteo > 0) existe = true;
+            }
+            return existe;
+        }
     }
 }

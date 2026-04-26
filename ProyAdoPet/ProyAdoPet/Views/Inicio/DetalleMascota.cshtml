@@ -14,6 +14,7 @@
         </div>
 
         <div class="col-md-7">
+
             <h1 class="display-4 fw-bold text-primary">@Model.Nombre</h1>
             <hr />
 
@@ -42,9 +43,18 @@
 
                 @if (User.Identity.IsAuthenticated)
                 {
-                    <a asp-controller="Solicitud" asp-action="Postular" asp-route-mascotaId="@Model.Id" class="btn btn-primary btn-lg px-5 shadow">
-                        Postular para Adopción <i class="bi bi-heart-fill ms-2"></i>
-                    </a>
+                    @if (ViewBag.YaPostulo)
+                    {
+                        <button class="btn btn-secondary btn-lg px-5 shadow" disabled>
+                            Solicitud en proceso <i class="bi bi-hourglass-split ms-2"></i>
+                        </button>
+                    }
+                    else
+                    {
+                        <a asp-controller="Solicitud" asp-action="Postular" asp-route-mascotaId="@Model.Id" class="btn btn-primary btn-lg px-5 shadow">
+                            Postular para Adopción <i class="bi bi-heart-fill ms-2"></i>
+                        </a>
+                    }
                 }
                 else
                 {
