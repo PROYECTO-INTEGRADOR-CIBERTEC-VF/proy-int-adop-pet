@@ -7,6 +7,7 @@ using System.Security.Claims;
 namespace ProyAdoPet.Controllers
 {
     [Authorize]
+    [Route("Adopcion")]
     public class SolicitudController : Controller
     {
         private readonly SolicitudService _solicitudService;
@@ -19,7 +20,7 @@ namespace ProyAdoPet.Controllers
         }
 
         //HU-16: SOLICITUD DE ADOPCION
-        [HttpGet]
+        [HttpGet("Formulario/{mascotaId}")]
         public IActionResult Postular(int mascotaId)
         {
             var mascota = _mascotaService.ObtenerMascota(mascotaId);
