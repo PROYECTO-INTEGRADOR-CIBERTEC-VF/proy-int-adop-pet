@@ -1,4 +1,5 @@
-﻿using ProyAdoPet.DAO;
+﻿using ProyAdoPet.Constants;
+using ProyAdoPet.DAO;
 using ProyAdoPet.Models;
 using ProyAdoPet.Repository;
 
@@ -48,6 +49,30 @@ namespace ProyAdoPet.Services
 
             return await Task.Run(() => _mascota.Actualizar(objeto));
         }
+
+        //HU-09: ELIMINAR MASCOTA
+        public bool EliminarMascota(int id)
+        {
+            if (id <= 0)
+            {
+                return false;
+            }
+
+            var mascotaActual = _mascota.Obtener(id);
+
+            if (mascotaActual == null)
+            {
+                return false;
+            }
+
+            if (mascotaActual.Estado != EstadosConstantes.Disponible)
+            {
+                return false;
+            }
+
+            return _mascota.Eliminar(id);
+        }
+
     }
 }
 
