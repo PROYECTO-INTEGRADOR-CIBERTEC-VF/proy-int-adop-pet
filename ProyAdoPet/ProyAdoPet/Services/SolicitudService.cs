@@ -31,5 +31,9 @@ namespace ProyAdoPet.Services
             return _solicitud.ListarParaAdmin();
         }
 
+        public EvaluacionSolicitudVM ObtenerDetalleSolicitud(int id)
+        {
+            return _solicitud.ObtenerDetalleEvaluacion(id);
+        }
     }
 }

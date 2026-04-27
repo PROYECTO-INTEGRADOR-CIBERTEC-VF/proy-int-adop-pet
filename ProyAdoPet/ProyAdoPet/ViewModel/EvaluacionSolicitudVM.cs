@@ -11,5 +11,6 @@
         public string? MascotaNombre { get; set; }
         public string? MascotaFoto { get; set; }
         public int EstadoActualId { get; set; }
+        public string? EstadoNombre { get; set; }
     }
 }

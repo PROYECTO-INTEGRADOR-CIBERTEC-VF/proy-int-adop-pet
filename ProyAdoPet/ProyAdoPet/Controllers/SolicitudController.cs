@@ -77,5 +77,14 @@ namespace ProyAdoPet.Controllers
             var solicitudes = _solicitudService.ObtenerBandejaAdmin();
             return View(solicitudes);
         }
+
+        [HttpGet("Bandeja/Detalle")]
+        public IActionResult Evaluar(int id)
+        {
+            var modelo = _solicitudService.ObtenerDetalleSolicitud(id);
+            if (modelo == null) return NotFound();
+
+            return View(modelo);
+        }
     }
 }

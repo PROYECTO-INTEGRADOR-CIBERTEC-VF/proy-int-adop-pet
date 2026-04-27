@@ -63,8 +63,9 @@ namespace ProyAdoPet.DAO
                             Direccion = dr["Direccion"].ToString(),
                             MotivoAdopcion = dr["MotivoAdopcion"].ToString(),
                             MascotaNombre = dr["MascotaNombre"].ToString(),
-                            MascotaFoto = dr["MascotaFoto"].ToString(),
-                            EstadoActualId = Convert.ToInt32(dr["EstadoActualId"])
+                            MascotaFoto = dr["FotoMascota"].ToString(),
+                            EstadoActualId = Convert.ToInt32(dr["EstadoActualId"]),
+                            EstadoNombre = dr["EstadoNombre"].ToString()
                         };
                     }
                 }

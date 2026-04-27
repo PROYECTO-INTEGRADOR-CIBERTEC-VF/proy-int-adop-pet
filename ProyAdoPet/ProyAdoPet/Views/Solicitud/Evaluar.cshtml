@@ -1,0 +1,151 @@
+﻿@model ProyAdoPet.ViewModel.EvaluacionSolicitudVM
+
+@{
+    ViewData["Title"] = "Evaluar Solicitud";
+}
+
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <a asp-action="Bandeja" class="text-decoration-none text-muted small">
+                <i class="bi bi-arrow-left"></i> Volver a la bandeja
+            </a>
+            <h2 class="fw-bold m-0">Evaluación de Postulante</h2>
+        </div>
+        <span class="badge @(Model.EstadoActualId == 1 ? "bg-warning" : "bg-info") px-3 py-2 fs-6 rounded-pill shadow-sm">
+            Estado Actual: @Model.EstadoNombre
+        </span>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="~/fotos/@Model.MascotaFoto" class="img-fluid h-100 w-100" style="object-fit: cover; min-height: 250px;" alt="Mascota">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body p-4">
+                            <h5 class="text-primary fw-bold text-uppercase small mb-1">Mascota Interesada</h5>
+                            <h3 class="card-title fw-bold mb-4">@Model.MascotaNombre</h3>
+
+                            <div class="row pt-2">
+                                <div class="col-sm-6 mb-3">
+                                    <p class="text-muted mb-0 small">Postulante</p>
+                                    <p class="fw-bold mb-0">@Model.NombrePostulante</p>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <p class="text-muted mb-0 small">Documento (DNI)</p>
+                                    <p class="fw-bold mb-0">@Model.DNI</p>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <p class="text-muted mb-0 small">Teléfono</p>
+                                    <p class="fw-bold mb-0 text-success">
+                                        <i class="bi bi-whatsapp"></i> @Model.Telefono
+                                    </p>
+                                </div>
+                                <div class="col-sm-6 mb-3">
+                                    <p class="text-muted mb-0 small">Ubicación</p>
+                                    <p class="fw-bold mb-0">@Model.Direccion</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm border-0 rounded-4 p-4">
+                <h5 class="fw-bold mb-3"><i class="bi bi-chat-quote text-primary me-2"></i>Carta de Motivación</h5>
+                <div class="p-4 rounded-3" style="background-color: #f8f9fa; border-left: 5px solid #0d6efd;">
+                    <p class="fs-5 text-dark lh-base mb-0" style="white-space: pre-line; font-style: italic;">
+                        "@Model.MotivoAdopcion"
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow border-0 rounded-4 p-4 sticky-top" style="top: 20px;">
+                <h4 class="fw-bold mb-4 text-center">Acciones de Gestión</h4>
+
+                <div class="d-grid gap-3">
+                    <button type="button" class="btn btn-primary btn-lg shadow-sm py-3" data-bs-toggle="modal" data-bs-target="#modalCita">
+                        <i class="bi bi-calendar-check me-2"></i> Programar Cita
+                    </button>
+
+                    <form asp-action="ActualizarEstado" method="post" onsubmit="return confirm('¿Estás seguro de rechazar esta solicitud?');">
+                        <input type="hidden" name="SolicitudId" value="@Model.SolicitudId" />
+                        <input type="hidden" name="NuevoEstadoId" value="4" />
+                        <button type="submit" class="btn btn-outline-danger btn-lg w-100 py-2">
+                            <i class="bi bi-x-circle me-2"></i> Rechazar Solicitud
+                        </button>
+                    </form>
+
+                    <div class="text-center my-2">
+                        <hr class="text-muted">
+                        <small class="text-muted text-uppercase fw-bold">Paso Final</small>
+                    </div>
+
+                    <form asp-action="ActualizarEstado" method="post">
+                        <input type="hidden" name="SolicitudId" value="@Model.SolicitudId" />
+                        <input type="hidden" name="NuevoEstadoId" value="3" />
+                        <button type="submit" class="btn btn-success btn-lg w-100 py-3 shadow @(Model.EstadoActualId != 2 ? "disabled" : "")">
+                            <i class="bi bi-house-heart me-2"></i> Confirmar Adopción
+                        </button>
+                        @if (Model.EstadoActualId != 2)
+                        {
+                            <div class="alert alert-light border-0 mt-2 mb-0 p-2 text-center">
+                                <small class="text-muted" style="font-size: 0.75rem;">
+                                    <i class="bi bi-info-circle"></i> Primero debes realizar la entrevista (Estado: Citado)
+                                </small>
+                            </div>
+                        }
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalCita" tabindex="-1" aria-labelledby="modalCitaLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <form asp-action="ProgramarCita" method="post" class="modal-content border-0 shadow-lg rounded-4">
+            <div class="modal-header bg-primary text-white rounded-top-4 p-4">
+                <h5 class="modal-title fw-bold" id="modalCitaLabel">
+                    <i class="bi bi-calendar-plus me-2"></i> Agendar Entrevista
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <input type="hidden" name="SolicitudId" value="@Model.SolicitudId" />
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Fecha y Hora de la Cita</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                        <input type="datetime-local" name="FechaCita" class="form-control form-control-lg" required />
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label fw-bold">Lugar de Encuentro</label>
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                        <input type="text" name="Lugar" class="form-control" value="Albergue Principal - Huaral" placeholder="Ej: Av. Los Naturales 123" required />
+                    </div>
+                </div>
+
+                <div class="mb-0">
+                    <label class="form-label fw-bold">Notas adicionales (Opcional)</label>
+                    <textarea name="Notas" class="form-control" rows="2" placeholder="Traer copia de DNI, fotos del patio, etc."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer border-0 p-4 pt-0">
+                <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary px-4 shadow">
+                    Guardar y Citar Postulante
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
