@@ -10,5 +10,6 @@ namespace ProyAdoPet.Repository
 
         //METODOS PARA EL ADMIN
         List<SolicitudAdopcionVM> ListarParaAdmin();
+        EvaluacionSolicitudVM ObtenerDetalleEvaluacion(int id);
     }
 }

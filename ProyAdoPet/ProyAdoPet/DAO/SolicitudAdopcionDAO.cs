@@ -40,6 +40,38 @@ namespace ProyAdoPet.DAO
             return lista;
         }
 
+        public EvaluacionSolicitudVM ObtenerDetalleEvaluacion(int id)
+        {
+            EvaluacionSolicitudVM detalle = null;
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                conexion.Open();
+                SqlCommand cmd = new SqlCommand("sp_ObtenerDetalleSolicitud", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id", id);
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        detalle = new EvaluacionSolicitudVM
+                        {
+                            SolicitudId = Convert.ToInt32(dr["SolicitudId"]),
+                            NombrePostulante = dr["NombrePostulante"].ToString(),
+                            DNI = dr["DNI"].ToString(),
+                            Telefono = dr["Telefono"].ToString(),
+                            Direccion = dr["Direccion"].ToString(),
+                            MotivoAdopcion = dr["MotivoAdopcion"].ToString(),
+                            MascotaNombre = dr["MascotaNombre"].ToString(),
+                            MascotaFoto = dr["MascotaFoto"].ToString(),
+                            EstadoActualId = Convert.ToInt32(dr["EstadoActualId"])
+                        };
+                    }
+                }
+            }
+            return detalle;
+        }
+
         public bool Registrar(SolicitudAdopcion solicitud)
         {
             bool respuesta = false;
