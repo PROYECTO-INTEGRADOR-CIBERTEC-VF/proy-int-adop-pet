@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProyAdoPet.Models;
 using ProyAdoPet.Services;
+using ProyAdoPet.ViewModel;
 
 namespace ProyAdoPet.Controllers
 {
@@ -28,6 +29,31 @@ namespace ProyAdoPet.Controllers
 
             return View(lista);
 
+        }
+
+        // HU-09: Filtrar mascotas
+        [HttpGet]
+        public IActionResult FiltrarMascotas(string? nombre, string? edad, int? estadoId)
+        {
+            var vm = new FiltroMascotaVM
+            {
+                Nombre = nombre,
+                Edad = edad,
+                EstadoId = estadoId,
+                Estados = _mascota.EstadosMascota()
+            };
+
+            bool hayFiltros = !string.IsNullOrWhiteSpace(nombre)
+                           || !string.IsNullOrWhiteSpace(edad)
+                           || estadoId.HasValue;
+
+            if (hayFiltros)
+            {
+                vm.Resultados = _mascota.FiltrarMascotas(nombre, edad, estadoId);
+                vm.BusquedaRealizada = true;
+            }
+
+            return View(vm);
         }
 
         [HttpGet("Detalle/{id}")]

@@ -53,7 +53,12 @@ namespace ProyAdoPet.Services
             return await Task.Run(() => _mascota.Actualizar(objeto));
         }
 
-        //HU-09: ELIMINAR MASCOTA
+        // HU-09: FILTRAR MASCOTAS
+        public IEnumerable<Mascota> FiltrarMascotas(string? nombre, string? edad, int? estadoId)
+        {
+            return _mascota.Filtrar(nombre, edad, estadoId);
+        }
+
         public bool EliminarMascota(int id)
         {
             var mascota = _mascota.Obtener(id);
