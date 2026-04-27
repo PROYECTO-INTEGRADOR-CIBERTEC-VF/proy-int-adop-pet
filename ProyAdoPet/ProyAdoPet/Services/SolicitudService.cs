@@ -1,5 +1,6 @@
 ﻿using ProyAdoPet.Models;
 using ProyAdoPet.Repository;
+using ProyAdoPet.ViewModel;
 
 namespace ProyAdoPet.Services
 {
@@ -22,6 +23,12 @@ namespace ProyAdoPet.Services
         public bool VerificarExistencia(int mascotaId, int usuarioId)
         {
             return _solicitud.YaTieneSolicitud(mascotaId, usuarioId);
+        }
+
+        //FUNCIONES PARA EL ADMIN
+        public List<SolicitudAdopcionVM> ObtenerBandejaAdmin()
+        {
+            return _solicitud.ListarParaAdmin();
         }
 
     }

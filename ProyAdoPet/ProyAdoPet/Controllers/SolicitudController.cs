@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProyAdoPet.Constants;
 using ProyAdoPet.Models;
 using ProyAdoPet.Services;
 using System.Security.Claims;
@@ -66,6 +67,14 @@ namespace ProyAdoPet.Controllers
             ViewBag.Nombre = nombre;
             ViewBag.Fecha = fecha;
             return View();
+        }
+
+        //FUNCIONES PARA ADMIN
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        public IActionResult Bandeja()
+        {
+            var solicitudes = _solicitudService.ObtenerBandejaAdmin();
+            return View(solicitudes);
         }
     }
 }
