@@ -65,7 +65,12 @@ namespace ProyAdoPet.DAO
                             MascotaNombre = dr["MascotaNombre"].ToString(),
                             MascotaFoto = dr["FotoMascota"].ToString(),
                             EstadoActualId = Convert.ToInt32(dr["EstadoActualId"]),
-                            EstadoNombre = dr["EstadoNombre"].ToString()
+                            EstadoNombre = dr["EstadoNombre"].ToString(),
+
+                            // VALIDAMOS SI HAY CITA (pueden venir nulos desde el LEFT JOIN)
+                            FechaCita = dr["FechaCita"] != DBNull.Value ? Convert.ToDateTime(dr["FechaCita"]) : DateTime.MinValue,
+                            LugarCita = dr["LugarCita"]?.ToString(),
+                            NotasCita = dr["NotasCita"]?.ToString()
                         };
                     }
                 }

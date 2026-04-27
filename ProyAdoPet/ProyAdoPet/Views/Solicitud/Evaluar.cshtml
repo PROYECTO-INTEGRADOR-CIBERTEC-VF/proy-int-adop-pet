@@ -93,9 +93,26 @@
                 <h4 class="fw-bold mb-4 text-center">Acciones de Gestión</h4>
 
                 <div class="d-grid gap-3">
-                    <button type="button" class="btn btn-primary btn-lg shadow-sm py-3" data-bs-toggle="modal" data-bs-target="#modalCita">
-                        <i class="bi bi-calendar-check me-2"></i> Programar Cita
-                    </button>
+
+                    @if (Model.EstadoActualId == 2)
+                    {
+                        <div class="alert alert-info border-0 shadow-sm rounded-4 p-3 mb-2">
+                            <h6 class="fw-bold text-info"><i class="bi bi-calendar-check-fill me-2"></i> Cita Programada</h6>
+                            <hr class="my-2">
+                            <p class="small mb-1"><strong>Fecha:</strong> @Model.FechaCita.ToString("dd/MM/yyyy hh:mm tt")</p>
+                            <p class="small mb-1"><strong>Lugar:</strong> @Model.LugarCita</p>
+                            @if (!string.IsNullOrEmpty(Model.NotasCita))
+                            {
+                                <p class="small mb-0 text-muted"><strong>Notas:</strong> @Model.NotasCita</p>
+                            }
+                        </div>
+                    }
+                    else if (Model.EstadoActualId == 1)
+                    {
+                        <button type="button" class="btn btn-primary btn-lg shadow-sm py-3" data-bs-toggle="modal" data-bs-target="#modalCita">
+                            <i class="bi bi-calendar-plus me-2"></i> Programar Cita
+                        </button>
+                    }
 
                     <form asp-action="ActualizarEstado" method="post" onsubmit="return confirm('¿Estás seguro de rechazar esta solicitud?');">
                         <input type="hidden" name="SolicitudId" value="@Model.SolicitudId" />
