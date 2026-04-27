@@ -113,3 +113,17 @@ CREATE TABLE CitaAdopcion (
     Notas NVARCHAR(MAX),
     CONSTRAINT FK_Cita_Solicitud FOREIGN KEY (SolicitudId) REFERENCES SolicitudAdopcion(Id)
 );
+
+
+-- =============================================
+-- TABLA: Contrato adopcion
+-- =============================================
+CREATE TABLE ContratoAdopcion (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    SolicitudId INT NOT NULL,
+    CodigoContrato AS ('CONT-' + CAST(Id AS VARCHAR)), -- Codigo autogenerado
+    FechaFirma DATETIME DEFAULT GETDATE(),
+    TerminosAceptados BIT DEFAULT 1,
+    ObservacionesIniciales NVARCHAR(MAX),
+    CONSTRAINT FK_Contrato_Solicitud FOREIGN KEY (SolicitudId) REFERENCES SolicitudAdopcion(Id)
+);
