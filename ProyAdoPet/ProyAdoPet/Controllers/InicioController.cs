@@ -1,18 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProyAdoPet.Models;
 using ProyAdoPet.Services;
-using System.Linq;
+using ProyAdoPet.ViewModel;
 
 namespace ProyAdoPet.Controllers
 {
     public class InicioController : Controller
     {
-        private readonly MascotaService _mascota;
-
-        public InicioController(MascotaService mascota)
+        MascotaService _mascota;
+        SolicitudService _solcitud;
+        public InicioController(MascotaService mascota, SolicitudService solicitud)
         {
             _mascota = mascota;
+            _solcitud = solicitud;
         }
+
 
         public async Task<IActionResult> Mascotas()
         {
@@ -28,31 +30,56 @@ namespace ProyAdoPet.Controllers
             return View(lista);
 
         }
-        public IActionResult Index(int? edad, string tipo, string tamano)
-        {
-            var lista = _mascota.FiltrarMascotas(edad, tipo, tamano);
 
-            if (lista == null || !lista.Any())
+        // HU-09: Filtrar mascotas
+        [HttpGet]
+        public IActionResult FiltrarMascotas(string? nombre, string? edad, int? estadoId)
+        {
+            var vm = new FiltroMascotaVM
             {
-                ViewBag.Mensaje = "No existen mascotas con esos criterios";
+                Nombre = nombre,
+                Edad = edad,
+                EstadoId = estadoId,
+                Estados = _mascota.EstadosMascota()
+            };
+
+            bool hayFiltros = !string.IsNullOrWhiteSpace(nombre)
+                           || !string.IsNullOrWhiteSpace(edad)
+                           || estadoId.HasValue;
+
+            if (hayFiltros)
+            {
+                vm.Resultados = _mascota.FiltrarMascotas(nombre, edad, estadoId);
+                vm.BusquedaRealizada = true;
             }
 
-            return View(lista);
+            return View(vm);
         }
 
-        public IActionResult Detalle(int id)
+        [HttpGet("Detalle/{id}")]
+        public IActionResult DetalleMascota(int id)
         {
-            var obj = _mascota.ObtenerMascotaPorId(id);
+            if (id <= 0)
+            {
+                return RedirectToAction("Mascotas");
+            }
 
-            if (obj == null)
-                return RedirectToAction("Index");
+            var mascota = _mascota.ObtenerMascota(id);
+            if (mascota == null) return NotFound();
 
-            return View(obj);
+            bool yaPostulo = false;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                int usuarioId = int.Parse(User.FindFirst("IdUsuario").Value);
+
+                yaPostulo = _solcitud.VerificarExistencia(id, usuarioId);
+            }
+
+            ViewBag.YaPostulo = yaPostulo;
+            return View(mascota);
         }
 
-        public IActionResult Limpiar()
-        {
-            return RedirectToAction("Index");
-        }
+
     }
 }
