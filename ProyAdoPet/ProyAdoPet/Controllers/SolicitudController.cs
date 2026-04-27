@@ -34,7 +34,7 @@ namespace ProyAdoPet.Controllers
             return View(modelo);
         }
 
-        [HttpPost]
+        [HttpPost("Postular")]
         [ValidateAntiForgeryToken]
         public IActionResult Postular(SolicitudAdopcion solicitud)
         {
@@ -109,5 +109,39 @@ namespace ProyAdoPet.Controllers
             return RedirectToAction("Evaluar", new { id = cita.SolicitudId });
         }
 
+        [HttpPost("Bandeja/Detalle/Aprobar")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        public IActionResult ConfirmarAdopcion(int SolicitudId, string Observaciones)
+        {
+            if (SolicitudId <= 0) return BadRequest();
+            var contrato = _solicitudService.AprobarYGenerarContrato(SolicitudId, Observaciones);
+
+            if (contrato != null)
+            {
+                TempData["MensajeExito"] = "¡Adopción finalizada con éxito! El contrato ha sido registrado.";
+                return View("FichaAdopcion", contrato);
+            }
+            else
+            {
+                TempData["MensajeError"] = "Hubo un error técnico al intentar finalizar la adopción.";
+                return RedirectToAction("Evaluar", new { id = SolicitudId });
+            }
+
+        }
+
+        [HttpGet("Bandeja/Contrato")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        public IActionResult VerContrato(int id)
+        {
+            var contrato = _solicitudService.ObtenerContratoPorSolicitud(id);
+
+            if (contrato == null)
+            {
+                TempData["MensajeError"] = "No se encontró un contrato para esta solicitud.";
+                return RedirectToAction("Bandeja");
+            }
+
+            return View("FichaAdopcion", contrato);
+        }
     }
 }

@@ -258,3 +258,79 @@ BEGIN
         THROW;
     END CATCH
 END;
+
+
+
+-- =============================================
+-- PROCEDIMIENTO: Para cambiar estados, crear contrato, devolver contrato a vista
+-- ============================================
+
+CREATE OR ALTER PROCEDURE sp_FinalizarAdopcion
+    @SolicitudId INT,
+    @Observaciones NVARCHAR(MAX) = 'Sin observaciones iniciales'
+AS
+BEGIN
+    BEGIN TRANSACTION
+    BEGIN TRY
+        DECLARE @MascotaId INT;
+        DECLARE @NuevoContratoId INT;
+
+        --obtener id mascota
+        SELECT @MascotaId = MascotaId FROM SolicitudAdopcion WHERE Id = @SolicitudId;
+
+        --cambiar estado solicitud a aprobado
+        UPDATE SolicitudAdopcion SET EstadoSolicitudId = 3 WHERE Id = @SolicitudId;
+
+        --cambiar mascota a adoptado
+        UPDATE Mascota SET EstadoId = 2 WHERE Id = @MascotaId;
+
+        --crear contrato adopcion
+        INSERT INTO ContratoAdopcion (SolicitudId, FechaFirma, ObservacionesIniciales)
+        VALUES (@SolicitudId, GETDATE(), @Observaciones);
+
+        --guardamos id de contrato
+        SET @NuevoContratoId = SCOPE_IDENTITY();
+
+        --devolver contrato para la vista
+        SELECT 
+            C.Id AS ContratoNumero,
+            C.CodigoContrato,
+            S.NombreCompleto AS Adoptante,
+            S.DNI,
+            S.Telefono,
+            M.Nombre AS Mascota,
+            C.FechaFirma AS FechaFinal
+        FROM ContratoAdopcion C
+        INNER JOIN SolicitudAdopcion S ON C.SolicitudId = S.Id
+        INNER JOIN Mascota M ON S.MascotaId = M.Id
+        WHERE C.Id = @NuevoContratoId;
+
+        COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+        THROW;
+    END CATCH
+END;
+
+
+-- =============================================
+-- PROCEDIMIENTO: Obtener detalle del contrato
+-- ============================================
+CREATE OR ALTER PROCEDURE sp_ObtenerContratoPorSolicitud
+    @SolicitudId INT
+AS
+BEGIN
+    SELECT 
+        C.Id AS ContratoNumero,
+        C.CodigoContrato,
+        S.NombreCompleto AS Adoptante,
+        S.DNI,
+        S.Telefono,
+        M.Nombre AS Mascota,
+        C.FechaFirma AS FechaFinal
+    FROM ContratoAdopcion C
+    INNER JOIN SolicitudAdopcion S ON C.SolicitudId = S.Id
+    INNER JOIN Mascota M ON S.MascotaId = M.Id
+    WHERE S.Id = @SolicitudId;
+END;
