@@ -78,7 +78,9 @@ namespace ProyAdoPet.Controllers
             return View(solicitudes);
         }
 
+
         [HttpGet("Bandeja/Detalle")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
         public IActionResult Evaluar(int id)
         {
             var modelo = _solicitudService.ObtenerDetalleSolicitud(id);
@@ -86,5 +88,26 @@ namespace ProyAdoPet.Controllers
 
             return View(modelo);
         }
+
+        [HttpPost("Bandeja/Detalle/Cita")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        public IActionResult ProgramarCita(CitaAdopcion cita)
+        {
+            if (cita.SolicitudId == 0) return BadRequest();
+
+            bool exito = _solicitudService.ProgramarEntrevista(cita);
+
+            if (exito)
+            {
+                TempData["MensajeExito"] = "La cita ha sido programada y el estado se actualizó a 'Citado'.";
+            }
+            else
+            {
+                TempData["MensajeError"] = "No se pudo programar la cita. Verifique que la fecha sea válida.";
+            }
+
+            return RedirectToAction("Evaluar", new { id = cita.SolicitudId });
+        }
+
     }
 }

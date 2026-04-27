@@ -73,6 +73,32 @@ namespace ProyAdoPet.DAO
             return detalle;
         }
 
+        public bool ProgramarCita(CitaAdopcion cita)
+        {
+            bool respuesta = false;
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                try
+                {
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_RegistrarCitaAdopcion", conexion);
+                    cmd.Parameters.AddWithValue("@SolicitudId", cita.SolicitudId);
+                    cmd.Parameters.AddWithValue("@FechaCita", cita.FechaCita);
+                    cmd.Parameters.AddWithValue("@Lugar", cita.Lugar ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@Notas", cita.Notas ?? (object)DBNull.Value);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    if (filasAfectadas > 0) respuesta = true;
+                }
+                catch (Exception ex)
+                {
+                    respuesta = false;
+                }
+            }
+            return respuesta;
+        }
+
         public bool Registrar(SolicitudAdopcion solicitud)
         {
             bool respuesta = false;

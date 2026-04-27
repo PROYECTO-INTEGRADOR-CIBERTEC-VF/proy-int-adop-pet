@@ -12,5 +12,11 @@
         public string? MascotaFoto { get; set; }
         public int EstadoActualId { get; set; }
         public string? EstadoNombre { get; set; }
+
+
+        //datos solo si hay una cita
+        public DateTime FechaCita { get; set; }
+        public string? LugarCita { get; set; }
+        public string? NotasCita { get; set; }
     }
 }

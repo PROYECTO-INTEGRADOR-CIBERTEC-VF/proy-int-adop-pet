@@ -35,5 +35,12 @@ namespace ProyAdoPet.Services
         {
             return _solicitud.ObtenerDetalleEvaluacion(id);
         }
+
+        public bool ProgramarEntrevista(CitaAdopcion cita)
+        {
+            if (cita.FechaCita < DateTime.Now) return false;
+
+            return _solicitud.ProgramarCita(cita);
+        }
     }
 }

@@ -217,10 +217,15 @@ BEGIN
         M.Nombre AS MascotaNombre,
         M.FotoMascota,
         S.EstadoSolicitudId AS EstadoActualId,
-        E.Nombre AS EstadoNombre
+        E.Nombre AS EstadoNombre,
+        --datos de cita (pueden ser NULL)
+        C.FechaCita,
+        C.Lugar AS LugarCita,
+        C.Notas AS NotasCita
     FROM SolicitudAdopcion S
     INNER JOIN Mascota M ON S.MascotaId = M.Id
     INNER JOIN EstadoSolicitud E ON S.EstadoSolicitudId = E.Id
+    LEFT JOIN CitaAdopcion C ON S.Id = C.SolicitudId
     WHERE S.Id = @Id;
 END;
 

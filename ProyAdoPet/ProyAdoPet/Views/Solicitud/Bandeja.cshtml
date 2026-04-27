@@ -51,6 +51,12 @@
                                 <span class="badge @claseBadge px-3 py-2 rounded-pill">
                                     @item.EstadoNombre
                                 </span>
+                                @if (item.EstadoId == 2)
+                                {
+                                    <div class="small text-muted mt-1 fw-bold">
+                                        <i class="bi bi-calendar-event text-info"></i> Cita programada
+                                    </div>
+                                }
                             </td>
                             <td class="text-center">
                                 <a asp-action="Evaluar" asp-route-id="@item.Id"
