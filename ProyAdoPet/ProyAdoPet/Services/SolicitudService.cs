@@ -42,5 +42,10 @@ namespace ProyAdoPet.Services
 
             return _solicitud.ProgramarCita(cita);
         }
+
+        public ContratoAdopcionVM AprobarYGenerarContrato(int solicitudId)
+        {
+            return _solicitud.FinalizarAdopcion(solicitudId);
+        }
     }
 }

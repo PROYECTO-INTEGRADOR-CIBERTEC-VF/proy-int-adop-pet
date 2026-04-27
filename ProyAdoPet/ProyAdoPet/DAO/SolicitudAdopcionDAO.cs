@@ -10,6 +10,43 @@ namespace ProyAdoPet.DAO
     {
         string cadena = (new ConfigurationBuilder().AddJsonFile("appsettings.json").Build()).GetConnectionString("cn") ?? "";
 
+        public ContratoAdopcionVM FinalizarAdopcion(int solicitudId)
+        {
+            ContratoAdopcionVM contrato = null;
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                try
+                {
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_FinalizarAdopcion", conexion);
+                    cmd.Parameters.AddWithValue("@SolicitudId", solicitudId);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            contrato = new ContratoAdopcionVM
+                            {
+                                ContratoNumero = Convert.ToInt32(dr["ContratoNumero"]),
+                                CodigoContrato = dr["CodigoContrato"].ToString(),
+                                Adoptante = dr["Adoptante"].ToString(),
+                                DNI = dr["DNI"].ToString(),
+                                Telefono = dr["Telefono"].ToString(),
+                                Mascota = dr["Mascota"].ToString(),
+                                FechaFinal = Convert.ToDateTime(dr["FechaFinal"])
+                            };
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    return null; //rollback
+                }
+            }
+            return contrato;
+        }
+
         public List<SolicitudAdopcionVM> ListarParaAdmin()
         {
             List<SolicitudAdopcionVM> lista = new List<SolicitudAdopcionVM>();

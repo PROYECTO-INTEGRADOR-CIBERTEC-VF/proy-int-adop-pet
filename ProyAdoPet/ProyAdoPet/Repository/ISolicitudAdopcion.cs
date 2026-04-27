@@ -12,5 +12,6 @@ namespace ProyAdoPet.Repository
         List<SolicitudAdopcionVM> ListarParaAdmin();
         EvaluacionSolicitudVM ObtenerDetalleEvaluacion(int id);
         bool ProgramarCita(CitaAdopcion cita);
+        ContratoAdopcionVM FinalizarAdopcion(int solicitudId);
     }
 }
