@@ -14,5 +14,6 @@ namespace ProyAdoPet.Repository
         bool ProgramarCita(CitaAdopcion cita);
         ContratoAdopcionVM FinalizarAdopcion(int solicitudId, string Observaciones);
         public ContratoAdopcionVM ObtenerContratoPorSolicitud(int solicitudId);
+        bool RechazarSolicitud(int solicitudId);
     }
 }

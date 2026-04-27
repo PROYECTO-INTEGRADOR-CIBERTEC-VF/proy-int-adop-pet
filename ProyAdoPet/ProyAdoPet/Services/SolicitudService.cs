@@ -50,8 +50,13 @@ namespace ProyAdoPet.Services
 
         public ContratoAdopcionVM ObtenerContratoPorSolicitud(int solicitudId)
         {
-            // Aquí solo llamamos al DAO para recuperar la info existente
+            // Aqui solo llamamos al DAO para recuperar la info existente
             return _solicitud.ObtenerContratoPorSolicitud(solicitudId);
+        }
+
+        public bool ProcesarRechazo(int solicitudId)
+        {
+            return _solicitud.RechazarSolicitud(solicitudId);
         }
     }
 }
