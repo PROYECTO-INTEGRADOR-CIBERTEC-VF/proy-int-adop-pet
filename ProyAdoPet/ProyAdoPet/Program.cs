@@ -1,19 +1,21 @@
-using ProyAdoPet.DAO;
+﻿using ProyAdoPet.DAO;
 using ProyAdoPet.Repository;
 using ProyAdoPet.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllersWithViews();
+
+// Dependency Injection
 builder.Services.AddScoped<IMascota, MascotaDAO>();
 builder.Services.AddScoped<MascotaService>();
+
 builder.Services.AddScoped<IUsuario, UsuarioDAO>();
 builder.Services.AddScoped<UsuarioService>();
 
-
-//sesion
+// SESSION
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -22,21 +24,20 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-//cookie
+// COOKIE AUTH
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Usuario/Login"; //si no esta logueado
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(20); 
+        options.LoginPath = "/Usuario/Login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
     });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Error handling
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -49,6 +50,7 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// 🔥 RUTA CORRECTA (ESTO ARREGLA EL ERROR)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Inicio}/{action=Mascotas}/{id?}");

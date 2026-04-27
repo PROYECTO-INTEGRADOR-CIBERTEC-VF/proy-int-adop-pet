@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProyAdoPet")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+428c6258180e0960608a1cf7acd56aec61d01d94")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+152ca4376258f91cae7f06b3ea03e0eac078fa8d")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProyAdoPet")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProyAdoPet")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

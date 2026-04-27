@@ -1,0 +1,31 @@
+﻿@model IEnumerable<ProyAdoPet.Models.Mascota>
+
+<h2>Filtrar Mascotas</h2>
+
+<form method="get" asp-action="Index">
+    <input type="number" name="edad" placeholder="Edad" />
+    <input type="text" name="tipo" placeholder="Tipo" />
+    <input type="text" name="tamano" placeholder="Tamaño" />
+
+    <button type="submit">Filtrar</button>
+    <a asp-action="Limpiar">Limpiar</a>
+</form>
+
+<hr />
+
+@if (ViewBag.Mensaje != null)
+{
+    <p style="color:red">@ViewBag.Mensaje</p>
+}
+
+@foreach (var item in Model)
+{
+    <div>
+        <h3>@item.Nombre</h3>
+        <p>@item.Descripcion</p>
+
+        <a asp-action="Detalle" asp-route-id="@item.Id">
+            Ver detalle
+        </a>
+    </div>
+}

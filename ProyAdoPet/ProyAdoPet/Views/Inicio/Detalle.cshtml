@@ -1,0 +1,177 @@
+@model ProyAdoPet.Models.Mascota
+
+@{
+    ViewData["Title"] = "Detalle - " + Model.Nombre;
+
+    string estado = Model.Estado?.ToLower() ?? "";
+    string badgeColor = estado switch
+    {
+        "disponible"  => "success",
+        "adoptado"    => "secondary",
+        "en proceso"  => "warning",
+        _             => "info"
+    };
+    string alertColor = estado switch
+    {
+        "disponible"  => "success",
+        "adoptado"    => "light",
+        "en proceso"  => "warning",
+        _             => "info"
+    };
+    string iconEstado = estado switch
+    {
+        "disponible"  => "bi-house-heart-fill",
+        "adoptado"    => "bi-check-circle-fill",
+        "en proceso"  => "bi-hourglass-split",
+        _             => "bi-question-circle-fill"
+    };
+}
+
+<!-- Barra de navegación interna -->
+<div class="bg-light py-2 border-bottom shadow-sm">
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0 small">
+                <li class="breadcrumb-item">
+                    <a href="/Inicio/Mascotas" class="text-decoration-none text-primary fw-semibold">
+                        <i class="bi bi-grid-fill me-1"></i>Mascotas
+                    </a>
+                </li>
+                <li class="breadcrumb-item active text-muted" aria-current="page">@Model.Nombre</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8 col-xl-7">
+
+            <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+
+                <!-- Imagen principal -->
+                <div class="position-relative">
+                    @if (!string.IsNullOrEmpty(Model.FotoMascota))
+                    {
+                        <img src="~/fotos/@Model.FotoMascota"
+                             class="w-100"
+                             alt="Foto de @Model.Nombre"
+                             style="height: 400px; object-fit: cover; object-position: center top;">
+                    }
+                    else
+                    {
+                        <div class="d-flex align-items-center justify-content-center bg-light"
+                             style="height: 400px;">
+                            <i class="bi bi-image text-secondary" style="font-size: 5rem;"></i>
+                        </div>
+                    }
+
+                    <!-- Badge de estado sobre la imagen -->
+                    <span class="position-absolute top-0 end-0 m-3 badge bg-@badgeColor
+                                 rounded-pill px-3 py-2 shadow fw-semibold"
+                          style="font-size: 0.85rem; letter-spacing: 0.3px;">
+                        <i class="bi @iconEstado me-1"></i>@Model.Estado
+                    </span>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+
+                    <!-- Nombre y edad -->
+                    <div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+                        <h2 class="fw-bold text-dark mb-0" style="font-size: 2rem;">@Model.Nombre</h2>
+                        <span class="text-muted fs-6">
+                            <i class="bi bi-calendar3 me-1 text-primary"></i>@Model.Edad de edad
+                        </span>
+                    </div>
+
+                    <!-- Pills con tipo y tamaño (si existen) -->
+                    @if (!string.IsNullOrWhiteSpace(Model.Tipo) || !string.IsNullOrWhiteSpace(Model.Tamaño))
+                    {
+                        <div class="d-flex flex-wrap gap-2 mb-4">
+                            @if (!string.IsNullOrWhiteSpace(Model.Tipo))
+                            {
+                                <span class="badge rounded-pill px-3 py-2 fw-normal"
+                                      style="background-color:#e8f0fe; color:#1a73e8; font-size:0.85rem;">
+                                    <i class="bi bi-tag-fill me-1"></i>@Model.Tipo
+                                </span>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(Model.Tamaño))
+                            {
+                                <span class="badge rounded-pill px-3 py-2 fw-normal"
+                                      style="background-color:#e6f4ea; color:#1e8e3e; font-size:0.85rem;">
+                                    <i class="bi bi-rulers me-1"></i>@Model.Tamaño
+                                </span>
+                            }
+                        </div>
+                    }
+
+                    <hr class="my-4">
+
+                    <!-- Descripción completa -->
+                    <div class="mb-4">
+                        <h5 class="fw-semibold text-dark mb-3">
+                            <i class="bi bi-file-text-fill text-primary me-2"></i>Descripción
+                        </h5>
+                        <p class="text-secondary lh-lg mb-0" style="font-size: 1.05rem; text-align: justify;">
+                            @if (string.IsNullOrWhiteSpace(Model.Descripcion))
+                            {
+                                <em>Sin descripción disponible.</em>
+                            }
+                            else
+                            {
+                                @Model.Descripcion
+                            }
+                        </p>
+                    </div>
+
+                    <!-- Estado de adopción -->
+                    <div class="rounded-3 p-3 mb-4 d-flex align-items-start gap-3
+                                border border-@badgeColor border-opacity-25"
+                         style="background-color: var(--bs-@(alertColor)-bg-subtle, #f8f9fa);">
+                        <i class="bi @iconEstado text-@badgeColor mt-1" style="font-size: 1.4rem; flex-shrink: 0;"></i>
+                        <div>
+                            <p class="fw-semibold text-dark mb-1" style="font-size: 0.95rem;">
+                                Estado de adopción:
+                                <span class="ms-1 text-@badgeColor">@Model.Estado</span>
+                            </p>
+                            <p class="text-muted small mb-0">
+                                @if (estado == "disponible")
+                                {
+                                    <span>¡@Model.Nombre está esperando a su nueva familia! Comunícate con nosotros para iniciar el proceso de adopción.</span>
+                                }
+                                else if (estado == "adoptado")
+                                {
+                                    <span>@Model.Nombre ya encontró un hogar. ¡Gracias a quienes hicieron esto posible!</span>
+                                }
+                                else if (estado == "en proceso")
+                                {
+                                    <span>La adopción de @Model.Nombre está en proceso de evaluación.</span>
+                                }
+                                else
+                                {
+                                    <span>Consulta con nosotros para más información sobre @Model.Nombre.</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Botón volver -->
+                    <div class="d-flex justify-content-start">
+                        <a href="/Inicio/Mascotas"
+                           class="btn btn-outline-primary rounded-pill px-4 py-2">
+                            <i class="bi bi-arrow-left me-2"></i>Volver al catálogo
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: none;
+    }
+</style>
