@@ -16,8 +16,6 @@ namespace ProyAdoPet.Controllers
         public async Task<IActionResult> Mascotas()
         {
 
-            var lista = await Task.Run(() => _mascota.MascotasDisponibles());
-
             if (lista == null || !lista.Any())
             {
                 TempData["Mensaje"] = "No hay mascotas disponibles en este momento";

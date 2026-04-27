@@ -15,9 +15,6 @@ namespace ProyAdoPet.DAO
             var lista = new List<Mascota>();
             using (SqlConnection cn = new SqlConnection(cadena))
             {
-                using (SqlCommand cmd = new SqlCommand("sp_ListarMascotas", cn))
-                {
-                    cmd.CommandType = CommandType.StoredProcedure;
                     cn.Open();
                     using (SqlDataReader dr = cmd.ExecuteReader())
                     {
