@@ -223,3 +223,33 @@ BEGIN
     INNER JOIN EstadoSolicitud E ON S.EstadoSolicitudId = E.Id
     WHERE S.Id = @Id;
 END;
+
+
+-- =============================================
+-- PROCEDIMIENTO: Programar cita presencial a una solicitud
+-- =============================================
+CREATE OR ALTER PROCEDURE sp_RegistrarCitaAdopcion
+    @SolicitudId INT,
+    @FechaCita DATETIME,
+    @Lugar NVARCHAR(250),
+    @Notas NVARCHAR(MAX)
+AS
+BEGIN
+    BEGIN TRANSACTION
+    BEGIN TRY
+        --insertar cita
+        INSERT INTO CitaAdopcion (SolicitudId, FechaCita, Lugar, Notas)
+        VALUES (@SolicitudId, @FechaCita, @Lugar, @Notas);
+
+        -- cambiar estado (citado)
+        UPDATE SolicitudAdopcion 
+        SET EstadoSolicitudId = 2 
+        WHERE Id = @SolicitudId;
+
+        COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+        THROW;
+    END CATCH
+END;
