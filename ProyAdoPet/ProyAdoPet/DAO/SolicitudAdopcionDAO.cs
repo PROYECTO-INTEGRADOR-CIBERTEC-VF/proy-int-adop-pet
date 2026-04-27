@@ -10,7 +10,7 @@ namespace ProyAdoPet.DAO
     {
         string cadena = (new ConfigurationBuilder().AddJsonFile("appsettings.json").Build()).GetConnectionString("cn") ?? "";
 
-        public ContratoAdopcionVM FinalizarAdopcion(int solicitudId)
+        public ContratoAdopcionVM FinalizarAdopcion(int solicitudId, string observaciones)
         {
             ContratoAdopcionVM contrato = null;
             using (SqlConnection conexion = new SqlConnection(cadena))
@@ -20,6 +20,7 @@ namespace ProyAdoPet.DAO
                     conexion.Open();
                     SqlCommand cmd = new SqlCommand("sp_FinalizarAdopcion", conexion);
                     cmd.Parameters.AddWithValue("@SolicitudId", solicitudId);
+                    cmd.Parameters.AddWithValue("@Observaciones", (object)observaciones ?? DBNull.Value);
                     cmd.CommandType = CommandType.StoredProcedure;
 
                     using (SqlDataReader dr = cmd.ExecuteReader())
@@ -75,6 +76,36 @@ namespace ProyAdoPet.DAO
                 }
             }
             return lista;
+        }
+
+        public ContratoAdopcionVM ObtenerContratoPorSolicitud(int solicitudId)
+        {
+            ContratoAdopcionVM contrato = null;
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                conexion.Open();
+                SqlCommand cmd = new SqlCommand("sp_ObtenerContratoPorSolicitud", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SolicitudId", solicitudId);
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        contrato = new ContratoAdopcionVM
+                        {
+                            ContratoNumero = Convert.ToInt32(dr["ContratoNumero"]),
+                            CodigoContrato = dr["CodigoContrato"].ToString(),
+                            Adoptante = dr["Adoptante"].ToString(),
+                            DNI = dr["DNI"].ToString(),
+                            Telefono = dr["Telefono"].ToString(),
+                            Mascota = dr["Mascota"].ToString(),
+                            FechaFinal = Convert.ToDateTime(dr["FechaFinal"])
+                        };
+                    }
+                }
+            }
+            return contrato;
         }
 
         public EvaluacionSolicitudVM ObtenerDetalleEvaluacion(int id)

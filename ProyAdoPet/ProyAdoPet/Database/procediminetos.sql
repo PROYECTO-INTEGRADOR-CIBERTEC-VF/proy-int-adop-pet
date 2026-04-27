@@ -263,17 +263,7 @@ END;
 
 -- =============================================
 -- PROCEDIMIENTO: Para cambiar estados, crear contrato, devolver contrato a vista
--- =============================================
-CREATE TABLE ContratoAdopcion (
-    Id INT PRIMARY KEY IDENTITY(1,1),
-    SolicitudId INT NOT NULL,
-    CodigoContrato AS ('CONT-' + CAST(Id AS VARCHAR)), -- Codigo autogenerado
-    FechaFirma DATETIME DEFAULT GETDATE(),
-    TerminosAceptados BIT DEFAULT 1,
-    ObservacionesIniciales NVARCHAR(MAX),
-    CONSTRAINT FK_Contrato_Solicitud FOREIGN KEY (SolicitudId) REFERENCES SolicitudAdopcion(Id)
-);
-
+-- ============================================
 
 CREATE OR ALTER PROCEDURE sp_FinalizarAdopcion
     @SolicitudId INT,
@@ -321,4 +311,26 @@ BEGIN
         ROLLBACK TRANSACTION
         THROW;
     END CATCH
+END;
+
+
+-- =============================================
+-- PROCEDIMIENTO: Obtener detalle del contrato
+-- ============================================
+CREATE OR ALTER PROCEDURE sp_ObtenerContratoPorSolicitud
+    @SolicitudId INT
+AS
+BEGIN
+    SELECT 
+        C.Id AS ContratoNumero,
+        C.CodigoContrato,
+        S.NombreCompleto AS Adoptante,
+        S.DNI,
+        S.Telefono,
+        M.Nombre AS Mascota,
+        C.FechaFirma AS FechaFinal
+    FROM ContratoAdopcion C
+    INNER JOIN SolicitudAdopcion S ON C.SolicitudId = S.Id
+    INNER JOIN Mascota M ON S.MascotaId = M.Id
+    WHERE S.Id = @SolicitudId;
 END;
