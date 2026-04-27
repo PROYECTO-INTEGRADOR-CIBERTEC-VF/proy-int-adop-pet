@@ -70,6 +70,7 @@ namespace ProyAdoPet.Controllers
         }
 
         //FUNCIONES PARA ADMIN
+        [HttpGet("Bandeja")]
         [Authorize(Roles = RolesConstantes.Administrador)]
         public IActionResult Bandeja()
         {
