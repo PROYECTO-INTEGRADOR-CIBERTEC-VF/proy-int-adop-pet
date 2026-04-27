@@ -109,5 +109,23 @@ namespace ProyAdoPet.Controllers
             return RedirectToAction("Evaluar", new { id = cita.SolicitudId });
         }
 
+        [HttpPost("Bandeja/Detalle/Aprobar")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        public IActionResult ConfirmarAdopcion(int SolicitudId)
+        {
+            if (SolicitudId <= 0) return BadRequest();
+            var contrato = _solicitudService.AprobarYGenerarContrato(SolicitudId);
+
+            if (contrato != null)
+            {
+                TempData["MensajeExito"] = "¡Adopción finalizada con éxito! El contrato ha sido registrado.";
+                return View("FichaAdopcion", contrato);
+            }
+            else
+            {
+                TempData["MensajeError"] = "Hubo un error técnico al intentar finalizar la adopción.";
+                return RedirectToAction("Evaluar", new { id = SolicitudId });
+            }
+        }
     }
 }
