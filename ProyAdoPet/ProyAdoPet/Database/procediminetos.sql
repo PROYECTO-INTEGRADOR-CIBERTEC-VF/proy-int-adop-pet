@@ -176,3 +176,25 @@ BEGIN
     SELECT SCOPE_IDENTITY(); -- Retorna el ID insertado
 END;
 GO
+
+
+-- =============================================
+-- PROCEDIMIENTO: Listado de todas las solicitudes enviadas
+-- =============================================
+CREATE OR ALTER PROCEDURE sp_ListarSolicitudesAdmin
+AS
+BEGIN
+    SELECT 
+        S.Id,
+        S.NombreCompleto AS NombrePostulante,
+        S.DNI,
+        M.Nombre AS NombreMascota,
+        M.FotoMascota,
+        S.FechaCreacion,
+        E.Nombre AS EstadoNombre,
+        S.EstadoSolicitudId AS EstadoId
+    FROM SolicitudAdopcion S
+    INNER JOIN Mascota M ON S.MascotaId = M.Id
+    INNER JOIN EstadoSolicitud E ON S.EstadoSolicitudId = E.Id
+    ORDER BY S.FechaCreacion DESC;
+END;

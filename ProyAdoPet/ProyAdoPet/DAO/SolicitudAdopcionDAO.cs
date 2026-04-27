@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using ProyAdoPet.Models;
 using ProyAdoPet.Repository;
+using ProyAdoPet.ViewModel;
 using System.Data;
 
 namespace ProyAdoPet.DAO
@@ -9,6 +10,35 @@ namespace ProyAdoPet.DAO
     {
         string cadena = (new ConfigurationBuilder().AddJsonFile("appsettings.json").Build()).GetConnectionString("cn") ?? "";
 
+        public List<SolicitudAdopcionVM> ListarParaAdmin()
+        {
+            List<SolicitudAdopcionVM> lista = new List<SolicitudAdopcionVM>();
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                conexion.Open();
+                SqlCommand cmd = new SqlCommand("sp_ListarSolicitudesAdmin", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(new SolicitudAdopcionVM
+                        {
+                            Id = Convert.ToInt32(dr["Id"]),
+                            NombrePostulante = dr["NombrePostulante"].ToString(),
+                            DNI = dr["DNI"].ToString(),
+                            NombreMascota = dr["NombreMascota"].ToString(),
+                            FotoMascota = dr["FotoMascota"].ToString(),
+                            FechaCreacion = Convert.ToDateTime(dr["FechaCreacion"]),
+                            EstadoNombre = dr["EstadoNombre"].ToString(),
+                            EstadoId = Convert.ToInt32(dr["EstadoId"])
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
 
         public bool Registrar(SolicitudAdopcion solicitud)
         {

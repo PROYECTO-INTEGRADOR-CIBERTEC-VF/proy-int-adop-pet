@@ -1,4 +1,5 @@
 ﻿using ProyAdoPet.Models;
+using ProyAdoPet.ViewModel;
 
 namespace ProyAdoPet.Repository
 {
@@ -6,5 +7,8 @@ namespace ProyAdoPet.Repository
     {
         public bool YaTieneSolicitud(int mascotaId, int usuarioId);
         bool Registrar(SolicitudAdopcion solicitud);
+
+        //METODOS PARA EL ADMIN
+        List<SolicitudAdopcionVM> ListarParaAdmin();
     }
 }
