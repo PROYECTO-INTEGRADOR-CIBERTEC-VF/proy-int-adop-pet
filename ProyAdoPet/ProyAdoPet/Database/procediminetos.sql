@@ -176,3 +176,85 @@ BEGIN
     SELECT SCOPE_IDENTITY(); -- Retorna el ID insertado
 END;
 GO
+
+
+-- =============================================
+-- PROCEDIMIENTO: Listado de todas las solicitudes enviadas
+-- =============================================
+CREATE OR ALTER PROCEDURE sp_ListarSolicitudesAdmin
+AS
+BEGIN
+    SELECT 
+        S.Id,
+        S.NombreCompleto AS NombrePostulante,
+        S.DNI,
+        M.Nombre AS NombreMascota,
+        M.FotoMascota,
+        S.FechaCreacion,
+        E.Nombre AS EstadoNombre,
+        S.EstadoSolicitudId AS EstadoId
+    FROM SolicitudAdopcion S
+    INNER JOIN Mascota M ON S.MascotaId = M.Id
+    INNER JOIN EstadoSolicitud E ON S.EstadoSolicitudId = E.Id
+    ORDER BY S.FechaCreacion DESC;
+END;
+
+
+-- =============================================
+-- PROCEDIMIENTO: Obtener el detalle de una solicitud
+-- =============================================
+CREATE OR ALTER PROCEDURE sp_ObtenerDetalleSolicitud
+    @Id INT
+AS
+BEGIN
+    SELECT 
+        S.Id AS SolicitudId,
+        S.NombreCompleto AS NombrePostulante,
+        S.DNI,
+        S.Telefono,
+        S.Direccion,
+        S.MotivoAdopcion,
+        M.Nombre AS MascotaNombre,
+        M.FotoMascota,
+        S.EstadoSolicitudId AS EstadoActualId,
+        E.Nombre AS EstadoNombre,
+        --datos de cita (pueden ser NULL)
+        C.FechaCita,
+        C.Lugar AS LugarCita,
+        C.Notas AS NotasCita
+    FROM SolicitudAdopcion S
+    INNER JOIN Mascota M ON S.MascotaId = M.Id
+    INNER JOIN EstadoSolicitud E ON S.EstadoSolicitudId = E.Id
+    LEFT JOIN CitaAdopcion C ON S.Id = C.SolicitudId
+    WHERE S.Id = @Id;
+END;
+
+
+-- =============================================
+-- PROCEDIMIENTO: Programar cita presencial a una solicitud
+-- =============================================
+CREATE OR ALTER PROCEDURE sp_RegistrarCitaAdopcion
+    @SolicitudId INT,
+    @FechaCita DATETIME,
+    @Lugar NVARCHAR(250),
+    @Notas NVARCHAR(MAX)
+AS
+BEGIN
+    BEGIN TRANSACTION
+    BEGIN TRY
+        --insertar cita
+        INSERT INTO CitaAdopcion (SolicitudId, FechaCita, Lugar, Notas)
+        VALUES (@SolicitudId, @FechaCita, @Lugar, @Notas);
+
+        -- cambiar estado (citado)
+        UPDATE SolicitudAdopcion 
+        SET EstadoSolicitudId = 2 
+        WHERE Id = @SolicitudId;
+
+        COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+        THROW;
+    END CATCH
+END;

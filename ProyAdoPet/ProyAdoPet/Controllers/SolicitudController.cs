@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ProyAdoPet.Constants;
 using ProyAdoPet.Models;
 using ProyAdoPet.Services;
 using System.Security.Claims;
@@ -67,5 +68,46 @@ namespace ProyAdoPet.Controllers
             ViewBag.Fecha = fecha;
             return View();
         }
+
+        //FUNCIONES PARA ADMIN
+        [HttpGet("Bandeja")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        public IActionResult Bandeja()
+        {
+            var solicitudes = _solicitudService.ObtenerBandejaAdmin();
+            return View(solicitudes);
+        }
+
+
+        [HttpGet("Bandeja/Detalle")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        public IActionResult Evaluar(int id)
+        {
+            var modelo = _solicitudService.ObtenerDetalleSolicitud(id);
+            if (modelo == null) return NotFound();
+
+            return View(modelo);
+        }
+
+        [HttpPost("Bandeja/Detalle/Cita")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        public IActionResult ProgramarCita(CitaAdopcion cita)
+        {
+            if (cita.SolicitudId == 0) return BadRequest();
+
+            bool exito = _solicitudService.ProgramarEntrevista(cita);
+
+            if (exito)
+            {
+                TempData["MensajeExito"] = "La cita ha sido programada y el estado se actualizó a 'Citado'.";
+            }
+            else
+            {
+                TempData["MensajeError"] = "No se pudo programar la cita. Verifique que la fecha sea válida.";
+            }
+
+            return RedirectToAction("Evaluar", new { id = cita.SolicitudId });
+        }
+
     }
 }

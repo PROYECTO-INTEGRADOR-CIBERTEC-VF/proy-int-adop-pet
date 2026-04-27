@@ -101,3 +101,15 @@ CREATE TABLE SolicitudAdopcion (
     CONSTRAINT FK_Solicitud_Usuario FOREIGN KEY (UsuarioId) REFERENCES Usuario(IdUsuario),
     CONSTRAINT FK_Solicitud_Estado FOREIGN KEY (EstadoSolicitudId) REFERENCES EstadoSolicitud(Id)
 );
+
+-- =============================================
+-- TABLA: Cita de Adopcion
+-- =============================================
+CREATE TABLE CitaAdopcion (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    SolicitudId INT NOT NULL,
+    FechaCita DATETIME NOT NULL,
+    Lugar NVARCHAR(255) DEFAULT 'Oficina Central del Albergue',
+    Notas NVARCHAR(MAX),
+    CONSTRAINT FK_Cita_Solicitud FOREIGN KEY (SolicitudId) REFERENCES SolicitudAdopcion(Id)
+);

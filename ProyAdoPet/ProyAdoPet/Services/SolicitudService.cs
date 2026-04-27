@@ -1,5 +1,6 @@
 ﻿using ProyAdoPet.Models;
 using ProyAdoPet.Repository;
+using ProyAdoPet.ViewModel;
 
 namespace ProyAdoPet.Services
 {
@@ -24,5 +25,22 @@ namespace ProyAdoPet.Services
             return _solicitud.YaTieneSolicitud(mascotaId, usuarioId);
         }
 
+        //FUNCIONES PARA EL ADMIN
+        public List<SolicitudAdopcionVM> ObtenerBandejaAdmin()
+        {
+            return _solicitud.ListarParaAdmin();
+        }
+
+        public EvaluacionSolicitudVM ObtenerDetalleSolicitud(int id)
+        {
+            return _solicitud.ObtenerDetalleEvaluacion(id);
+        }
+
+        public bool ProgramarEntrevista(CitaAdopcion cita)
+        {
+            if (cita.FechaCita < DateTime.Now) return false;
+
+            return _solicitud.ProgramarCita(cita);
+        }
     }
 }
