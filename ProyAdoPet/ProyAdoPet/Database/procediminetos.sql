@@ -198,3 +198,28 @@ BEGIN
     INNER JOIN EstadoSolicitud E ON S.EstadoSolicitudId = E.Id
     ORDER BY S.FechaCreacion DESC;
 END;
+
+
+-- =============================================
+-- PROCEDIMIENTO: Obtener el detalle de una solicitud
+-- =============================================
+CREATE OR ALTER PROCEDURE sp_ObtenerDetalleSolicitud
+    @Id INT
+AS
+BEGIN
+    SELECT 
+        S.Id AS SolicitudId,
+        S.NombreCompleto AS NombrePostulante,
+        S.DNI,
+        S.Telefono,
+        S.Direccion,
+        S.MotivoAdopcion,
+        M.Nombre AS MascotaNombre,
+        M.FotoMascota,
+        S.EstadoSolicitudId AS EstadoActualId,
+        E.Nombre AS EstadoNombre
+    FROM SolicitudAdopcion S
+    INNER JOIN Mascota M ON S.MascotaId = M.Id
+    INNER JOIN EstadoSolicitud E ON S.EstadoSolicitudId = E.Id
+    WHERE S.Id = @Id;
+END;
