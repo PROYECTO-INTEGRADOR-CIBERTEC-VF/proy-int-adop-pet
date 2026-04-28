@@ -172,6 +172,27 @@ namespace ProyAdoPet.DAO
             return respuesta;
         }
 
+        public bool RechazarSolicitud(int solicitudId)
+        {
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                try
+                {
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_RechazarSolicitud", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@SolicitudId", solicitudId);
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    return filasAfectadas > 0;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
+        }
+
         public bool Registrar(SolicitudAdopcion solicitud)
         {
             bool respuesta = false;

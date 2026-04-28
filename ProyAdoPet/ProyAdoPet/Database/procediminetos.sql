@@ -170,12 +170,25 @@ CREATE OR ALTER PROCEDURE sp_RegistrarSolicitud
     @MotivoAdopcion NVARCHAR(MAX)
 AS
 BEGIN
-    INSERT INTO SolicitudAdopcion (MascotaId, UsuarioId, NombreCompleto, DNI, Telefono, Direccion, MotivoAdopcion, EstadoSolicitudId, FechaCreacion)
-    VALUES (@MascotaId, @UsuarioId, @NombreCompleto, @DNI, @Telefono, @Direccion, @MotivoAdopcion, 1, GETDATE());
-    
-    SELECT SCOPE_IDENTITY(); -- Retorna el ID insertado
+    BEGIN TRANSACTION
+    BEGIN TRY
+
+        INSERT INTO SolicitudAdopcion (MascotaId, UsuarioId, NombreCompleto, DNI, Telefono, Direccion, MotivoAdopcion, EstadoSolicitudId, FechaCreacion)
+        VALUES (@MascotaId, @UsuarioId, @NombreCompleto, @DNI, @Telefono, @Direccion, @MotivoAdopcion, 1, GETDATE());
+        
+        DECLARE @NuevaSolicitudId INT = SCOPE_IDENTITY();
+
+        UPDATE Mascota SET EstadoId = 3 WHERE Id = @MascotaId;
+
+        COMMIT TRANSACTION
+        
+        SELECT @NuevaSolicitudId; --id solicitud
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+        THROW;
+    END CATCH
 END;
-GO
 
 
 -- =============================================
@@ -333,4 +346,30 @@ BEGIN
     INNER JOIN SolicitudAdopcion S ON C.SolicitudId = S.Id
     INNER JOIN Mascota M ON S.MascotaId = M.Id
     WHERE S.Id = @SolicitudId;
+END;
+
+
+-- =============================================
+-- PROCEDIMIENTO: Rechazar solicitud de adopcion
+-- ============================================
+CREATE OR ALTER PROCEDURE sp_RechazarSolicitud
+    @SolicitudId INT
+AS
+BEGIN
+    DECLARE @MascotaId INT;
+    SELECT @MascotaId = MascotaId FROM SolicitudAdopcion WHERE Id = @SolicitudId;
+
+    BEGIN TRANSACTION
+    BEGIN TRY
+ 
+        UPDATE SolicitudAdopcion SET EstadoSolicitudId = 4 WHERE Id = @SolicitudId;
+
+        UPDATE Mascota SET EstadoId = 1 WHERE Id = @MascotaId;
+
+        COMMIT TRANSACTION
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION
+        THROW;
+    END CATCH
 END;
