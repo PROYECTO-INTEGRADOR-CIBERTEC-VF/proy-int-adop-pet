@@ -1,0 +1,133 @@
+﻿@using ProyAdoPet.ViewModel
+@model IEnumerable<MisSolicitudesVM>
+
+@{
+    ViewData["Title"] = "Mis Solicitudes de Adopción";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <div>
+                    <h2 class="fw-bold text-dark mb-1">Mis Solicitudes</h2>
+                    <p class="text-muted">Sigue de cerca el proceso para conocer a tu nuevo compañero.</p>
+                </div>
+                <a asp-controller="Iniicio" asp-action="Mascotas" class="btn btn-outline-primary rounded-pill">
+                    <i class="bi bi-plus-lg"></i> Nueva Adopción
+                </a>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5 bg-light rounded-4 border-dashed">
+                    <i class="bi bi-card-checklist display-1 text-muted"></i>
+                    <h4 class="mt-3 text-muted">Aún no tienes solicitudes</h4>
+                    <p>¡Nuestras mascotas están esperando por un hogar!</p>
+                    <a asp-controller="Adopcion" asp-action="Index" class="btn btn-primary px-4 py-2 rounded-pill shadow">Ver Mascotas</a>
+                </div>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    string colorClase = item.EstadoId switch
+                    {
+                        1 => "primary",
+                        2 => "info",
+                        3 => "success",
+                        4 => "danger",
+                        _ => "secondary"
+                    };
+
+                    <div class="card shadow-sm border-0 rounded-4 mb-4 overflow-hidden card-solicitud">
+    <div class="card-body p-0">
+        <div class="row g-0 h-100"> <div class="col-md-3 position-relative contenedor-img-fija">
+                <img src="~/fotos/@item.MascotaFoto"
+                     class="img-fija-solicitud"
+                     alt="@item.MascotaNombre">
+                
+                <div class="position-absolute top-0 start-0 m-2">
+                    <span class="badge bg-@colorClase shadow-sm px-3 py-2">@item.EstadoNombre</span>
+                </div>
+            </div>
+
+            <div class="col-md-9 p-4 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h4 class="fw-bold mb-0">@item.MascotaNombre</h4>
+                            <small class="text-muted"><i class="bi bi-clock me-1"></i> Enviado el @item.FechaEnvio.ToString("dd MMM yyyy")</small>
+                        </div>
+                        <div class="text-end">
+                            @if (item.EstadoId == 3)
+                            {
+                                <button class="btn btn-success rounded-pill px-4 shadow-sm btn-sm">
+                                    <i class="bi bi-file-earmark-pdf"></i> Descargar Acta
+                                </button>
+                            }
+                        </div>
+                    </div>
+
+                    @if (item.EstadoId == 2 && item.FechaCita.HasValue)
+                    {
+                        <div class="mt-2 p-2 bg-light rounded-3 border-start border-4 border-info">
+                            <p class="small mb-0" style="font-size: 0.85rem;">
+                                <strong>Cita:</strong> @item.FechaCita.Value.ToString("dd/MM/yyyy hh:mm tt") | @item.LugarCita
+                            </p>
+                        </div>
+                    }
+
+                    @if (item.EstadoId == 4)
+                    {
+                        <p class="small text-danger mt-2 mb-0">
+                            <i class="bi bi-exclamation-circle me-1"></i> Solicitud no procesada.
+                        </p>
+                    }
+                </div>
+
+                <div class="mt-auto">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span class="small fw-bold" style="font-size: 0.75rem;">Progreso de la solicitud</span>
+                        <span class="small text-muted" style="font-size: 0.75rem;">@item.PorcentajeProgreso%</span>
+                    </div>
+                    <div class="progress rounded-pill" style="height: 8px;">
+                        <div class="progress-bar bg-@colorClase progress-bar-striped progress-bar-animated"
+                             role="progressbar"
+                             style="width: @item.PorcentajeProgreso%"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+
+    .card-solicitud {
+        height: 210px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .contenedor-img-fija {
+        height: 210px;
+        overflow: hidden;
+    }
+    .img-fija-solicitud {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+    .card-solicitud:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+    }
+
+</style>

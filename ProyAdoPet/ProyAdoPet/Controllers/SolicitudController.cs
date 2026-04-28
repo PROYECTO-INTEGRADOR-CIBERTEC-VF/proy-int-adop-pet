@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace ProyAdoPet.Controllers
 {
     [Authorize]
-    [Route("Adopcion")]
+    [Route("Solicitud")]
     public class SolicitudController : Controller
     {
         private readonly SolicitudService _solicitudService;
@@ -34,9 +34,9 @@ namespace ProyAdoPet.Controllers
             return View(modelo);
         }
 
-        [HttpPost("Postular")]
+        [HttpPost("Procesar")]
         [ValidateAntiForgeryToken]
-        public IActionResult Postular(SolicitudAdopcion solicitud)
+        public IActionResult ProcesarSolicitud(SolicitudAdopcion solicitud)
         {
             string idUsuarioStr = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
                                  ?? User.FindFirst("IdUsuario")?.Value;

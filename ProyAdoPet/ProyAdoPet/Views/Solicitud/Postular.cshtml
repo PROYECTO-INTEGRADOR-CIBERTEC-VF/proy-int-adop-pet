@@ -32,7 +32,7 @@
                         </div>
                     }
 
-                    <form asp-controller="Adopcion" asp-action="Postular" method="post">
+                    <form asp-controller="Solicitud" asp-action="ProcesarSolicitud" method="post">
                         @Html.AntiForgeryToken()
 
                         <input type="hidden" asp-for="MascotaId" />
