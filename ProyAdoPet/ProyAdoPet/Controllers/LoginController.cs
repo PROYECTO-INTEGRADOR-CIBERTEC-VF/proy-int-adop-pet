@@ -46,7 +46,7 @@ namespace ProyAdoPet.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("Mascotas", "Inicio");
+                    return RedirectToAction("Index", "Inicio");
                 }
             }
 
@@ -58,7 +58,7 @@ namespace ProyAdoPet.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Mascotas", "Inicio");
+            return RedirectToAction("Index", "Inicio");
         }
 
         [AllowAnonymous] //todos puede ver esta pagina

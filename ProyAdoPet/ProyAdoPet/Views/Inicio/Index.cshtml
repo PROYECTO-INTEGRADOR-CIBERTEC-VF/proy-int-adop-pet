@@ -1,0 +1,96 @@
+﻿@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <small><i class="bi bi-info-circle-fill me-2"></i> @TempData["Mensaje"]</small>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<header class="hero-gradient text-white text-center py-5 rounded-bottom-5 shadow-lg">
+    <div class="container py-5 px-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <span class="badge rounded-pill bg-light text-primary mb-3 px-3 py-2 fw-bold text-uppercase">Adopta Responsablemente</span>
+                <h1 class="display-3 fw-bold mb-3">Encuentra a tu mejor amigo en ProyAdoPet</h1>
+                <p class="lead opacity-75 mb-4">Un hogar no está completo sin una mascota. Facilitamos el encuentro entre corazones y patitas.</p>
+                <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                    <a asp-action="Mascotas" class="btn btn-light btn-lg rounded-pill px-5 py-3 fw-bold text-primary shadow">
+                        <i class="bi bi-paw-fill me-2"></i>¡Quiero Adoptar!
+                    </a>
+                    <a href="#proceso" class="btn btn-outline-light btn-lg rounded-pill px-5 py-3">
+                        Saber más
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section id="proceso" class="py-5 bg-light">
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold display-5">¿Cómo es el proceso?</h2>
+            <p class="text-muted">Tres simples pasos para cambiar una vida para siempre.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 step-card shadow-sm p-4 text-center">
+                    <div class="icon-circle mb-4">
+                        <i class="bi bi-search display-6 text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold">1. Elige</h4>
+                    <p class="text-muted">Explora nuestra galería de mascotas. Filtra por tamaño, edad o personalidad.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 step-card shadow-sm p-4 text-center border-top border-primary border-4">
+                    <div class="icon-circle mb-4">
+                        <i class="bi bi-file-earmark-text-fill display-6 text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold">2. Postula</h4>
+                    <p class="text-muted">Completa la solicitud digital. Evaluamos tu entorno para asegurar el bienestar de ambos.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 step-card shadow-sm p-4 text-center">
+                    <div class="icon-circle mb-4">
+                        <i class="bi bi-house-heart-fill display-6 text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold">3. Adopta</h4>
+                    <p class="text-muted">Firma el compromiso y ¡listo! Tu nuevo compañero está listo para ir a casa contigo.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .hero-gradient {
+        background: linear-gradient(135deg, #0d6efd 0%, #004085 100%);
+    }
+
+    .step-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: none;
+    }
+
+        .step-card:hover {
+            transform: translateY(-10.px);
+            box-shadow: 0 1rem 3rem rgba(0,0,0,.175) !important;
+        }
+
+    .icon-circle {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background-color: rgba(13, 110, 253, 0.1);
+        margin: 0 auto;
+    }
+
+</style>

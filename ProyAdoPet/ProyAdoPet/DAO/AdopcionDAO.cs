@@ -9,6 +9,35 @@ namespace ProyAdoPet.DAO
     {
         string cadena = (new ConfigurationBuilder().AddJsonFile("appsettings.json").Build()).GetConnectionString("cn") ?? "";
 
+        public ActaAdopcionVM ObtenerDatosActa(int solicitudId)
+        {
+            ActaAdopcionVM acta = null;
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("sp_ObtenerDatosActa", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@Id", solicitudId);
+                cn.Open();
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        acta = new ActaAdopcionVM
+                        {
+                            Folio = Convert.ToInt32(dr["Folio"]),
+                            CodigoContrato = dr["CodigoContrato"].ToString(),
+                            AdoptanteNombre = dr["AdoptanteNombre"].ToString(),
+                            AdoptanteDNI = dr["AdoptanteDNI"].ToString(),
+                            AdoptanteDireccion = dr["AdoptanteDireccion"].ToString(),
+                            MascotaNombre = dr["MascotaNombre"].ToString(),
+                            FechaEmision = Convert.ToDateTime(dr["FechaEmision"]),
+                            ObservacionesIniciales = dr["ObservacionesIniciales"]?.ToString()
+                        };
+                    }
+                }
+            }
+            return acta;
+        }
 
         public IEnumerable<MisSolicitudesVM> ObtenerMisSolicitudes(int usuarioId)
         {

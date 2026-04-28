@@ -1,0 +1,149 @@
+﻿@using ProyAdoPet.ViewModel
+@model ActaAdopcionVM
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Acta de Adopción - @Model.CodigoContrato</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            padding: 40px;
+            border: 15px solid #f8f9fa;
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #198754;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            color: #198754;
+            margin: 0;
+            text-transform: uppercase;
+            font-size: 28px;
+        }
+        .folio-box {
+            float: right;
+            background: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            text-align: right;
+            border-radius: 8px;
+        }
+        .section-title {
+            background: #e9ecef;
+            padding: 8px 15px;
+            font-weight: bold;
+            margin-top: 25px;
+            border-radius: 4px;
+            color: #495057;
+        }
+        .content-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+        .content-table td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .label {
+            color: #6c757d;
+            font-size: 12px;
+            text-transform: uppercase;
+            font-weight: bold;
+            width: 30%;
+        }
+        .value {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .footer-message {
+            margin-top: 50px;
+            text-align: center;
+            font-style: italic;
+            color: #6c757d;
+            border-top: 1px solid #eee;
+            padding-top: 20px;
+        }
+        .sello {
+            margin-top: 30px;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="folio-box">
+            <small>Código de Contrato:</small><br />
+            <strong>@Model.CodigoContrato</strong><br />
+            <small>Fecha de Emisión:</small><br />
+            <strong>@Model.FechaEmision.ToString("dd/MM/yyyy")</strong>
+        </div>
+
+        <div class="header">
+            <h1>Constancia de Adopción</h1>
+            <p>Albergue de Mascotas - Proyecto Adopet</p>
+        </div>
+
+        <p>Por medio de la presente, se certifica la culminación exitosa del proceso de adopción, otorgando la custodia formal de la mascota a continuación detallada:</p>
+
+        <div class="section-title">DATOS DEL ADOPTANTE</div>
+        <table class="content-table">
+            <tr>
+                <td class="label">Nombre Completo:</td>
+                <td class="value">@Model.AdoptanteNombre</td>
+            </tr>
+            <tr>
+                <td class="label">DNI:</td>
+                <td class="value">@Model.AdoptanteDNI</td>
+            </tr>
+            <tr>
+                <td class="label">Dirección:</td>
+                <td class="value">@Model.AdoptanteDireccion</td>
+            </tr>
+        </table>
+
+        <div class="section-title">DATOS DE LA MASCOTA</div>
+        <table class="content-table">
+            <tr>
+                <td class="label">Nombre de la Mascota:</td>
+                <td class="value">@Model.MascotaNombre</td>
+            </tr>
+            <tr>
+                <td class="label">Origen:</td>
+                <td class="value">Detalle registrado en sistema</td>
+            </tr>
+        </table>
+
+        @if (!string.IsNullOrEmpty(Model.ObservacionesIniciales))
+        {
+            <div class="section-title">OBSERVACIONES DEL PROCESO</div>
+            <div style="padding: 10px; font-size: 14px; color: #555;">
+                @Model.ObservacionesIniciales
+            </div>
+        }
+
+        <div class="footer-message">
+            <p>"Adoptar es un acto de amor y responsabilidad. <br /> Gracias por darle una segunda oportunidad a un ser que lo necesitaba."</p>
+
+            <div class="sello">
+                <div style="width: 150px; height: 150px; border: 2px dashed #198754; border-radius: 50%; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: #198754; font-weight: bold; transform: rotate(-15deg);">
+                    Sello Digital<br />PROYADOPET
+                </div>
+                <p style="font-size: 10px; margin-top: 10px;">Validado electrónicamente por el sistema ProyAdoPet - Huaral</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

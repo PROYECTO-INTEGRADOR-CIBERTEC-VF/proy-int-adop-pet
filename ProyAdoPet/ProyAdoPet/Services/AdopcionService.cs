@@ -16,5 +16,10 @@ namespace ProyAdoPet.Services
         {
             return _adopcion.ObtenerMisSolicitudes(usuarioId);
         }
+
+        public ActaAdopcionVM ObtenerDatosActa(int solicitudId)
+        {
+            return _adopcion.ObtenerDatosActa(solicitudId);
+        }
     }
 }

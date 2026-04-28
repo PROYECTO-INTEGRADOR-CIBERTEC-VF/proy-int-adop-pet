@@ -64,9 +64,11 @@
                                             <div class="text-end" style="position: relative; z-index: 5;">
                                                 @if (item.EstadoId == 3)
                                                 {
-                                                    <button class="btn btn-success rounded-pill px-4 shadow-sm btn-sm">
+                                                    <a asp-action="DescargarActa"
+                                                       asp-route-id="@item.SolicitudId"
+                                                       class="btn btn-success rounded-pill px-4 shadow-sm btn-sm">
                                                         <i class="bi bi-file-earmark-pdf"></i> Descargar Acta
-                                                    </button>
+                                                    </a>
                                                 }
                                             </div>
                                         </div>
