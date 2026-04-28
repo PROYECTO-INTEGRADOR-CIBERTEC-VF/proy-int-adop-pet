@@ -118,7 +118,6 @@ namespace ProyAdoPet.Controllers
 
             if (contrato != null)
             {
-                TempData["MensajeExito"] = "¡Adopción finalizada con éxito! El contrato ha sido registrado.";
                 return View("FichaAdopcion", contrato);
             }
             else
@@ -142,6 +141,26 @@ namespace ProyAdoPet.Controllers
             }
 
             return View("FichaAdopcion", contrato);
+        }
+
+        [HttpPost("Rechazar")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        public IActionResult Rechazar(int SolicitudId)
+        {
+            if (SolicitudId <= 0) return BadRequest();
+
+            bool exito = _solicitudService.ProcesarRechazo(SolicitudId);
+
+            if (exito)
+            {
+                TempData["MensajeExito"] = "La solicitud ha sido rechazada y la mascota está disponible nuevamente.";
+            }
+            else
+            {
+                TempData["MensajeError"] = "Hubo un error al procesar el rechazo.";
+            }
+
+            return RedirectToAction("Evaluar", new { id = SolicitudId });
         }
     }
 }
