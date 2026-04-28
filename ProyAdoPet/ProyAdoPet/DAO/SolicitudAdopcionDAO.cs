@@ -10,6 +10,44 @@ namespace ProyAdoPet.DAO
     {
         string cadena = "server=localhost\\SQLEXPRESS;database=ProyAdoPet;Trusted_Connection=true;multipleActiveResultSets=true;TrustServerCertificate=true;Encrypt=false";
 
+        public ContratoAdopcionVM FinalizarAdopcion(int solicitudId, string observaciones)
+        {
+            ContratoAdopcionVM contrato = null;
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                try
+                {
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_FinalizarAdopcion", conexion);
+                    cmd.Parameters.AddWithValue("@SolicitudId", solicitudId);
+                    cmd.Parameters.AddWithValue("@Observaciones", (object)observaciones ?? DBNull.Value);
+                    cmd.CommandType = CommandType.StoredProcedure;
+
+                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    {
+                        if (dr.Read())
+                        {
+                            contrato = new ContratoAdopcionVM
+                            {
+                                ContratoNumero = Convert.ToInt32(dr["ContratoNumero"]),
+                                CodigoContrato = dr["CodigoContrato"].ToString(),
+                                Adoptante = dr["Adoptante"].ToString(),
+                                DNI = dr["DNI"].ToString(),
+                                Telefono = dr["Telefono"].ToString(),
+                                Mascota = dr["Mascota"].ToString(),
+                                FechaFinal = Convert.ToDateTime(dr["FechaFinal"])
+                            };
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    return null; //rollback
+                }
+            }
+            return contrato;
+        }
+
         public List<SolicitudAdopcionVM> ListarParaAdmin()
         {
             List<SolicitudAdopcionVM> lista = new List<SolicitudAdopcionVM>();
@@ -38,6 +76,36 @@ namespace ProyAdoPet.DAO
                 }
             }
             return lista;
+        }
+
+        public ContratoAdopcionVM ObtenerContratoPorSolicitud(int solicitudId)
+        {
+            ContratoAdopcionVM contrato = null;
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                conexion.Open();
+                SqlCommand cmd = new SqlCommand("sp_ObtenerContratoPorSolicitud", conexion);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SolicitudId", solicitudId);
+
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    if (dr.Read())
+                    {
+                        contrato = new ContratoAdopcionVM
+                        {
+                            ContratoNumero = Convert.ToInt32(dr["ContratoNumero"]),
+                            CodigoContrato = dr["CodigoContrato"].ToString(),
+                            Adoptante = dr["Adoptante"].ToString(),
+                            DNI = dr["DNI"].ToString(),
+                            Telefono = dr["Telefono"].ToString(),
+                            Mascota = dr["Mascota"].ToString(),
+                            FechaFinal = Convert.ToDateTime(dr["FechaFinal"])
+                        };
+                    }
+                }
+            }
+            return contrato;
         }
 
         public EvaluacionSolicitudVM ObtenerDetalleEvaluacion(int id)
@@ -102,6 +170,27 @@ namespace ProyAdoPet.DAO
                 }
             }
             return respuesta;
+        }
+
+        public bool RechazarSolicitud(int solicitudId)
+        {
+            using (SqlConnection conexion = new SqlConnection(cadena))
+            {
+                try
+                {
+                    conexion.Open();
+                    SqlCommand cmd = new SqlCommand("sp_RechazarSolicitud", conexion);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@SolicitudId", solicitudId);
+
+                    int filasAfectadas = cmd.ExecuteNonQuery();
+                    return filasAfectadas > 0;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
+            }
         }
 
         public bool Registrar(SolicitudAdopcion solicitud)

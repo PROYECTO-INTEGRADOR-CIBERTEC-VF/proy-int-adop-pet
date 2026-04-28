@@ -42,5 +42,21 @@ namespace ProyAdoPet.Services
 
             return _solicitud.ProgramarCita(cita);
         }
+
+        public ContratoAdopcionVM AprobarYGenerarContrato(int solicitudId, string Observaciones)
+        {
+            return _solicitud.FinalizarAdopcion(solicitudId, Observaciones);
+        }
+
+        public ContratoAdopcionVM ObtenerContratoPorSolicitud(int solicitudId)
+        {
+            // Aqui solo llamamos al DAO para recuperar la info existente
+            return _solicitud.ObtenerContratoPorSolicitud(solicitudId);
+        }
+
+        public bool ProcesarRechazo(int solicitudId)
+        {
+            return _solicitud.RechazarSolicitud(solicitudId);
+        }
     }
 }

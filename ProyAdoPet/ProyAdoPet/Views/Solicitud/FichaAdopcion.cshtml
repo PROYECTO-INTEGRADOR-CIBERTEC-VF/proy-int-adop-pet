@@ -1,0 +1,132 @@
+﻿@model ProyAdoPet.ViewModel.ContratoAdopcionVM
+
+@{
+    ViewData["Title"] = "Ficha de Adopción";
+    // Desactivamos el Layout si queremos que sea una página totalmente limpia
+    // o lo dejamos si queremos mantener el menú (el CSS se encargará de ocultarlo al imprimir)
+}
+
+<div class="container my-5">
+    <div class="d-flex justify-content-between align-items-center mb-4 d-print-none">
+        <a asp-action="Bandeja" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Volver a la Bandeja
+        </a>
+        <button onclick="window.print();" class="btn btn-dark shadow">
+            <i class="bi bi-printer-fill me-2"></i> Imprimir Contrato
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-lg p-5 printable-area" id="contrato-documento">
+
+        <div class="text-center mb-5">
+            <div class="mb-3">
+                <i class="bi bi-heart-fill text-danger" style="font-size: 3rem;"></i>
+            </div>
+            <h1 class="display-5 fw-bold text-uppercase" style="letter-spacing: 2px;">Acta de Adopción</h1>
+            <p class="text-muted text-uppercase fw-bold">Albergue Municipal de Mascotas - Huaral</p>
+            <div class="border-top border-3 border-dark mx-auto" style="width: 100px;"></div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-12">
+                <p class="lead mb-4">
+                    Por el presente documento, se hace entrega formal de la mascota en calidad de adopción a
+                    <strong>@Model.Adoptante</strong>, quien a partir de la fecha asume la responsabilidad
+                    total de su bienestar, salud y seguridad.
+                </p>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+            <div class="col-md-6 border-end border-2">
+                <h5 class="fw-bold text-primary mb-3 text-uppercase small">Datos del Adoptante</h5>
+                <p class="mb-1"><strong>Nombre Completo:</strong> @Model.Adoptante</p>
+                <p class="mb-1"><strong>DNI:</strong> @Model.DNI</p>
+                <p class="mb-1"><strong>Teléfono:</strong> @Model.Telefono</p>
+                <p class="mb-0"><strong>Contrato N°:</strong> <span class="badge bg-dark">@Model.CodigoContrato</span></p>
+            </div>
+            <div class="col-md-6 ps-md-4">
+                <h5 class="fw-bold text-primary mb-3 text-uppercase small">Datos de la Mascota</h5>
+                <p class="mb-1"><strong>Nombre:</strong> @Model.Mascota</p>
+                <p class="mb-1"><strong>Fecha de Adopción:</strong> @Model.FechaFinal.ToString("dd/MM/yyyy")</p>
+                <p class="mb-0"><strong>ID Proceso:</strong> #@Model.ContratoNumero.ToString("D5")</p>
+            </div>
+        </div>
+
+        <div class="bg-light p-4 rounded-3 mb-5 border">
+            <h6 class="fw-bold mb-3"><i class="bi bi-shield-check me-2"></i> Compromisos del Adoptante:</h6>
+            <ul class="small mb-0">
+                <li>Brindar alimentación adecuada y agua limpia permanentemente.</li>
+                <li>Mantener el esquema de vacunación y desparasitación al día.</li>
+                <li>Proporcionar un espacio seguro y protegido de la intemperie.</li>
+                <li><strong>No abandonar, regalar ni vender a la mascota.</strong></li>
+                <li>Permitir las visitas de seguimiento programadas por el albergue.</li>
+            </ul>
+        </div>
+
+        <div class="row mt-5 pt-5">
+            <div class="col-6 text-center">
+                <div class="mx-auto border-top border-dark pt-2" style="width: 200px;">
+                    <p class="small mb-0">@Model.Adoptante</p>
+                    <p class="small fw-bold text-muted">Adoptante</p>
+                </div>
+            </div>
+            <div class="col-6 text-center">
+                <div class="mx-auto border-top border-dark pt-2" style="width: 200px;">
+                    <p class="small mb-0">Responsable del Albergue</p>
+                    <p class="small fw-bold text-muted">Autoridad Municipal</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-5 pt-4 text-center border-top">
+            <p class="small text-muted mb-0">
+                Documento generado el @DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss") por el Sistema ProyAdoPet.
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    .printable-area {
+        background-color: #ffffff;
+        min-height: 297mm;
+    }
+
+    @@media print {
+        .d-print-none, nav, footer, .btn, .navbar {
+            display: none !important;
+        }
+        body {
+            background-color: white !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 100% !important;
+            max-width: none !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .card {
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
+        .shadow-lg {
+            box-shadow: none !important;
+        }
+        .bg-light {
+            background-color: #f8f9fa !important;
+            -webkit-print-color-adjust: exact;
+        }
+
+        .text-primary {
+            color: #0d6efd !important;
+            -webkit-print-color-adjust: exact;
+        }
+    }
+</style>
