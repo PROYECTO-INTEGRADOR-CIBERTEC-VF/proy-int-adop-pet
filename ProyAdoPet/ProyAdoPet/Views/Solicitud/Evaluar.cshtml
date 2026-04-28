@@ -106,7 +106,10 @@
                         <div class="card bg-light border-0 rounded-4 p-3">
                             <h6 class="fw-bold text-muted small text-uppercase"><i class="bi bi-info-circle me-1"></i> Resumen del proceso</h6>
                             <hr class="my-2">
-                            <p class="small mb-1"><strong>Entrevista:</strong> @Model.FechaCita.ToString("dd/MM/yyyy")</p>
+                            <p class="small mb-1">
+                                <strong>Entrevista:</strong>
+                                @(Model.FechaCita.HasValue ? Model.FechaCita.Value.ToString("dd/MM/yyyy") : "Pendiente")
+                            </p>
                             <p class="small mb-0"><strong>Lugar:</strong> @Model.LugarCita</p>
                         </div>
 
@@ -143,7 +146,9 @@
                             <div class="alert alert-info border-0 shadow-sm rounded-4 p-3 mb-2">
                                 <h6 class="fw-bold text-info"><i class="bi bi-calendar-check-fill me-2"></i> Cita Programada</h6>
                                 <hr class="my-2">
-                                <p class="small mb-1"><strong>Fecha:</strong> @Model.FechaCita.ToString("dd/MM/yyyy hh:mm tt")</p>
+                                <p class="small mb-1">
+                                    <strong>Fecha:</strong> @Model.FechaCita?.ToString("dd/MM/yyyy hh:mm tt")
+                                </p>
                                 <p class="small mb-1"><strong>Lugar:</strong> @Model.LugarCita</p>
                                 @if (!string.IsNullOrEmpty(Model.NotasCita))
                                 {

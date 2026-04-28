@@ -1,0 +1,144 @@
+﻿@using ProyAdoPet.ViewModel
+@model EvaluacionSolicitudVM
+
+@{
+    ViewData["Title"] = "Estado de mi Solicitud";
+}
+
+<div class="container py-5">
+    <div class="mb-4">
+        <a asp-action="MisSolicitudes" class="btn btn-link text-decoration-none text-muted p-0">
+            <i class="bi bi-arrow-left"></i> Volver a mis solicitudes
+        </a>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden sticky-top" style="top: 20px;">
+                <img src="~/fotos/@Model.MascotaFoto" class="img-fluid" alt="@Model.MascotaNombre" style="width: 100%; height: 300px; object-fit: cover;">
+                <div class="card-body text-center bg-white">
+                    <h3 class="fw-bold mb-1">@Model.MascotaNombre</h3>
+                    <p class="text-muted mb-0">ID de Solicitud: #@Model.SolicitudId</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5">
+
+                @* --- ESTADO 1: PENDIENTE --- *@
+                @if (Model.EstadoActualId == 1)
+                {
+                    <div class="text-center">
+                        <div class="display-1 text-primary mb-3"><i class="bi bi-hourglass-split"></i></div>
+                        <h2 class="fw-bold">Estamos evaluando tu solicitud</h2>
+                        <p class="text-muted lead">¡Gracias por tu interés en @Model.MascotaNombre! Nuestro equipo de evaluadores está revisando tu postulación. Te enviaremos una notificación cuando tengamos una respuesta.</p>
+                        <div class="alert alert-primary border-0 rounded-3 mt-4">
+                            <i class="bi bi-info-circle me-2"></i> El proceso suele tardar entre 2 y 5 días hábiles.
+                        </div>
+                    </div>
+                }
+
+                @* --- ESTADO 2: CITADO (ENTREVISTA) --- *@
+                else if (Model.EstadoActualId == 2)
+                {
+                    <div class="border-start border-info border-5 ps-4">
+                        <span class="badge bg-info text-dark mb-2 px-3 py-2 rounded-pill">¡Tienes una cita programada!</span>
+                        <h2 class="fw-bold text-info">Detalles de la Entrevista</h2>
+                        <p class="text-muted">Nos encantaría conocerte en persona y que compartas un momento con @Model.MascotaNombre.</p>
+
+                        <div class="row g-3 mt-3">
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-4">
+                                    <small class="text-muted d-block uppercase fw-bold">Fecha y Hora</small>
+                                    <span class="fs-5 fw-bold text-dark">@Model.FechaCita?.ToString("dd 'de' MMMM, hh:mm tt")</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-3 bg-light rounded-4">
+                                    <small class="text-muted d-block uppercase fw-bold">Lugar del Encuentro</small>
+                                    <span class="fs-5 fw-bold text-dark">@Model.LugarCita</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(Model.NotasCita))
+                        {
+                            <div class="mt-4 p-4 bg-info bg-opacity-10 rounded-4">
+                                <h6 class="fw-bold"><i class="bi bi-chat-left-dots me-2"></i> Mensaje del Albergue:</h6>
+                                <p class="mb-0 italic text-dark">"@Model.NotasCita"</p>
+                            </div>
+                        }
+                    </div>
+                }
+
+                @* --- ESTADO 3: APROBADO --- *@
+                else if (Model.EstadoActualId == 3)
+                {
+                    <div class="text-center py-4">
+                        <div class="display-1 text-success mb-3"><i class="bi bi-patch-check-fill"></i></div>
+                        <h2 class="fw-bold text-success">¡Solicitud Aprobada!</h2>
+                        <p class="lead">Felicidades, has sido seleccionado para darle un nuevo hogar a @Model.MascotaNombre. El siguiente paso es formalizar el acta de compromiso.</p>
+                        <div class="d-grid gap-2 d-md-block mt-4">
+                            <button class="btn btn-success btn-lg rounded-pill px-5">
+                                <i class="bi bi-file-earmark-pdf me-2"></i> Descargar Acta de Adopción
+                            </button>
+                        </div>
+                    </div>
+                }
+
+                @* --- ESTADO 4: RECHAZADO --- *@
+                else if (Model.EstadoActualId == 4)
+                {
+                    <div class="text-center py-4">
+                        <div class="display-1 text-danger mb-3"><i class="bi bi-heart-break"></i></div>
+                        <h2 class="fw-bold">Respuesta a tu solicitud</h2>
+                        <p class="text-muted px-lg-5">Gracias por querer adoptar a @Model.MascotaNombre. Lamentablemente, después de evaluar todos los perfiles, hemos decidido no proceder con tu solicitud en esta ocasión.</p>
+                        <div class="mt-4 p-3 bg-danger bg-opacity-10 text-danger rounded-pill d-inline-block px-4">
+                            Estado: Finalizado (No Apta)
+                        </div>
+                        <p class="small text-muted mt-4">¡No te desanimes! A veces es una cuestión de compatibilidad entre la mascota y el estilo de vida. Puedes postular por otros amigos.</p>
+                    </div>
+                }
+
+                <hr class="my-5">
+
+                <div>
+                    <h5 class="fw-bold mb-4">Resumen de tu Postulación</h5>
+                    <div class="row g-4">
+                        <div class="col-sm-6">
+                            <label class="text-muted small fw-bold text-uppercase">Postulante</label>
+                            <p class="mb-0 fw-semibold text-dark">@Model.NombrePostulante</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="text-muted small fw-bold text-uppercase">DNI / Identificación</label>
+                            <p class="mb-0 fw-semibold text-dark">@Model.DNI</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="text-muted small fw-bold text-uppercase">Teléfono de Contacto</label>
+                            <p class="mb-0 fw-semibold text-dark">@Model.Telefono</p>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="text-muted small fw-bold text-uppercase">Dirección declarada</label>
+                            <p class="mb-0 fw-semibold text-dark">@Model.Direccion</p>
+                        </div>
+                        <div class="col-12">
+                            <label class="text-muted small fw-bold text-uppercase">Tu motivación para adoptar</label>
+                            <div class="bg-light p-3 rounded-3 mt-1">
+                                <p class="mb-0 text-muted italic">"@Model.MotivoAdopcion"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body { background-color: #f8f9fa; }
+    .rounded-4 { border-radius: 1.2rem !important; }
+    .bg-opacity-10 { --bs-bg-opacity: 0.1; }
+    .uppercase { text-transform: uppercase; letter-spacing: 1px; font-size: 0.7rem; }
+</style>

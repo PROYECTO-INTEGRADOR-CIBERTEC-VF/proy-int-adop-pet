@@ -3,6 +3,7 @@
     public class EvaluacionSolicitudVM
     {
         public int SolicitudId { get; set; }
+        public int UsuarioId { get; set; }
         public string? NombrePostulante { get; set; }
         public string? DNI { get; set; }
         public string? Telefono { get; set; }
@@ -15,7 +16,7 @@
 
 
         //datos solo si hay una cita
-        public DateTime FechaCita { get; set; }
+        public DateTime? FechaCita { get; set; }
         public string? LugarCita { get; set; }
         public string? NotasCita { get; set; }
     }

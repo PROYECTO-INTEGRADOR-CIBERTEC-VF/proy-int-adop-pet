@@ -13,6 +13,8 @@ builder.Services.AddScoped<IUsuario, UsuarioDAO>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ISolicitudAdopcion, SolicitudAdopcionDAO>();
 builder.Services.AddScoped<SolicitudService>();
+builder.Services.AddScoped<IAdopcion, AdopcionDAO>();
+builder.Services.AddScoped<AdopcionService>();
 
 
 //sesion

@@ -125,6 +125,7 @@ namespace ProyAdoPet.DAO
                         detalle = new EvaluacionSolicitudVM
                         {
                             SolicitudId = Convert.ToInt32(dr["SolicitudId"]),
+                            UsuarioId = Convert.ToInt32(dr["UsuarioId"]),
                             NombrePostulante = dr["NombrePostulante"].ToString(),
                             DNI = dr["DNI"].ToString(),
                             Telefono = dr["Telefono"].ToString(),
