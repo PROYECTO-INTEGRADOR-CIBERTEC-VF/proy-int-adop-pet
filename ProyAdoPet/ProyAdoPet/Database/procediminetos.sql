@@ -401,3 +401,26 @@ BEGIN
     ORDER BY S.FechaCreacion DESC;
 END;
 GO
+
+
+-- ================================================================
+-- PROCEDIMIENTO: Obtener datos para acta de adopcion
+-- ================================================================
+CREATE OR ALTER PROCEDURE sp_ObtenerDatosActa
+    @Id INT
+AS
+BEGIN
+    SELECT 
+        S.Id AS Folio,
+        C.CodigoContrato,
+        S.NombreCompleto AS AdoptanteNombre,
+        S.DNI AS AdoptanteDNI,
+        S.Direccion AS AdoptanteDireccion,
+        M.Nombre AS MascotaNombre,
+        C.FechaFirma AS FechaEmision,
+        C.ObservacionesIniciales
+    FROM SolicitudAdopcion S
+    INNER JOIN Mascota M ON S.MascotaId = M.Id
+    INNER JOIN ContratoAdopcion C ON S.Id = C.SolicitudId
+    WHERE S.Id = @Id AND S.EstadoSolicitudId = 3; 
+END;
