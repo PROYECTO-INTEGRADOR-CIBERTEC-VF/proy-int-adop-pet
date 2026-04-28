@@ -373,3 +373,31 @@ BEGIN
         THROW;
     END CATCH
 END;
+
+
+
+-- ================================================================
+-- PROCEDIMIENTO: Listar solicitudes de adopcion de un solo usuario
+-- ================================================================
+CREATE OR ALTER PROCEDURE sp_ListarSolicitudesPorUsuario
+    @UsuarioId INT
+AS
+BEGIN
+    SELECT 
+        S.Id AS SolicitudId,
+        M.Nombre AS MascotaNombre,
+        M.FotoMascota AS MascotaFoto,
+        S.EstadoSolicitudId AS EstadoId,
+        E.Nombre AS EstadoNombre,
+        S.FechaCreacion AS FechaEnvio,
+        C.FechaCita,
+        C.Lugar AS LugarCita,
+        C.Notas AS NotasCita
+    FROM SolicitudAdopcion S
+    INNER JOIN Mascota M ON S.MascotaId = M.Id
+    INNER JOIN EstadoSolicitud E ON S.EstadoSolicitudId = E.Id
+    LEFT JOIN CitaAdopcion C ON S.Id = C.SolicitudId
+    WHERE S.UsuarioId = @UsuarioId
+    ORDER BY S.FechaCreacion DESC;
+END;
+GO
