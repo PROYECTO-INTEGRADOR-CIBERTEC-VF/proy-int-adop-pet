@@ -2,6 +2,7 @@ using ProyAdoPet.DAO;
 using ProyAdoPet.Repository;
 using ProyAdoPet.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Rotativa.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -37,10 +38,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 
 var app = builder.Build();
 
-
-
-
-
+IWebHostEnvironment env = app.Environment;
+RotativaConfiguration.Setup(env.WebRootPath, "Rotativa");
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
