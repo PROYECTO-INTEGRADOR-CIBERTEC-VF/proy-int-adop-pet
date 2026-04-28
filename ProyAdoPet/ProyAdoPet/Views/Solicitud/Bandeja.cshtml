@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ProyAdoPet.ViewModel.SolicitudAdopcionVM>
+
+@{
+    ViewData["Title"] = "Bandeja de Solicitudes";
+}
+
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold"><i class="bi bi-inbox-fill text-primary me-2"></i>Solicitudes Recibidas</h2>
+        <span class="badge bg-secondary">Total: @Model.Count()</span>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Mascota</th>
+                        <th>Postulante</th>
+                        <th>DNI</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <img src="~/fotos/@item.FotoMascota" class="rounded-circle me-3"
+                                         style="width: 45px; height: 45px; object-fit: cover;">
+                                    <span class="fw-bold text-dark">@item.NombreMascota</span>
+                                </div>
+                            </td>
+                            <td>@item.NombrePostulante</td>
+                            <td><code class="text-dark">@item.DNI</code></td>
+                            <td>@item.FechaCreacion.ToString("dd MMM yyyy")</td>
+                            <td>
+                                @{
+                                    string claseBadge = item.EstadoId switch
+                                    {
+                                        1 => "bg-warning text-dark", // Pendiente
+                                        2 => "bg-info text-white",   // En Revisión
+                                        3 => "bg-success",           // Aprobado
+                                        4 => "bg-danger",            // Rechazado
+                                        _ => "bg-secondary"
+                                    };
+                                }
+                                <span class="badge @claseBadge px-3 py-2 rounded-pill">
+                                    @item.EstadoNombre
+                                </span>
+                                @if (item.EstadoId == 2)
+                                {
+                                    <div class="small text-muted mt-1 fw-bold">
+                                        <i class="bi bi-calendar-event text-info"></i> Cita programada
+                                    </div>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Evaluar" asp-route-id="@item.Id"
+                                   class="btn btn-outline-primary btn-sm rounded-pill px-3">
+                                    <i class="bi bi-eye-fill me-1"></i> Evaluar
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

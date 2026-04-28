@@ -56,6 +56,7 @@ namespace ProyAdoPet.Controllers
             return View(vm);
         }
 
+
         [HttpGet("Detalle/{id}")]
         public IActionResult DetalleMascota(int id)
         {

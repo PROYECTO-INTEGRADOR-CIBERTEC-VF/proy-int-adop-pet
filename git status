@@ -1,0 +1,32 @@
+[33m0e0a157[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mhu-05-crear-modelo-solicitud-adopcion[m[33m, [m[1;31morigin/hu-05-crear-modelo-solicitud-adopcion[m[33m)[m HU05: vista de solicitud
+[33m3567ca5[m HU05: Crear interfaz ISolicitud
+[33m2cf5bc7[m HU: Crear modelo Solicitud Adopción
+[33m840a605[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mfeature/HU5-solicitud-adopcion[m[33m)[m Merge pull request #47 from PROYECTO-INTEGRADOR-CIBERTEC-VF/hu-06-registrar-mascota
+[33me10cafc[m[33m ([m[1;31morigin/hu-06-registrar-mascota[m[33m)[m HU-06: Implementado los mensajes de alerta dependiendo del resultado close #46
+[33m84ba819[m HU-06: Implementado el metodo post de registro de mascota con las validaciones y el procesamiento de imagenes close #45
+[33m67ea83d[m HU-06: Implementado el proceso y logica para insertar una mascota close #43
+[33m36c3071[m HU-06: Ajustado el diseño de la vista del formulario del registro de mascota close #42
+[33m5243e58[m HU-06: Definido el metodo get registrar mascota con el SelectList close #41
+[33m5c72629[m HU-06: Implementado la logica para obtener el listado de estados close #40
+[33m8f0f39b[m HU-06: Creacion y estructura del modelo estado de mascotas. close #39
+[33m9377669[m Merge pull request #38 from PROYECTO-INTEGRADOR-CIBERTEC-VF/hu-14-visualizar-listado-de-mascotas
+[33m5a35ea5[m[33m ([m[1;31morigin/hu-14-visualizar-listado-de-mascotas[m[33m)[m HU-14: Ajustado el diseño de la vista con las opciones de mantenimiento y leer archivo de imagen close #37
+[33md0aaea1[m HU-14: Creado la vista que recibe el listado desde el controlado para mostrar close #36
+[33m4630623[m HU-10: Implementado el metodo del controlador que se encarga de llenar la vista. close #35
+[33ma9ee9d6[m HU-14: Implementado el controlador AdminMascotaController para mantenimiento de mascota. close #34
+[33m3055057[m Merge pull request #33 from PROYECTO-INTEGRADOR-CIBERTEC-VF/hu-10-acceso-de-administrador
+[33mfbc53b5[m[33m ([m[1;31morigin/hu-10-acceso-de-administrador[m[33m)[m HU-10: Implementado el manejo de rutas y el acceso denegado para usuarios sin permisos. close #31
+[33m83cca1f[m HU-10: Ajuste del Navbar dinamico para admin y usuario en general. close #30
+[33m387d624[m HU-10: Implementado la restriccion que da acceso solo a un administrador
+[33m959d720[m HU-10: Implementado el controlador de administrador que accede a su panel. close #32
+[33mdc1e9ae[m HU:10 Implementado la logica de redireccion al iniciar sesion close #28
+[33m8bd7077[m HU:10: Implementado la definicion de constantes de seguridad para los roles. Close #27
+[33m152ca43[m[33m ([m[1;31morigin/hu-09-filtrar-mascotas[m[33m)[m Configuracion gitignore
+[33m54ab599[m[33m ([m[1;31morigin/hu-04-detalle-mascota[m[33m)[m Merge pull request #15 from PROYECTO-INTEGRADOR-CIBERTEC-VF/hu-03-login
+[33m32a8ace[m[33m ([m[1;31morigin/hu-03-login[m[33m)[m HU-03: Implementado el inicio de sesion del usuario a la plataforma
+[33md55d9b3[m Merge pull request #14 from PROYECTO-INTEGRADOR-CIBERTEC-VF/hu-02-registro-usuario
+[33me3cbc14[m[33m ([m[1;31morigin/hu-02-registro-usuario[m[33m)[m HU-02: Implementado el registro de usuario a la plataforma
+[33mccf01b5[m Merge pull request #13 from PROYECTO-INTEGRADOR-CIBERTEC-VF/hu-01-ver-mascotas
+[33me9a57b5[m[33m ([m[1;31morigin/hu-01-ver-mascotas[m[33m, [m[1;32mhu-01-ver-mascotas[m[33m)[m HU-O1: Implementado el listado de mascotas disponibles
+[33m18356ba[m Inicial: Estructura del proyecto .NET Core
+[33m3109af1[m[33m ([m[1;31morigin/hu-13-rechazar-adopción[m[33m, [m[1;31morigin/hu-12-aprobar-adopción[m[33m, [m[1;31morigin/hu-11-ver-estado-de-adopción[m[33m)[m Initial commit

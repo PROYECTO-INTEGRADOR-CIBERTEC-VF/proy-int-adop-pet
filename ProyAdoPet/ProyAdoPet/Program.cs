@@ -1,4 +1,4 @@
-﻿using ProyAdoPet.DAO;
+using ProyAdoPet.DAO;
 using ProyAdoPet.Repository;
 using ProyAdoPet.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,6 +14,8 @@ builder.Services.AddScoped<MascotaService>();
 
 builder.Services.AddScoped<IUsuario, UsuarioDAO>();
 builder.Services.AddScoped<UsuarioService>();
+builder.Services.AddScoped<ISolicitudAdopcion, SolicitudAdopcionDAO>();
+builder.Services.AddScoped<SolicitudService>();
 
 // SESSION
 builder.Services.AddDistributedMemoryCache();
@@ -28,13 +30,14 @@ builder.Services.AddSession(options =>
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Usuario/Login";
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
+        options.LoginPath = "/Login/Login";
+        options.AccessDeniedPath = "/Login/AccesoDenegado";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     });
 
 var app = builder.Build();
 
-// Error handling
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");

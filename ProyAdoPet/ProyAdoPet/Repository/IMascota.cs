@@ -6,9 +6,13 @@ namespace ProyAdoPet.Repository
     public interface IMascota
     {
         List<Mascota> Listado();
-
         Mascota ObtenerMascotaPorId(int id);
+        List<Mascota> FiltrarMascotas(string? nombre, string? edad, int? estadoId);
 
-        List<Mascota> FiltrarMascotas(int? edad, string tipo, string tamano);
+        IEnumerable<Estado> ListarEstado();
+        bool Registrar(Mascota objeto);
+        Mascota Obtener(int id);
+        bool Actualizar(Mascota obj);
+        bool Eliminar(int id);
     }
 }

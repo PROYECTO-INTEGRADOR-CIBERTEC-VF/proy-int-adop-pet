@@ -1,4 +1,5 @@
-﻿using ProyAdoPet.DAO;
+﻿using ProyAdoPet.Constants;
+using ProyAdoPet.DAO;
 using ProyAdoPet.Models;
 using ProyAdoPet.Repository;
 
@@ -27,6 +28,7 @@ namespace ProyAdoPet.Services
             }
 
             //si todo pasa correcto
+            usuario.IdRol = int.Parse(RolesConstantes.Usuario);
             return _usuario.Registrar(usuario);
         }
 
@@ -40,6 +42,17 @@ namespace ProyAdoPet.Services
 
             //si es correcto
             return _usuario.ValidarUsuario(correo, clave);
+        }
+
+        public string RegistrarAdministrador(Usuario admin)
+        {
+            if (string.IsNullOrEmpty(admin.Correo) || string.IsNullOrEmpty(admin.Clave))
+            {
+                return "Los datos de acceso son obligatorios.";
+            }
+
+            admin.IdRol = int.Parse(RolesConstantes.Administrador);
+            return _usuario.Registrar(admin);
         }
     }
 }
