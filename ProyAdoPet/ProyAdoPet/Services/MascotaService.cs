@@ -3,12 +3,13 @@ using ProyAdoPet.Constants;
 using ProyAdoPet.DAO;
 using ProyAdoPet.Models;
 using ProyAdoPet.Repository;
+using System.Collections.Generic;
 
 namespace ProyAdoPet.Services
 {
     public class MascotaService
     {
-        IMascota _mascota;
+        private readonly IMascota _mascota;
         private readonly IWebHostEnvironment _hostEnvironment;
 
         public MascotaService(IMascota mascota, IWebHostEnvironment hostEnvironment)
@@ -19,7 +20,17 @@ namespace ProyAdoPet.Services
 
         public IEnumerable<Mascota> MascotasDisponibles()
         {
-            return _mascota.listado();
+            return _mascota.Listado();
+        }
+
+        public Mascota ObtenerMascotaPorId(int id)
+        {
+            return _mascota.ObtenerMascotaPorId(id);
+        }
+
+        public IEnumerable<Mascota> FiltrarMascotas(string? nombre, string? edad, int? estadoId)
+        {
+            return _mascota.FiltrarMascotas(nombre, edad, estadoId);
         }
 
         public IEnumerable<Estado> EstadosMascota()

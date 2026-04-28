@@ -1,44 +1,117 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using ProyAdoPet.Models;
 using ProyAdoPet.Repository;
+using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace ProyAdoPet.DAO
 {
     public class MascotaDAO : IMascota
     {
-        string cadena = (new ConfigurationBuilder().AddJsonFile("appsettings.json").Build()).GetConnectionString("cn") ?? "";
+        string cadena = "Server=.\\SQLEXPRESS;Database=ProyAdoPet;Trusted_Connection=True;TrustServerCertificate=True;";
 
-
-        public IEnumerable<Mascota> listado()
+        // LISTAR
+        public List<Mascota> Listado()
         {
-            var lista = new List<Mascota>();
+            List<Mascota> lista = new List<Mascota>();
+
             using (SqlConnection cn = new SqlConnection(cadena))
             {
-                using (SqlCommand cmd = new SqlCommand("sp_ListarMascotas", cn))
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Mascota", cn);
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                while (dr.Read())
                 {
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cn.Open();
-                    using (SqlDataReader dr = cmd.ExecuteReader())
+                    lista.Add(new Mascota()
                     {
-                        while (dr.Read())
-                        {
-                            var mascota = new Mascota
-                            {
-                                Id = Convert.ToInt32(dr["Id"]),
-                                Nombre = dr["Nombre"].ToString(),
-                                Edad = dr["Edad"].ToString(),
-                                Descripcion = dr["Descripcion"].ToString(),
-                                Estado = Convert.ToInt32(dr["EstadoId"]),
-                                FotoMascota = dr["FotoMascota"] != DBNull.Value
-                                              ? dr["FotoMascota"].ToString()
-                                              : "sin-foto.jpg"
-                            };
-                            lista.Add(mascota);
-                        }
-                    }
+                        Id = Convert.ToInt32(dr["Id"]),
+                        Nombre = dr["Nombre"].ToString(),
+                        Edad = dr["Edad"].ToString(),
+                        Descripcion = dr["Descripcion"].ToString(),
+                        Estado = Convert.ToInt32(dr["EstadoId"]),
+                        FotoMascota = dr["FotoMascota"] != DBNull.Value
+                                      ? dr["FotoMascota"].ToString()
+                                      : "sin-foto.jpg"
+                    });
                 }
             }
+
+            return lista;
+        }
+
+        // DETALLE (HU-04)
+        public Mascota ObtenerMascotaPorId(int id)
+        {
+            Mascota obj = null;
+
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand("SELECT * FROM Mascota WHERE Id = @id", cn);
+                cmd.Parameters.AddWithValue("@id", id);
+
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                if (dr.Read())
+                {
+                    obj = new Mascota()
+                    {
+                        Id = Convert.ToInt32(dr["Id"]),
+                        Nombre = dr["Nombre"].ToString(),
+                        Edad = dr["Edad"].ToString(),
+                        Descripcion = dr["Descripcion"].ToString(),
+                        Estado = Convert.ToInt32(dr["EstadoId"]),
+                        FotoMascota = dr["FotoMascota"] != DBNull.Value
+                                      ? dr["FotoMascota"].ToString()
+                                      : "sin-foto.jpg"
+                    };
+                }
+            }
+
+            return obj;
+        }
+
+        // FILTROS (HU-09)
+        public List<Mascota> FiltrarMascotas(string? nombre, string? edad, int? estadoId)
+        {
+            List<Mascota> lista = new List<Mascota>();
+
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                cn.Open();
+
+                SqlCommand cmd = new SqlCommand(@"
+                    SELECT * FROM Mascota
+                    WHERE (@nombre IS NULL OR Nombre LIKE '%' + @nombre + '%')
+                    AND (@edad IS NULL OR Edad = @edad)
+                    AND (@estadoId IS NULL OR EstadoId = @estadoId)", cn);
+
+                cmd.Parameters.AddWithValue("@nombre", (object?)nombre ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@edad", (object?)edad ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@estadoId", (object?)estadoId ?? DBNull.Value);
+
+                SqlDataReader dr = cmd.ExecuteReader();
+
+                while (dr.Read())
+                {
+                    lista.Add(new Mascota()
+                    {
+                        Id = Convert.ToInt32(dr["Id"]),
+                        Nombre = dr["Nombre"].ToString(),
+                        Edad = dr["Edad"].ToString(),
+                        Descripcion = dr["Descripcion"].ToString(),
+                        Estado = Convert.ToInt32(dr["EstadoId"]),
+                        FotoMascota = dr["FotoMascota"] != DBNull.Value
+                                      ? dr["FotoMascota"].ToString()
+                                      : "sin-foto.jpg"
+                    });
+                }
+            }
+
             return lista;
         }
 
@@ -93,9 +166,9 @@ namespace ProyAdoPet.DAO
                 respuesta = false;
             }
             return respuesta;
-       }
-    
-     //  HU07 → OBTENER
+        }
+
+        // HU07 → OBTENER
         public Mascota Obtener(int id)
         {
             Mascota mascota = null;
@@ -131,7 +204,7 @@ namespace ProyAdoPet.DAO
             return mascota;
         }
 
-        //  HU07 → ACTUALIZAR
+        // HU07 → ACTUALIZAR
         public bool Actualizar(Mascota obj)
         {
             bool respuesta = false;
@@ -164,6 +237,7 @@ namespace ProyAdoPet.DAO
             return respuesta;
         }
 
+        // HU-09: ELIMINAR MASCOTA
         public bool Eliminar(int id)
         {
             bool respuesta = false;
@@ -192,4 +266,3 @@ namespace ProyAdoPet.DAO
         }
     }
 }
-

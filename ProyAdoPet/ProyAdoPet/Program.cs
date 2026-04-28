@@ -5,17 +5,19 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add services to the container
 builder.Services.AddControllersWithViews();
+
+// Dependency Injection
 builder.Services.AddScoped<IMascota, MascotaDAO>();
 builder.Services.AddScoped<MascotaService>();
+
 builder.Services.AddScoped<IUsuario, UsuarioDAO>();
 builder.Services.AddScoped<UsuarioService>();
 builder.Services.AddScoped<ISolicitudAdopcion, SolicitudAdopcionDAO>();
 builder.Services.AddScoped<SolicitudService>();
 
-
-//sesion
+// SESSION
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -24,27 +26,21 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-//cookie
+// COOKIE AUTH
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/Login/Login"; //si no esta logueado
-        options.AccessDeniedPath = "/Login/AccesoDenegado"; //donde se va sin permiso
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(60); 
+        options.LoginPath = "/Login/Login";
+        options.AccessDeniedPath = "/Login/AccesoDenegado";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     });
 
 var app = builder.Build();
-
-
-
-
-
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -57,6 +53,7 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
+// 🔥 RUTA CORRECTA (ESTO ARREGLA EL ERROR)
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Inicio}/{action=Mascotas}/{id?}");
