@@ -7,7 +7,7 @@ namespace ProyAdoPet.DAO
 {
     public class UsuarioDAO : IUsuario
     {
-        string cadena = (new ConfigurationBuilder().AddJsonFile("appsettings.json").Build()).GetConnectionString("cn") ?? "";
+        string cadena = "server=localhost\\SQLEXPRESS;database=ProyAdoPet;Trusted_Connection=true;multipleActiveResultSets=true;TrustServerCertificate=true;Encrypt=false";
 
         public string Registrar(Usuario oUsuario)
         {
