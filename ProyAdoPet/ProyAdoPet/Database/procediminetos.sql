@@ -222,6 +222,7 @@ AS
 BEGIN
     SELECT 
         S.Id AS SolicitudId,
+        S.UsuarioId,
         S.NombreCompleto AS NombrePostulante,
         S.DNI,
         S.Telefono,
@@ -231,7 +232,6 @@ BEGIN
         M.FotoMascota,
         S.EstadoSolicitudId AS EstadoActualId,
         E.Nombre AS EstadoNombre,
-        --datos de cita (pueden ser NULL)
         C.FechaCita,
         C.Lugar AS LugarCita,
         C.Notas AS NotasCita
