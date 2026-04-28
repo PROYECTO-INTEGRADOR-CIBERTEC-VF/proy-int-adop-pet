@@ -14,6 +14,7 @@ namespace ProyAdoPet.Controllers
             _solcitud = solicitud;
         }
 
+        public IActionResult Index() => View();
 
         public async Task<IActionResult> Mascotas()
         {

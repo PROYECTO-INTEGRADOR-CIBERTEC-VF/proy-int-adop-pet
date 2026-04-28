@@ -27,7 +27,7 @@ namespace ProyAdoPet.Controllers
             if (resultado == "OK")
             {
                 TempData["Mensaje"] = "¡Cuenta creada con éxito! Ya puedes iniciar sesión.";
-                return RedirectToAction("Mascotas", "Inicio");
+                return RedirectToAction("Index", "Inicio");
             }
             else
             {
