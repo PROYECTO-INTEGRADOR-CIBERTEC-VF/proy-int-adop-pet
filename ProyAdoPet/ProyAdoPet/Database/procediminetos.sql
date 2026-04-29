@@ -474,3 +474,42 @@ BEGIN
     WHERE SolicitudId = @SolicitudId
     ORDER BY FechaProgramada DESC;
 END;
+
+-- ================================================================
+-- PROCEDIMIENTO: Registrar una visita a la adopcion en seguimiento
+-- ================================================================
+CREATE OR ALTER PROCEDURE sp_ProgramarVisitaSeguimiento
+    @SolicitudId INT,
+    @FechaProgramada DATETIME,
+    @TipoControl NVARCHAR(50),
+    @Responsable NVARCHAR(100),
+    @ObservacionInicial NVARCHAR(MAX)
+AS
+BEGIN
+    INSERT INTO SeguimientoAdopcion 
+        (SolicitudId, FechaProgramada, TipoControl, Responsable, ObservacionInicial, EstadoVisita) 
+    VALUES 
+        (@SolicitudId, @FechaProgramada, @TipoControl, @Responsable, @ObservacionInicial, 'Pendiente');
+END;
+
+
+-- ================================================================
+-- PROCEDIMIENTO: Registrar los datos de la visita
+-- ================================================================
+CREATE OR ALTER PROCEDURE sp_RegistrarResultadoVisita
+    @Id INT,
+    @FechaRealizada DATETIME,
+    @Resultado NVARCHAR(50),
+    @Comentarios NVARCHAR(MAX),
+    @FotografiaEvidencia NVARCHAR(255)
+AS
+BEGIN
+    UPDATE SeguimientoAdopcion
+    SET 
+        FechaRealizada = @FechaRealizada,
+        Resultado = @Resultado,
+        Comentarios = @Comentarios,
+        FotografiaEvidencia = @FotografiaEvidencia,
+        EstadoVisita = 'Realizada'
+    WHERE Id = @Id;
+END;

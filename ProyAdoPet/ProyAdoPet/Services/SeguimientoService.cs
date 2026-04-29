@@ -40,5 +40,17 @@ namespace ProyAdoPet.Services
                 Controles = historial
             };
         }
+
+        //programar visita
+        public bool ProgramarNuevaVisita(int solicitudId, DateTime fecha, string tipo, string responsable, string obs)
+        {
+            return _seguimiento.ProgramarVisita(solicitudId, fecha, tipo, responsable, obs);
+        }
+
+        //registrar datos de seguimiento
+        public bool RegistrarResultadoVisita(int id, DateTime fecha, string resultado, string comentarios, string foto)
+        {
+            return _seguimiento.RegistrarResultadoVisita(id, fecha, resultado, comentarios, foto);
+        }
     }
 }

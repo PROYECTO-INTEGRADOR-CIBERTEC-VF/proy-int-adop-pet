@@ -67,12 +67,48 @@ namespace ProyAdoPet.DAO
                             FechaRealizada = dr["FechaRealizada"] != DBNull.Value ? (DateTime?)dr["FechaRealizada"] : null,
                             Resultado = dr["Resultado"] != DBNull.Value ? dr["Resultado"].ToString() : null,
                             Comentarios = dr["Comentarios"] != DBNull.Value ? dr["Comentarios"].ToString() : null,
-                            FotoEvidencia = dr["FotoEvidencia"] != DBNull.Value ? dr["FotoEvidencia"].ToString() : null
+                            FotoEvidencia = dr["FotografiaEvidencia"] != DBNull.Value ? dr["FotografiaEvidencia"].ToString() : null
                         });
                     }
                 }
             }
             return lista;
+        }
+
+        public bool ProgramarVisita(int solicitudId, DateTime fecha, string tipo, string responsable, string obs)
+        {
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("sp_ProgramarVisitaSeguimiento", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@SolicitudId", solicitudId);
+                cmd.Parameters.AddWithValue("@FechaProgramada", fecha);
+                cmd.Parameters.AddWithValue("@TipoControl", tipo);
+                cmd.Parameters.AddWithValue("@Responsable", responsable);
+                cmd.Parameters.AddWithValue("@ObservacionInicial", (object)obs ?? DBNull.Value);
+
+                cn.Open();
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
+
+        public bool RegistrarResultadoVisita(int id, DateTime fecha, string resultado, string comentarios, string foto)
+        {
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("sp_RegistrarResultadoVisita", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@FechaRealizada", fecha);
+                cmd.Parameters.AddWithValue("@Resultado", resultado);
+                cmd.Parameters.AddWithValue("@Comentarios", (object)comentarios ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@FotografiaEvidencia", (object)foto ?? DBNull.Value);
+
+                cn.Open();
+                return cmd.ExecuteNonQuery() > 0;
+            }
         }
     }
 }
