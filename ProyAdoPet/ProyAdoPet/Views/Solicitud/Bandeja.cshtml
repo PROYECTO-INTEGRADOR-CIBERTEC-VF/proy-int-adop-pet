@@ -4,64 +4,79 @@
     ViewData["Title"] = "Bandeja de Solicitudes";
 }
 
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold"><i class="bi bi-inbox-fill text-primary me-2"></i>Solicitudes Recibidas</h2>
-        <span class="badge bg-secondary">Total: @Model.Count()</span>
+<div class="container py-5">
+    <div class="row align-items-center mb-4 g-3">
+        <div class="col-md-6">
+            <h2 class="fw-bold m-0"><i class="bi bi-inbox-fill text-primary me-2"></i>Bandeja de Entrada</h2>
+            <p class="text-muted mb-0">Gestiona las solicitudes de adopción recibidas.</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <div class="d-inline-flex gap-2">
+                <div class="bg-white border rounded-3 px-3 py-2 shadow-sm text-center">
+                    <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 10px;">Pendientes</small>
+                    <span class="fw-bold text-warning">@Model.Count(x => x.EstadoId == 1)</span>
+                </div>
+                <div class="bg-white border rounded-3 px-3 py-2 shadow-sm text-center">
+                    <small class="text-muted d-block text-uppercase fw-bold" style="font-size: 10px;">Total</small>
+                    <span class="fw-bold text-primary">@Model.Count()</span>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
         <div class="table-responsive">
             <table class="table table-hover align-middle mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th class="ps-4">Mascota</th>
-                        <th>Postulante</th>
-                        <th>DNI</th>
-                        <th>Fecha</th>
-                        <th>Estado</th>
-                        <th class="text-center">Acciones</th>
+                <thead class="bg-light">
+                    <tr class="text-secondary small fw-bold text-uppercase">
+                        <th class="ps-4 py-3">Mascota en Adopción</th>
+                        <th>Información del Postulante</th>
+                        <th>Fecha de Envío</th>
+                        <th>Estado del Proceso</th>
+                        <th class="text-center pe-4">Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
+                        <tr class="table-row-hover">
                             <td class="ps-4">
                                 <div class="d-flex align-items-center">
-                                    <img src="~/fotos/@item.FotoMascota" class="rounded-circle me-3"
-                                         style="width: 45px; height: 45px; object-fit: cover;">
+                                    <img src="~/fotos/@item.FotoMascota" class="rounded-circle avatar-img me-3">
                                     <span class="fw-bold text-dark">@item.NombreMascota</span>
                                 </div>
                             </td>
-                            <td>@item.NombrePostulante</td>
-                            <td><code class="text-dark">@item.DNI</code></td>
-                            <td>@item.FechaCreacion.ToString("dd MMM yyyy")</td>
+                            <td>
+                                <div class="postulante-info">
+                                    <div class="fw-bold">@item.NombrePostulante</div>
+                                    <small class="text-muted"><i class="bi bi-card-text me-1"></i>DNI: @item.DNI</small>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="text-dark small">
+                                    <i class="bi bi-calendar3 me-1 text-secondary"></i>
+                                    @item.FechaCreacion.ToString("dd MMM, yyyy")
+                                </div>
+                            </td>
                             <td>
                                 @{
-                                    string claseBadge = item.EstadoId switch
+                                    var (clase, icono) = item.EstadoId switch
                                     {
-                                        1 => "bg-warning text-dark", // Pendiente
-                                        2 => "bg-info text-white",   // En Revisión
-                                        3 => "bg-success",           // Aprobado
-                                        4 => "bg-danger",            // Rechazado
-                                        _ => "bg-secondary"
+                                        1 => ("badge-soft-warning", "bi-clock-history"),
+                                        2 => ("badge-soft-info", "bi-calendar-check"),
+                                        3 => ("badge-soft-success", "bi-check-circle"),
+                                        4 => ("badge-soft-danger", "bi-x-circle"),
+                                        _ => ("bg-secondary", "bi-question")
                                     };
                                 }
-                                <span class="badge @claseBadge px-3 py-2 rounded-pill">
-                                    @item.EstadoNombre
+                                <span class="badge @clase rounded-pill px-3 py-2">
+                                    <i class="bi @icono me-1"></i> @item.EstadoNombre
                                 </span>
-                                @if (item.EstadoId == 2)
-                                {
-                                    <div class="small text-muted mt-1 fw-bold">
-                                        <i class="bi bi-calendar-event text-info"></i> Cita programada
-                                    </div>
-                                }
                             </td>
-                            <td class="text-center">
+                            <td class="text-center pe-4">
                                 <a asp-action="Evaluar" asp-route-id="@item.Id"
-                                   class="btn btn-outline-primary btn-sm rounded-pill px-3">
-                                    <i class="bi bi-eye-fill me-1"></i> Evaluar
+                                   class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm">
+                                    <i class="bi bi-search me-1"></i> Revisar
                                 </a>
                             </td>
                         </tr>
@@ -71,3 +86,47 @@
         </div>
     </div>
 </div>
+
+<style>
+    .avatar-img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border: 2px solid #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .postulante-info {
+        line-height: 1.2;
+    }
+
+    .table-row-hover:hover {
+        background-color: rgba(13, 110, 253, 0.02) !important;
+        transition: background-color 0.2s ease;
+    }
+
+    /* Badges modernos con colores sutiles */
+    .badge-soft-warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+    }
+
+    .badge-soft-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+
+    .badge-soft-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .badge-soft-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+</style>

@@ -5,97 +5,109 @@
     ViewData["Title"] = "Gestión de Mascotas";
 }
 
-<div class="container-fluid mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="text-dark fw-bold"><i class="bi bi-gear-fill me-2"></i>Gestión de Mascotas</h1>
-        <a asp-action="RegistrarMascota" class="btn btn-primary shadow-sm">
-            <i class="bi bi-plus-circle me-1"></i> Agregar Nueva Mascota
-        </a>
+<div class="container-fluid py-4">
+    <div class="card border-0 shadow-sm mb-4 bg-primary text-white rounded-4">
+        <div class="card-body p-4 d-flex justify-content-between align-items-center">
+            <div>
+                <h2 class="fw-bold mb-0"><i class="bi bi-paw-fill me-2"></i>Gestión de Mascotas</h2>
+                <p class="mb-0 opacity-75">Administra el inventario de animalitos en espera de un hogar.</p>
+            </div>
+            <a asp-action="RegistrarMascota" class="btn btn-light btn-lg rounded-pill shadow-sm fw-bold">
+                <i class="bi bi-plus-lg me-1"></i> Nueva Mascota
+            </a>
+        </div>
     </div>
 
     @if (TempData["MensajeExito"] != null)
     {
-        <div class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
-            <i class="bi bi-check-circle-fill me-2"></i>
-            @TempData["MensajeExito"]
+        <div class="alert alert-success alert-dismissible fade show border-0 shadow-sm rounded-3" role="alert">
+            <i class="bi bi-check-circle-fill me-2"></i> @TempData["MensajeExito"]
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     }
 
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover align-middle mb-0">
-                    <thead class="bg-light">
+                    <thead class="bg-light text-secondary text-uppercase small fw-bold">
                         <tr>
-                            <th class="ps-4">ID</th>
-                            <th>Foto</th>
-                            <th>Nombre</th>
+                            <th class="ps-4 py-3">Mascota</th>
                             <th>Edad</th>
                             <th>Estado</th>
-                            <th>Descripción</th>
-                            <th class="text-center">Acciones</th>
+                            <th class="d-none d-md-table-cell">Descripción</th>
+                            <th class="text-center pe-4">Acciones</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if (!Model.Any())
                         {
                             <tr>
-                                <td colspan="7" class="text-center py-5 text-muted">
-                                    <i class="bi bi-search d-block mb-2" style="font-size: 2rem;"></i>
-                                    No se encontraron mascotas registradas.
+                                <td colspan="5" class="text-center py-5">
+                                    <div class="text-muted">
+                                        <i class="bi bi-emoji-frown display-4 d-block mb-3"></i>
+                                        <p class="h5">No hay mascotas registradas aún</p>
+                                        <small>Comienza agregando una en el botón superior.</small>
+                                    </div>
                                 </td>
                             </tr>
                         }
                         else
                         {
-                            @foreach (var item in Model)
+                            foreach (var item in Model)
                             {
                                 <tr>
-                                    <td class="ps-4 fw-bold">#@item.Id</td>
-                                    <td>
-                                        @if (!string.IsNullOrEmpty(item.FotoMascota))
-                                        {
-                                            <img src="~/fotos/@item.FotoMascota" class="rounded shadow-sm" style="width: 50px; height: 50px; object-fit: cover;" alt="@item.Nombre" />
-                                        }
-                                        else
-                                        {
-                                            <div class="bg-secondary text-white rounded d-flex align-items-center justify-content-center shadow-sm" style="width: 50px; height: 50px;">
-                                                <i class="bi bi-image"></i>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center">
+                                            @if (!string.IsNullOrEmpty(item.FotoMascota))
+                                            {
+                                                <img src="~/fotos/@item.FotoMascota" class="table-img shadow-sm me-3" alt="@item.Nombre" />
+                                            }
+                                            else
+                                            {
+                                                <div class="table-img bg-light text-secondary d-flex align-items-center justify-content-center me-3">
+                                                    <i class="bi bi-camera"></i>
+                                                </div>
+                                            }
+                                            <div>
+                                                <div class="fw-bold text-dark">@item.Nombre</div>
+                                                <small class="text-muted text-uppercase" style="font-size: 0.7rem;">ID: #@item.Id</small>
                                             </div>
-                                        }
+                                        </div>
                                     </td>
-                                    <td class="fw-bold">@item.Nombre</td>
-                                    <td>@item.Edad</td>
-                                            <td>
+                                    <td><span class="text-secondary">@item.Edad años</span></td>
+                                    <td>
                                         @if (item.Estado == EstadosConstantes.Disponible)
                                         {
-                                            <span class="badge rounded-pill bg-success">Disponible</span>
+                                            <span class="badge bg-success-subtle text-success border border-success-subtle status-badge rounded-pill">Disponible</span>
                                         }
                                         else if (item.Estado == EstadosConstantes.Adoptado)
                                         {
-                                            <span class="badge rounded-pill bg-info text-dark">Adoptado</span>
+                                            <span class="badge bg-info-subtle text-info border border-info-subtle status-badge rounded-pill">Adoptado</span>
                                         }
                                         else
                                         {
-                                            <span class="badge rounded-pill bg-warning text-dark">Estado #@item.Estado</span>
+                                            <span class="badge bg-light text-dark border status-badge rounded-pill">Estado: @item.Estado</span>
                                         }
                                     </td>
-                                    <td>
-                                        <small class="text-muted d-inline-block text-truncate" style="max-width: 200px;">
+                                    <td class="d-none d-md-table-cell">
+                                        <p class="text-muted mb-0 small text-truncate" style="max-width: 250px;">
                                             @item.Descripcion
-                                        </small>
+                                        </p>
                                     </td>
-                                    <td class="text-center">
-                                        <div class="btn-group" role="group">
-                                            <a asp-action="Editar" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm" title="Editar">
-                                                <i class="bi bi-pencil-square"></i>
+                                    <td class="text-center pe-4">
+                                        <div class="d-flex justify-content-center gap-2">
+                                            <a asp-action="Editar" asp-route-id="@item.Id"
+                                               class="btn btn-outline-primary action-btn" title="Editar">
+                                                <i class="bi bi-pencil-fill"></i>
                                             </a>
-                                            <form asp-action="Eliminar" method="post" onsubmit="return confirm('¿Realmente deseas eliminar a @item.Nombre?');">
-                                                <input type="hidden" name="id" value="@item.Id" />
 
-                                                <button type="submit" class="btn btn-outline-danger btn-sm" title="Eliminar Mascota">
-                                                    <i class="bi bi-trash"></i>
+                                            <form asp-action="Eliminar" method="post"
+                                                  onsubmit="return confirm('¿Estás seguro de eliminar a @item.Nombre?');"
+                                                  class="d-inline">
+                                                <input type="hidden" name="id" value="@item.Id" />
+                                                <button type="submit" class="btn btn-outline-danger action-btn" title="Eliminar">
+                                                    <i class="bi bi-trash3-fill"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -109,3 +121,33 @@
         </div>
     </div>
 </div>
+
+<style>
+    .table-img {
+        width: 45px;
+        height: 45px;
+        object-fit: cover;
+        border-radius: 12px; /* Bordes más redondeados */
+        border: 2px solid #f8f9fa;
+    }
+
+    .status-badge {
+        font-size: 0.85rem;
+        padding: 0.5em 1em;
+        font-weight: 600;
+    }
+
+    .action-btn {
+        width: 34px;
+        height: 34px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+        }
+</style>

@@ -1,73 +1,118 @@
 ﻿@model IEnumerable<ProyAdoPet.ViewModel.SeguimientoListaVM>
 
-<div class="container mt-4">
-    <h2><i class="bi bi-calendar-check me-2"></i>Mascotas en Seguimiento</h2>
-    <p class="text-muted">Gestione las visitas y controles de las mascotas adoptadas.</p>
+@{
+    ViewData["Title"] = "Seguimiento de Mascotas";
+}
 
-    <div class="table-responsive shadow-sm rounded">
-        <table class="table table-hover align-middle bg-white">
-            <thead class="table-dark">
-                <tr>
-                    <th>Contrato</th>
-                    <th>Mascota / Adoptante</th>
-                    <th class="text-center">Último Control</th>
-                    <th class="text-center">Estado</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-end mb-4">
+        <div>
+            <h2 class="fw-bold mb-1"><i class="bi bi-calendar-check text-primary me-2"></i>Control de Seguimiento</h2>
+            <p class="text-muted mb-0">Supervisión de bienestar para mascotas adoptadas.</p>
+        </div>
+        <div class="text-end">
+            <span class="badge bg-light text-dark border px-3 py-2">
+                <i class="bi bi-shield-check text-success me-1"></i> @Model.Count() Procesos Activos
+            </span>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="bg-dark text-white">
                     <tr>
-                        <td class="fw-bold text-primary">@item.CodigoContrato</td>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <img src="~/fotos//@item.FotoMascota"
-                                     onerror="this.src='/img/no-photo.png'"
-                                     class="rounded-circle me-3 shadow-sm"
-                                     style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #f0f0f0;" />
-
-                                <div>
-                                    <div class="fw-bold mb-0" style="font-size: 1.05rem;">@item.Mascota</div>
-                                    <small class="text-muted">
-                                        <i class="bi bi-person-fill"></i> @item.Adoptante
-                                    </small>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="text-center">
-                            <span class="text-secondary">
-                                <i class="bi bi-calendar3 me-1"></i>
-                                @(item.UltimoControl?.ToString("dd/MM/yyyy") ?? "Sin registros")
-                            </span>
-                        </td>
-                        <td class="text-center">
-                            @if (item.UltimoControl == null)
-                            {
-                                <span class="badge rounded-pill bg-danger px-3">Sin controles (Urgente)</span>
-                            }
-                            else if (item.DiasDesdeUltimoControl > 60)
-                            {
-                                <span class="badge rounded-pill bg-danger px-3">Urgente (@item.DiasDesdeUltimoControl d)</span>
-                            }
-                            else if (item.DiasDesdeUltimoControl > 30)
-                            {
-                                <span class="badge rounded-pill bg-warning text-dark px-3">Pendiente</span>
-                            }
-                            else
-                            {
-                                <span class="badge rounded-pill bg-success px-3">Al día</span>
-                            }
-                        </td>
-                        <td class="text-center">
-                            <a asp-action="VerSeguimiento" asp-route-id="@item.SolicitudId"
-                               class="btn btn-outline-primary btn-sm rounded-pill px-3 shadow-sm">
-                                <i class="bi bi-eye-fill me-1"></i> Ver Detalles
-                            </a>
-                        </td>
+                        <th class="ps-4 py-3">ID Contrato</th>
+                        <th>Binomio (Mascota / Adoptante)</th>
+                        <th class="text-center">Último Control</th>
+                        <th class="text-center">Estado de Alerta</th>
+                        <th class="text-center pe-4">Acciones</th>
                     </tr>
-                }
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="ps-4">
+                                <span class="contract-code fw-bold">@item.CodigoContrato</span>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="position-relative">
+                                        <img src="~/fotos/@item.FotoMascota"
+                                             onerror="this.src='/img/no-photo.png'"
+                                             class="rounded-3 shadow-sm me-3"
+                                             style="width: 52px; height: 52px; object-fit: cover;">
+                                        @if (item.DiasDesdeUltimoControl > 60 || item.UltimoControl == null)
+                                        {
+                                            <span class="position-absolute top-0 start-0 translate-middle p-1 bg-danger border border-light rounded-circle"></span>
+                                        }
+                                    </div>
+                                    <div>
+                                        <h6 class="fw-bold mb-0">@item.Mascota</h6>
+                                        <small class="text-muted"><i class="bi bi-person me-1"></i>@item.Adoptante</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="d-flex flex-column">
+                                    <span class="fw-bold @(item.UltimoControl == null ? "text-danger" : "text-dark")">
+                                        <i class="bi bi-calendar3 me-1"></i>
+                                        @(item.UltimoControl?.ToString("dd/MM/yyyy") ?? "Sin Registro")
+                                    </span>
+                                    @if (item.UltimoControl != null)
+                                    {
+                                        <small class="text-muted small">Hace @item.DiasDesdeUltimoControl días</small>
+                                    }
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                @if (item.UltimoControl == null || item.DiasDesdeUltimoControl > 60)
+                                {
+                                    <span class="badge rounded-pill bg-danger px-3 py-2 badge-pulse-urgent">
+                                        <i class="bi bi-exclamation-triangle-fill me-1"></i> CRÍTICO
+                                    </span>
+                                }
+                                else if (item.DiasDesdeUltimoControl > 30)
+                                {
+                                    <span class="badge rounded-pill bg-warning text-dark px-3 py-2 border border-warning-subtle">
+                                        <i class="bi bi-clock-fill me-1"></i> PENDIENTE
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-3 py-2">
+                                        <i class="bi bi-check-circle-fill me-1"></i> AL DÍA
+                                    </span>
+                                }
+                            </td>
+                            <td class="text-center pe-4">
+                                <a asp-action="VerSeguimiento" asp-route-id="@item.SolicitudId"
+                                   class="btn btn-primary btn-sm rounded-pill px-4 shadow">
+                                    Historial <i class="bi bi-arrow-right ms-1"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
+
+<style>
+    .badge-pulse-urgent {
+    animation: pulse-red 2s infinite;
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+}
+
+.contract-code {
+    background-color: #f0f7ff;
+    color: #0056b3;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    border: 1px solid #cce5ff;
+}
+</style>

@@ -60,13 +60,16 @@
                             <div class="col-md-4 text-end align-self-center">
                                 @if (control.EstadoVisita == "Pendiente")
                                 {
-                                    <a asp-action="RegistrarResultado" asp-route-id="@control.Id" class="btn btn-sm btn-primary rounded-pill px-3">
-                                        <i class="bi bi-pencil-square"></i> Registrar Resultado
-                                    </a>
+                                    <button type="button" class="btn btn-sm btn-primary" onclick="prepararModal(@control.Id)">
+                                        Registrar Resultado
+                                    </button>
                                 }
                                 else if (!string.IsNullOrEmpty(control.FotoEvidencia))
                                 {
-                                    <img src="~/img/seguimientos/@control.FotoEvidencia" class="img-thumbnail" style="width: 80px;" />
+                                    <img src="~/adop/seguimientos/@control.FotoEvidencia"
+                                         class="img-thumbnail shadow-sm"
+                                         style="width: 100px; height: 100px; object-fit: cover;"
+                                         alt="Evidencia de visita" />
                                 }
                             </div>
                         </div>
@@ -122,3 +125,52 @@
         </form>
     </div>
 </div>
+
+<div class="modal fade" id="modalResultado" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form asp-action="CompletarVisita" method="post" enctype="multipart/form-data" class="modal-content">
+            <input type="hidden" name="SeguimientoId" id="inputSeguimientoId" />
+            <input type="hidden" name="SolicitudId" value="@Model.SolicitudId" />
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="bi bi-journal-check me-2"></i>Registrar Resultado de Visita</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Fecha de Realización</label>
+                    <input type="date" name="FechaRealizada" class="form-control" required value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Resultado</label>
+                    <select name="Resultado" class="form-control">
+                        <option value="Conforme">Conforme (Todo bien)</option>
+                        <option value="Observaciones">Con Observaciones (Requiere atención)</option>
+                        <option value="Urgente">Urgente (Riesgo para la mascota)</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Comentarios Finales</label>
+                    <textarea name="Comentarios" class="form-control" rows="3" required placeholder="Describe lo que viste..."></textarea>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Foto de Evidencia (Opcional)</label>
+                    <input type="file" name="FotoFile" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">Guardar Informe</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    function prepararModal(id) {
+        document.getElementById('inputSeguimientoId').value = id;
+        var myModal = new bootstrap.Modal(document.getElementById('modalResultado'));
+        myModal.show();
+    }
+</script>
