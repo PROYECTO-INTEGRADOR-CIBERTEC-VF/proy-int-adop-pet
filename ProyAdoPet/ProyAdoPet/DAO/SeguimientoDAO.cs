@@ -74,5 +74,23 @@ namespace ProyAdoPet.DAO
             }
             return lista;
         }
+
+        public bool ProgramarVisita(int solicitudId, DateTime fecha, string tipo, string responsable, string obs)
+        {
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("sp_ProgramarVisitaSeguimiento", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@SolicitudId", solicitudId);
+                cmd.Parameters.AddWithValue("@FechaProgramada", fecha);
+                cmd.Parameters.AddWithValue("@TipoControl", tipo);
+                cmd.Parameters.AddWithValue("@Responsable", responsable);
+                cmd.Parameters.AddWithValue("@ObservacionInicial", (object)obs ?? DBNull.Value);
+
+                cn.Open();
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
     }
 }
