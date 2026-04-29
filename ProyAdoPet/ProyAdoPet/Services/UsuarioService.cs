@@ -54,5 +54,8 @@ namespace ProyAdoPet.Services
             admin.IdRol = int.Parse(RolesConstantes.Administrador);
             return _usuario.Registrar(admin);
         }
+
+
+        //OPCIONES DE USUARIO ADOPTANTE
     }
 }
