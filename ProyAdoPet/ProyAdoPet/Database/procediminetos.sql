@@ -427,7 +427,7 @@ END;
 
 
 -- ================================================================
--- PROCEDIMIENTO: Obtener todas las adopciones en curso y su estado de control
+-- PROCEDIMIENTO: Obtener todas las adopciones en curso con seguimiento
 -- ================================================================
 CREATE OR ALTER PROCEDURE sp_ListarAdopcionesEnSeguimiento
 AS
@@ -446,4 +446,23 @@ BEGIN
     INNER JOIN ContratoAdopcion C ON S.Id = C.SolicitudId
     WHERE S.EstadoSolicitudId = 3
     ORDER BY UltimoControl ASC, FechaInicio ASC;
+END;
+
+-- ================================================================
+-- PROCEDIMIENTO: Obtener detalles de una adopcion en seguimiento
+-- ================================================================
+CREATE OR ALTER PROCEDURE sp_ObtenerHistorialSeguimiento
+    @SolicitudId INT
+AS
+BEGIN
+    SELECT 
+        Id,
+        FechaControl,
+        TipoControl,
+        EstadoSalud,
+        Observaciones,
+        ProximoControl
+    FROM SeguimientoAdopcion
+    WHERE SolicitudId = @SolicitudId
+    ORDER BY FechaControl DESC;
 END;
