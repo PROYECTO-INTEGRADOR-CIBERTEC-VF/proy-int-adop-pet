@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ProyAdoPet.ViewModel.SeguimientoListaVM>
+
+<div class="container mt-4">
+    <h2><i class="bi bi-calendar-check me-2"></i>Mascotas en Seguimiento</h2>
+    <p class="text-muted">Gestione las visitas y controles de las mascotas adoptadas.</p>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-hover align-middle bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>Contrato</th>
+                    <th>Mascota / Adoptante</th>
+                    <th class="text-center">Último Control</th>
+                    <th class="text-center">Estado</th>
+                    <th class="text-center">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-bold text-primary">@item.CodigoContrato</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img src="~/fotos//@item.FotoMascota"
+                                     onerror="this.src='/img/no-photo.png'"
+                                     class="rounded-circle me-3 shadow-sm"
+                                     style="width: 50px; height: 50px; object-fit: cover; border: 2px solid #f0f0f0;" />
+
+                                <div>
+                                    <div class="fw-bold mb-0" style="font-size: 1.05rem;">@item.Mascota</div>
+                                    <small class="text-muted">
+                                        <i class="bi bi-person-fill"></i> @item.Adoptante
+                                    </small>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span class="text-secondary">
+                                <i class="bi bi-calendar3 me-1"></i>
+                                @(item.UltimoControl?.ToString("dd/MM/yyyy") ?? "Sin registros")
+                            </span>
+                        </td>
+                        <td class="text-center">
+                            @if (item.UltimoControl == null)
+                            {
+                                <span class="badge rounded-pill bg-danger px-3">Sin controles (Urgente)</span>
+                            }
+                            else if (item.DiasDesdeUltimoControl > 60)
+                            {
+                                <span class="badge rounded-pill bg-danger px-3">Urgente (@item.DiasDesdeUltimoControl d)</span>
+                            }
+                            else if (item.DiasDesdeUltimoControl > 30)
+                            {
+                                <span class="badge rounded-pill bg-warning text-dark px-3">Pendiente</span>
+                            }
+                            else
+                            {
+                                <span class="badge rounded-pill bg-success px-3">Al día</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="VerSeguimiento" asp-route-id="@item.SolicitudId"
+                               class="btn btn-outline-primary btn-sm rounded-pill px-3 shadow-sm">
+                                <i class="bi bi-eye-fill me-1"></i> Ver Detalles
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

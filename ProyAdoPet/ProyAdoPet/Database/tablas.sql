@@ -127,3 +127,27 @@ CREATE TABLE ContratoAdopcion (
     ObservacionesIniciales NVARCHAR(MAX),
     CONSTRAINT FK_Contrato_Solicitud FOREIGN KEY (SolicitudId) REFERENCES SolicitudAdopcion(Id)
 );
+
+
+-- =============================================
+-- TABLA: Control de seguimiento para adopciones en curso
+-- =============================================
+CREATE TABLE SeguimientoAdopcion (
+    Id INT PRIMARY KEY IDENTITY(1,1),
+    SolicitudId INT NOT NULL,
+    
+    --datos programar cita
+    FechaProgramada DATETIME NOT NULL,
+    TipoControl NVARCHAR(50),
+    Responsable NVARCHAR(100),
+    ObservacionInicial NVARCHAR(MAX),
+    EstadoVisita NVARCHAR(20) DEFAULT 'Pendiente',
+    
+    --datos resultado visita
+    FechaRealizada DATETIME NULL,
+    Resultado NVARCHAR(50),
+    Comentarios NVARCHAR(MAX),
+    FotografiaEvidencia NVARCHAR(255),
+    
+    CONSTRAINT FK_Seguimiento_Solicitud FOREIGN KEY (SolicitudId) REFERENCES SolicitudAdopcion(Id)
+);

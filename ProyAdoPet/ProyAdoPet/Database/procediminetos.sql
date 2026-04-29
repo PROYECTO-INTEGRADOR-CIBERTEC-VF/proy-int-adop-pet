@@ -424,3 +424,53 @@ BEGIN
     INNER JOIN ContratoAdopcion C ON S.Id = C.SolicitudId
     WHERE S.Id = @Id AND S.EstadoSolicitudId = 3; 
 END;
+
+
+-- ================================================================
+-- PROCEDIMIENTO: Obtener todas las adopciones en curso con seguimiento
+-- ================================================================
+CREATE OR ALTER PROCEDURE sp_ListarAdopcionesEnSeguimiento
+AS
+BEGIN
+    SELECT 
+        S.Id AS SolicitudId,
+        S.NombreCompleto AS Adoptante,
+        S.DNI,
+        S.Telefono,
+        M.Nombre AS Mascota,
+        M.FotoMascota,
+        C.CodigoContrato,
+        C.FechaFirma AS FechaInicio,
+        --fecha ultima visita realizada
+        (SELECT MAX(FechaRealizada) 
+         FROM SeguimientoAdopcion 
+         WHERE SolicitudId = S.Id AND EstadoVisita = 'Realizada') AS UltimoControl
+    FROM SolicitudAdopcion S
+    INNER JOIN Mascota M ON S.MascotaId = M.Id
+    INNER JOIN ContratoAdopcion C ON S.Id = C.SolicitudId
+    WHERE S.EstadoSolicitudId = 3
+    ORDER BY UltimoControl ASC, FechaInicio ASC;
+END;
+
+-- ================================================================
+-- PROCEDIMIENTO: Obtener detalles de una adopcion en seguimiento
+-- ================================================================
+CREATE OR ALTER PROCEDURE sp_ObtenerHistorialSeguimiento
+    @SolicitudId INT
+AS
+BEGIN
+    SELECT 
+        Id,
+        FechaProgramada,
+        TipoControl,
+        Responsable,
+        ObservacionInicial,
+        EstadoVisita,
+        FechaRealizada,
+        Resultado,
+        Comentarios,
+        FotografiaEvidencia
+    FROM SeguimientoAdopcion
+    WHERE SolicitudId = @SolicitudId
+    ORDER BY FechaProgramada DESC;
+END;
