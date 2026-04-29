@@ -7,6 +7,7 @@ namespace ProyAdoPet.DAO
 {
     public class SeguimientoDAO : ISeguimiento
     {
+
         string cadena = (new ConfigurationBuilder().AddJsonFile("appsettings.json").Build()).GetConnectionString("cn") ?? "";
 
 
@@ -32,6 +33,34 @@ namespace ProyAdoPet.DAO
                             CodigoContrato = dr["CodigoContrato"].ToString(),
                             FechaInicio = (DateTime)dr["FechaInicio"],
                             UltimoControl = dr["UltimoControl"] != DBNull.Value ? (DateTime?)dr["UltimoControl"] : null
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
+
+        public List<SeguimientoItemVM> ListarControlesPorSolicitud(int solicitudId)
+        {
+            List<SeguimientoItemVM> lista = new List<SeguimientoItemVM>();
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("sp_ObtenerHistorialSeguimiento", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@SolicitudId", solicitudId);
+                cn.Open();
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(new SeguimientoItemVM
+                        {
+                            Id = (int)dr["Id"],
+                            FechaControl = (DateTime)dr["FechaControl"],
+                            TipoControl = dr["TipoControl"].ToString(),
+                            EstadoSalud = dr["EstadoSalud"].ToString(),
+                            Observaciones = dr["Observaciones"].ToString(),
+                            ProximoControl = dr["ProximoControl"] != DBNull.Value ? (DateTime?)dr["ProximoControl"] : null
                         });
                     }
                 }
