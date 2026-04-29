@@ -92,5 +92,23 @@ namespace ProyAdoPet.DAO
                 return cmd.ExecuteNonQuery() > 0;
             }
         }
+
+        public bool RegistrarResultadoVisita(int id, DateTime fecha, string resultado, string comentarios, string foto)
+        {
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("sp_RegistrarResultadoVisita", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+
+                cmd.Parameters.AddWithValue("@Id", id);
+                cmd.Parameters.AddWithValue("@FechaRealizada", fecha);
+                cmd.Parameters.AddWithValue("@Resultado", resultado);
+                cmd.Parameters.AddWithValue("@Comentarios", (object)comentarios ?? DBNull.Value);
+                cmd.Parameters.AddWithValue("@FotografiaEvidencia", (object)foto ?? DBNull.Value);
+
+                cn.Open();
+                return cmd.ExecuteNonQuery() > 0;
+            }
+        }
     }
 }
