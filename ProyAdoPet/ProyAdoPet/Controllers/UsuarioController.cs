@@ -51,5 +51,19 @@ namespace ProyAdoPet.Controllers
 
             return View(lista);
         }
+
+
+        [HttpGet("Adopciones/Detalle")]
+        [Authorize]
+        public IActionResult MiMascotaDetalle(int id)
+        {
+            var detalle = _seguimiento.ObtenerHistorialSeguimiento(id);
+
+            if (detalle == null)
+            {
+                return NotFound();
+            }
+            return View(detalle);
+        }
     }
 }

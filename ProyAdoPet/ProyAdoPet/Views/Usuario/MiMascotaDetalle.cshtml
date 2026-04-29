@@ -1,0 +1,46 @@
+﻿@using ProyAdoPet.ViewModel
+@model DetalleSeguimientoVM
+
+<div class="container mt-4">
+    <div class="card shadow-sm border-0 mb-4 bg-primary text-white">
+        <div class="card-body">
+            <h2 class="mb-0">@Model.MascotaNombre</h2>
+            <small>Contrato: @Model.CodigoContrato | Adoptante: @Model.AdoptanteNombre</small>
+        </div>
+    </div>
+
+    <h4 class="mb-3 fw-bold">Historial de Visitas</h4>
+
+    @if (Model.Controles == null || !Model.Controles.Any())
+    {
+        <div class="alert alert-light border text-center">No hay visitas registradas.</div>
+    }
+    else
+    {
+        <div class="list-group">
+            @foreach (var control in Model.Controles)
+            {
+                <div class="list-group-item mb-2 shadow-sm border-start border-4 @(control.EstadoVisita == "Pendiente" ? "border-warning" : "border-success")">
+                    <h5 class="fw-bold">@control.TipoControl</h5>
+
+                    @if (control.EstadoVisita == "Pendiente")
+                    {
+                        <p class="mb-0 text-primary">Próxima visita: @control.FechaProgramada.ToString("dd/MM/yyyy")</p>
+                        <small class="text-muted">Responsable: @control.Responsable</small>
+                    }
+                    else
+                    {
+                        <p class="mb-0">Fecha: @control.FechaRealizada?.ToString("dd/MM/yyyy")</p>
+                        <p class="mb-0"><strong>Resultado:</strong> @control.Resultado</p>
+                        <p class="bg-light p-2 mt-2"><em>@control.Comentarios</em></p>
+
+                        @if (!string.IsNullOrEmpty(control.FotoEvidencia))
+                        {
+                            <img src="~/adop/seguimientos/@control.FotoEvidencia" style="width: 120px;" class="mt-2" />
+                        }
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
