@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <Folder Include="ViewsModel\" />
+    <Folder Include="wwwroot\adop\seguimientos\" />
   </ItemGroup>
 
   <ItemGroup>
