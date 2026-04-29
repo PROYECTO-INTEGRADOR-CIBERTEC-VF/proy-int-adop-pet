@@ -55,6 +55,6 @@ namespace ProyAdoPet.Controllers
             return View(mascota);
         }
 
-
+        public IActionResult AcercaDe() => View();
     }
 }

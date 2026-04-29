@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "Sobre Nosotros";
+}
+
+<div class="about-hero text-center mb-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold">Unidos por sus Huellas</h1>
+        <p class="lead">Transformando vidas a través de la adopción responsable desde 2024.</p>
+    </div>
+</div>
+
+<div class="container pb-5">
+    <div class="row align-items-center mb-5 pb-lg-4">
+        <div class="col-lg-6">
+            <h6 class="text-primary fw-bold text-uppercase tracking-wider">Nuestra Historia</h6>
+            <h2 class="fw-bold mb-4">Más que un albergue, un hogar de transición</h2>
+            <p class="text-muted">
+                <strong>ProyAdoPet</strong> nació de la necesidad de conectar a cientos de mascotas en situación de abandono
+                con familias dispuestas a brindarles una segunda oportunidad. No solo rescatamos animales,
+                gestionamos historias de éxito.
+            </p>
+            <p class="text-muted">
+                Nuestro sistema permite un seguimiento riguroso para asegurar que cada adopción sea definitiva
+                y exitosa, garantizando el bienestar de nuestros peluditos en su nuevo entorno.
+            </p>
+            <div class="row g-4 mt-2">
+                <div class="col-6">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill text-success fs-4 me-2"></i>
+                        <span class="fw-bold">Rescate Ético</span>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-check-circle-fill text-success fs-4 me-2"></i>
+                        <span class="fw-bold">Control Médico</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Nuestros Valores</h2>
+        <p class="text-muted">Lo que nos impulsa a seguir trabajando cada día.</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 value-card rounded-4">
+                <div class="icon-box">
+                    <i class="bi bi-shield-heart"></i>
+                </div>
+                <h4 class="fw-bold">Compromiso</h4>
+                <p class="text-muted small">No descansamos hasta que cada mascota tenga un contrato de adopción que garantice su seguridad.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 value-card rounded-4">
+                <div class="icon-box">
+                    <i class="bi bi-eye"></i>
+                </div>
+                <h4 class="fw-bold">Transparencia</h4>
+                <p class="text-muted small">Todo nuestro proceso de seguimiento es visible para el adoptante y el administrador en tiempo real.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm p-4 value-card rounded-4">
+                <div class="icon-box">
+                    <i class="bi bi-house-check"></i>
+                </div>
+                <h4 class="fw-bold">Responsabilidad</h4>
+                <p class="text-muted small">Fomentamos la tenencia responsable mediante charlas y visitas de control periódicas.</p>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<style>
+    .about-hero {
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/img/shelter-bg.jpg'); /* Busca una foto de perritos feliz */
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0;
+        border-radius: 0 0 50px 50px;
+        color: white;
+    }
+
+    .icon-box {
+        width: 80px;
+        height: 80px;
+        background: #f0f7ff;
+        color: #0d6efd;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .value-card:hover .icon-box {
+        background: #0d6efd;
+        color: white;
+        transform: rotate(-10deg);
+    }
+
+    .stats-card {
+        background: #0d6efd;
+        color: white;
+        border-radius: 30px;
+        padding: 40px;
+    }
+</style>
