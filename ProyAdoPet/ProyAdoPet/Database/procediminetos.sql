@@ -513,3 +513,26 @@ BEGIN
         EstadoVisita = 'Realizada'
     WHERE Id = @Id;
 END;
+
+
+-- ================================================================
+-- PROCEDIMIENTO: Listar adopciones por usuario
+-- ================================================================
+CREATE OR ALTER PROCEDURE sp_ListarMisMascotasAdoptadas
+    @UsuarioId INT
+AS
+BEGIN
+    SELECT 
+        M.Id AS MascotaId,
+        M.Nombre AS MascotaNombre,
+        M.FotoMascota,
+        S.Id AS SolicitudId,
+        C.CodigoContrato,
+        (SELECT MIN(FechaProgramada) 
+         FROM SeguimientoAdopcion 
+         WHERE SolicitudId = S.Id AND EstadoVisita = 'Pendiente') AS ProximaVisita
+    FROM SolicitudAdopcion S
+    INNER JOIN Mascota M ON S.MascotaId = M.Id
+    INNER JOIN ContratoAdopcion C ON S.Id = C.SolicitudId
+    WHERE S.UsuarioId = @UsuarioId AND S.EstadoSolicitudId = 3
+END;
