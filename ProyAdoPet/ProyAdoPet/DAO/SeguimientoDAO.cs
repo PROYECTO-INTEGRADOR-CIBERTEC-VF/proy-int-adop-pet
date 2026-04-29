@@ -67,7 +67,7 @@ namespace ProyAdoPet.DAO
                             FechaRealizada = dr["FechaRealizada"] != DBNull.Value ? (DateTime?)dr["FechaRealizada"] : null,
                             Resultado = dr["Resultado"] != DBNull.Value ? dr["Resultado"].ToString() : null,
                             Comentarios = dr["Comentarios"] != DBNull.Value ? dr["Comentarios"].ToString() : null,
-                            FotoEvidencia = dr["FotoEvidencia"] != DBNull.Value ? dr["FotoEvidencia"].ToString() : null
+                            FotoEvidencia = dr["FotografiaEvidencia"] != DBNull.Value ? dr["FotografiaEvidencia"].ToString() : null
                         });
                     }
                 }

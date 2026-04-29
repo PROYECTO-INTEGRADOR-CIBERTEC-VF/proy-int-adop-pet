@@ -33,5 +33,37 @@ namespace ProyAdoPet.Controllers
             return View(model);
         }
 
+        //programar visita
+        [HttpPost("ProgramarVisita")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        [ValidateAntiForgeryToken] 
+        public IActionResult ProgramarVisita(int SolicitudId, DateTime FechaProgramada, string TipoControl, string Responsable, string ObservacionInicial)
+        {
+            try
+            {
+                if (FechaProgramada == DateTime.MinValue)
+                {
+                    ModelState.AddModelError("", "La fecha programada no es válida.");
+                    return RedirectToAction("VerSeguimiento", new { id = SolicitudId });
+                }
+
+                bool exito = _seguimientoService.ProgramarNuevaVisita(SolicitudId, FechaProgramada, TipoControl, Responsable, ObservacionInicial);
+
+                if (exito)
+                {
+                    TempData["Mensaje"] = "Visita programada correctamente.";
+                    return RedirectToAction("VerSeguimiento", new { id = SolicitudId });
+                }
+                else
+                {
+                    TempData["Error"] = "No se pudo programar la visita.";
+                    return RedirectToAction("VerSeguimiento", new { id = SolicitudId });
+                }
+            }
+            catch (Exception ex)
+            {
+                return View("Error");
+            }
+        }
     }
 }

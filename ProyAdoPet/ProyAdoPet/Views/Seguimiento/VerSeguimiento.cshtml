@@ -7,9 +7,13 @@
             <h2 class="mb-0">Seguimiento: @Model.MascotaNombre</h2>
             <p class="text-muted">Adoptante: @Model.AdoptanteNombre</p>
         </div>
-        <a asp-action="ProgramarVisita" asp-route-id="@Model.SolicitudId" class="btn btn-warning rounded-pill px-4 shadow-sm">
+
+        <button type="button"
+                class="btn btn-warning rounded-pill px-4 shadow-sm"
+                data-bs-toggle="modal"
+                data-bs-target="#modalProgramar">
             <i class="bi bi-calendar-plus me-2"></i>Programar Nueva Visita
-        </a>
+        </button>
     </div>
 
     @if (Model.Controles == null || !Model.Controles.Any())
@@ -76,5 +80,45 @@
         <a asp-action="Lista" class="btn btn-outline-secondary rounded-pill">
             <i class="bi bi-arrow-left"></i> Volver al listado
         </a>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalProgramar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form asp-action="ProgramarVisita" method="post" class="modal-content">
+            <input type="hidden" name="SolicitudId" value="@Model.SolicitudId" />
+
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title"><i class="bi bi-calendar-plus me-2"></i>Programar Nueva Visita</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Fecha Programada</label>
+                    <input type="date" name="FechaProgramada" class="form-control" required min="@DateTime.Now.ToString("yyyy-MM-dd")">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Tipo de Control</label>
+                    <select name="TipoControl" class="form-control">
+                        <option value="Presencial">Presencial</option>
+                        <option value="Virtual">Virtual (WhatsApp/Video)</option>
+                        <option value="Llamada">Llamada Telefónica</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Responsable</label>
+                    <input type="text" name="Responsable" class="form-control" placeholder="Nombre del voluntario" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Observación Inicial / Objetivo</label>
+                    <textarea name="ObservacionInicial" class="form-control" rows="2" placeholder="Ej: Verificar estado de vacunas..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-warning fw-bold">Guardar Programación</button>
+            </div>
+        </form>
     </div>
 </div>
