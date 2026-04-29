@@ -75,6 +75,35 @@ namespace ProyAdoPet.DAO
             return lista;
         }
 
+        public List<MisMascotasVM> ListarMisMascotasAdoptadas(int usuarioId)
+        {
+            List<MisMascotasVM> lista = new List<MisMascotasVM>();
+            using (SqlConnection cn = new SqlConnection(cadena))
+            {
+                SqlCommand cmd = new SqlCommand("sp_ListarMisMascotasAdoptadas", cn);
+                cmd.CommandType = CommandType.StoredProcedure;
+                cmd.Parameters.AddWithValue("@UsuarioId", usuarioId);
+
+                cn.Open();
+                using (SqlDataReader dr = cmd.ExecuteReader())
+                {
+                    while (dr.Read())
+                    {
+                        lista.Add(new MisMascotasVM
+                        {
+                            MascotaId = (int)dr["MascotaId"],
+                            MascotaNombre = dr["MascotaNombre"].ToString(),
+                            FotoMascota = dr["FotoMascota"].ToString(),
+                            SolicitudId = (int)dr["SolicitudId"],
+                            CodigoContrato = dr["CodigoContrato"].ToString(),
+                            ProximaVisita = dr["ProximaVisita"] != DBNull.Value ? (DateTime?)dr["ProximaVisita"] : null
+                        });
+                    }
+                }
+            }
+            return lista;
+        }
+
         public bool ProgramarVisita(int solicitudId, DateTime fecha, string tipo, string responsable, string obs)
         {
             using (SqlConnection cn = new SqlConnection(cadena))

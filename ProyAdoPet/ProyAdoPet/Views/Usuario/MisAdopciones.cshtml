@@ -1,0 +1,111 @@
+﻿@using ProyAdoPet.ViewModel
+@model List<MisMascotasVM>
+
+@{
+    ViewData["Title"] = "Mis Mascotas Adoptadas";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold"><i class="bi bi-heart-fill text-danger me-2"></i>Mis Compañeros</h1>
+        <p class="text-muted">Aquí puedes ver a los integrantes de tu familia y sus próximos controles.</p>
+        <hr class="w-25 mx-auto text-primary" style="height: 3px;">
+    </div>
+
+    @if (Model == null || !Model.Any())
+    {
+        <div class="card border-0 shadow-sm rounded-4 py-5 text-center">
+            <div class="card-body">
+                <img src="~/img/empty-pets.svg" style="width: 150px;" class="mb-3 opacity-50" />
+                <h4 class="text-muted">Aún no tienes mascotas adoptadas</h4>
+                <p class="mb-4">¡Anímate a darle un hogar a un peludito!</p>
+                <a asp-controller="Adopcion" asp-action="Explorar" class="btn btn-primary rounded-pill px-4">
+                    Explorar Mascotas
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="card h-100 pet-card border-0 shadow-sm">
+                        <div class="pet-img-container">
+                            <img src="~/fotos/@item.FotoMascota"
+                                 class="card-img-top"
+                                 style="height: 260px; object-fit: cover;"
+                                 alt="@item.MascotaNombre">
+                            <div class="position-absolute bottom-0 end-0 m-3">
+                                <span class="badge bg-white text-dark shadow-sm rounded-pill px-3 py-2">
+                                    <i class="bi bi-hash text-primary"></i> @item.CodigoContrato
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-4 text-center">
+                            <h3 class="fw-bold text-dark mb-3">@item.MascotaNombre</h3>
+
+                            <div class="next-visit-box p-3 mb-4">
+                                <small class="text-uppercase fw-bold text-muted d-block mb-1" style="letter-spacing: 1px; font-size: 0.65rem;">
+                                    Próximo Seguimiento
+                                </small>
+                                <div class="h6 mb-0 fw-bold">
+                                    @if (item.ProximaVisita.HasValue)
+                                    {
+                                        <i class="bi bi-calendar-check-fill text-warning me-1"></i>
+                                        @item.ProximaVisita.Value.ToString("dd 'de' MMMM, yyyy")
+                                    }
+                                    else
+                                    {
+                                        <i class="bi bi-clock-history text-muted me-1"></i>
+                                        <span>Por programar</span>
+                                    }
+                                </div>
+                            </div>
+
+                            <a asp-action="MiMascotaDetalle" asp-route-id="@item.SolicitudId"
+                               class="btn btn-primary btn-lg w-100 rounded-pill shadow-sm py-2"
+                               style="font-size: 0.9rem; font-weight: 600;">
+                                Ver Diario de Vida <i class="bi bi-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .pet-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 20px !important;
+    }
+
+        .pet-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+        }
+
+    .pet-img-container {
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px 20px 0 0;
+    }
+
+        .pet-img-container img {
+            transition: transform 0.5s ease;
+        }
+
+    .pet-card:hover .pet-img-container img {
+        transform: scale(1.1);
+    }
+
+    .next-visit-box {
+        background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+        border: 1px dashed #ffc107;
+        border-radius: 15px;
+    }
+</style>

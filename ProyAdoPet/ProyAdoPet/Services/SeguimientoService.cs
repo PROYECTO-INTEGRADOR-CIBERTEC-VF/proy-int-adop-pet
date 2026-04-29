@@ -52,5 +52,12 @@ namespace ProyAdoPet.Services
         {
             return _seguimiento.RegistrarResultadoVisita(id, fecha, resultado, comentarios, foto);
         }
+
+
+        //listado para usuario adoptante
+        public List<MisMascotasVM> ListarMisMascotasAdoptadas(int usuarioId)
+        {
+            return _seguimiento.ListarMisMascotasAdoptadas(usuarioId);
+        }
     }
 }
