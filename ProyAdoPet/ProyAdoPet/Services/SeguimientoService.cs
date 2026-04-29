@@ -12,7 +12,7 @@ namespace ProyAdoPet.Services
             _seguimiento = seguimiento;
         }
 
-        public List<SeguimientoListaVM> ObtenerListaAdopciones()
+        public List<SeguimientoListaVM> ListarAdopcionesEnSeguimiento()
         {
             return _seguimiento.ListarAdopcionesEnSeguimiento();
         }

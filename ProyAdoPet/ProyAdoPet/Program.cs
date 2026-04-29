@@ -16,6 +16,8 @@ builder.Services.AddScoped<ISolicitudAdopcion, SolicitudAdopcionDAO>();
 builder.Services.AddScoped<SolicitudService>();
 builder.Services.AddScoped<IAdopcion, AdopcionDAO>();
 builder.Services.AddScoped<AdopcionService>();
+builder.Services.AddScoped<ISeguimiento, SeguimientoDAO>();
+builder.Services.AddScoped<SeguimientoService>();
 
 
 //sesion
