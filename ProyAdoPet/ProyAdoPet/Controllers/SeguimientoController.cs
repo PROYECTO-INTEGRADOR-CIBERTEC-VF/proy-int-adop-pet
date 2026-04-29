@@ -22,5 +22,16 @@ namespace ProyAdoPet.Controllers
             return View(lista);
         }
 
+        [HttpGet("Detalle")]
+        [Authorize(Roles = RolesConstantes.Administrador)]
+        public IActionResult VerSeguimiento(int id)
+        {
+            var model = _seguimientoService.ObtenerHistorialSeguimiento(id);
+
+            if (model == null) return NotFound();
+
+            return View(model);
+        }
+
     }
 }

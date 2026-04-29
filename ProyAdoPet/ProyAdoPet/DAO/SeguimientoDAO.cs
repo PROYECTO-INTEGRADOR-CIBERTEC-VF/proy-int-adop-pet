@@ -23,15 +23,14 @@ namespace ProyAdoPet.DAO
                 {
                     while (dr.Read())
                     {
+                        // Dentro del while (dr.Read())
                         lista.Add(new SeguimientoListaVM
                         {
                             SolicitudId = (int)dr["SolicitudId"],
                             Adoptante = dr["Adoptante"].ToString(),
-                            DNI = dr["DNI"].ToString(),
-                            Telefono = dr["Telefono"].ToString(),
                             Mascota = dr["Mascota"].ToString(),
+                            FotoMascota = dr["FotoMascota"].ToString(),
                             CodigoContrato = dr["CodigoContrato"].ToString(),
-                            FechaInicio = (DateTime)dr["FechaInicio"],
                             UltimoControl = dr["UltimoControl"] != DBNull.Value ? (DateTime?)dr["UltimoControl"] : null
                         });
                     }
@@ -56,11 +55,19 @@ namespace ProyAdoPet.DAO
                         lista.Add(new SeguimientoItemVM
                         {
                             Id = (int)dr["Id"],
-                            FechaControl = (DateTime)dr["FechaControl"],
+
+                            //datos programcion cita
+                            FechaProgramada = (DateTime)dr["FechaProgramada"],
                             TipoControl = dr["TipoControl"].ToString(),
-                            EstadoSalud = dr["EstadoSalud"].ToString(),
-                            Observaciones = dr["Observaciones"].ToString(),
-                            ProximoControl = dr["ProximoControl"] != DBNull.Value ? (DateTime?)dr["ProximoControl"] : null
+                            Responsable = dr["Responsable"].ToString(),
+                            ObservacionInicial = dr["ObservacionInicial"].ToString(),
+                            EstadoVisita = dr["EstadoVisita"].ToString(),
+
+                            //datos resultado (pueden ser null)
+                            FechaRealizada = dr["FechaRealizada"] != DBNull.Value ? (DateTime?)dr["FechaRealizada"] : null,
+                            Resultado = dr["Resultado"] != DBNull.Value ? dr["Resultado"].ToString() : null,
+                            Comentarios = dr["Comentarios"] != DBNull.Value ? dr["Comentarios"].ToString() : null,
+                            FotoEvidencia = dr["FotoEvidencia"] != DBNull.Value ? dr["FotoEvidencia"].ToString() : null
                         });
                     }
                 }

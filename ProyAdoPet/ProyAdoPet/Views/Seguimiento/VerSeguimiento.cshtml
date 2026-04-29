@@ -1,0 +1,80 @@
+﻿@using ProyAdoPet.ViewModel
+@model DetalleSeguimientoVM
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">Seguimiento: @Model.MascotaNombre</h2>
+            <p class="text-muted">Adoptante: @Model.AdoptanteNombre</p>
+        </div>
+        <a asp-action="ProgramarVisita" asp-route-id="@Model.SolicitudId" class="btn btn-warning rounded-pill px-4 shadow-sm">
+            <i class="bi bi-calendar-plus me-2"></i>Programar Nueva Visita
+        </a>
+    </div>
+
+    @if (Model.Controles == null || !Model.Controles.Any())
+    {
+        <div class="alert alert-info border-0 shadow-sm">
+            <i class="bi bi-info-circle me-2"></i>Aún no se han registrado visitas de control para esta adopción.
+        </div>
+    }
+    else
+    {
+        <div class="timeline">
+            @foreach (var control in Model.Controles)
+            {
+                <div class="card shadow-sm border-0 border-start border-4 @(control.EstadoVisita == "Pendiente" ? "border-warning" : "border-success") mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="fw-bold @(control.EstadoVisita == "Pendiente" ? "text-warning" : "text-success")">
+                                <i class="bi @(control.EstadoVisita == "Pendiente" ? "bi-clock" : "bi-check-circle") me-1"></i>
+                                Visita @control.TipoControl (@control.EstadoVisita)
+                            </span>
+                            <small class="text-muted">Ref: #@control.Id</small>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-8">
+                                <p class="mb-1"><strong>Fecha Programada:</strong> @control.FechaProgramada.ToString("dd/MM/yyyy")</p>
+
+                                @if (control.EstadoVisita == "Pendiente")
+                                {
+                                    <p class="text-muted small">Responsable asignado: @control.Responsable</p>
+                                    <p class="card-text italic">"@control.ObservacionInicial"</p>
+                                }
+                                else
+                                {
+                                    <p class="mb-1"><strong>Fecha Realizada:</strong> @control.FechaRealizada?.ToString("dd/MM/yyyy")</p>
+                                    <p class="mb-1">
+                                        <strong>Resultado:</strong>
+                                        <span class="badge @(control.Resultado == "Urgente" ? "bg-danger" : "bg-info text-dark")">@control.Resultado</span>
+                                    </p>
+                                    <p class="card-text">@control.Comentarios</p>
+                                }
+                            </div>
+
+                            <div class="col-md-4 text-end align-self-center">
+                                @if (control.EstadoVisita == "Pendiente")
+                                {
+                                    <a asp-action="RegistrarResultado" asp-route-id="@control.Id" class="btn btn-sm btn-primary rounded-pill px-3">
+                                        <i class="bi bi-pencil-square"></i> Registrar Resultado
+                                    </a>
+                                }
+                                else if (!string.IsNullOrEmpty(control.FotoEvidencia))
+                                {
+                                    <img src="~/img/seguimientos/@control.FotoEvidencia" class="img-thumbnail" style="width: 80px;" />
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    <div class="mt-4">
+        <a asp-action="Lista" class="btn btn-outline-secondary rounded-pill">
+            <i class="bi bi-arrow-left"></i> Volver al listado
+        </a>
+    </div>
+</div>

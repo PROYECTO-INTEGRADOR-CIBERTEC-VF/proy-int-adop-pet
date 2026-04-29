@@ -438,9 +438,13 @@ BEGIN
         S.DNI,
         S.Telefono,
         M.Nombre AS Mascota,
+        M.FotoMascota,
         C.CodigoContrato,
         C.FechaFirma AS FechaInicio,
-        (SELECT MAX(FechaControl) FROM SeguimientoAdopcion WHERE SolicitudId = S.Id) AS UltimoControl
+        --fecha ultima visita realizada
+        (SELECT MAX(FechaRealizada) 
+         FROM SeguimientoAdopcion 
+         WHERE SolicitudId = S.Id AND EstadoVisita = 'Realizada') AS UltimoControl
     FROM SolicitudAdopcion S
     INNER JOIN Mascota M ON S.MascotaId = M.Id
     INNER JOIN ContratoAdopcion C ON S.Id = C.SolicitudId
@@ -457,12 +461,16 @@ AS
 BEGIN
     SELECT 
         Id,
-        FechaControl,
+        FechaProgramada,
         TipoControl,
-        EstadoSalud,
-        Observaciones,
-        ProximoControl
+        Responsable,
+        ObservacionInicial,
+        EstadoVisita,
+        FechaRealizada,
+        Resultado,
+        Comentarios,
+        FotografiaEvidencia
     FROM SeguimientoAdopcion
     WHERE SolicitudId = @SolicitudId
-    ORDER BY FechaControl DESC;
+    ORDER BY FechaProgramada DESC;
 END;
